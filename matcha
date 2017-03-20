@@ -7,17 +7,11 @@
 #
 
 #從執行 shell 路徑判定builder路徑
+declare EXEC_PATH=$(readlink "$BASH_SOURCE")
+declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
-
-if [[ -z "$MATCHA_BUILDER_BASE" ]]; then
-  declare EXEC_PATH="$BASH_SOURCE"
-  declare EXEC_DIR=$(dirname "$EXEC_PATH")
-  pushd "$EXEC_DIR" >> /dev/null
-
-  export MATCHA_BUILDER_BASE=$(pwd)
-else
-  pushd "$MATCHA_BUILDER_BASE" >> /dev/null
-fi
+pushd "$EXEC_DIR" >> /dev/null
+export MATCHA_BUILDER_BASE=$(pwd)
 
 declare -a array=($@)
 if [[ "${array[@]}" =~ "basic" ]]; then
