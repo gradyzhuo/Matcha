@@ -1,59 +1,22 @@
-#!/bin/bash
+#!/bin/bash -l
 #
-# build
+# .prefix
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-CORE_DIR="$BUILDER_BASE/core"
-MODULES_DIR="$CORE_DIR/modules"
-SUBSCRIPT_DIR="$CORE_DIR/subscript"
+declare -f @exec
 
-declare -f @import
-declare -f show_help_if_needed
+function @exec() {
+  PARAMS="$@"
+  command="$1"
+  declare -i cmd_len=${#command}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $cmd_len-$params_len )
 
-function welcome(){
-  print -c green '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
-  print -c green '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  print -c green '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
-  print -c green '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
-  print -c green '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
-  print -c green '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  print -c green '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  COMMAND_BASE="$MATCHA_BUILDER_BASE/command/$command"
+  pushd "$COMMAND_BASE" >> /dev/null
+  source main $PARAMS
+  popd >> /dev/null
 }
-
-function @import() {
-  declare module="$1"
-  declare module_path="$MODULES_DIR/$module"
-
-  if [[ -e "$module_path" ]]; then
-    pushd "$module_path" >> /dev/null
-    source @.imports >> /dev/null
-    popd >> /dev/null
-    print -c cyan -s bold ">> Module [$module] import succeed."
-  else
-    print -c "red" -s bold "-- Module [$module] not found! ----------"
-  fi
-}
-
-function show_help_if_needed(){
-  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-  	more "README.md"
-  	exit 0
-  fi
-}
-
-declare -a array=($@)
-if [[ "${array[@]}" =~ "-ci" ]]; then
-  BUILD_CI=0
-fi
-
-if [[ "${array[@]}" =~ "-ndp" ]]; then
-  NEED_DOWNLOAD_PROVISION_PROFILE=1
-fi
-
-
-@import Prints
-@import Files
-@import BashSupport

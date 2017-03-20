@@ -6,18 +6,22 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+
+declare -i BUILD_CI=1
+
+declare -a array=($@)
+if [[ "${array[@]}" =~ "-ci" ]]; then
+  BUILD_CI=0
+fi
+
 #從執行 shell 路徑判定builder路徑
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
+MATCHA_BUILDER_BASE=$(pwd)
 pushd "$EXEC_DIR" >> /dev/null
-export MATCHA_BUILDER_BASE=$(pwd)
 
-declare -a array=($@)
-if [[ "${array[@]}" =~ "basic" ]]; then
-  source .basic $@
-elif [[ "${array[@]}" =~ "build" ]]; then
-  source .build $@
-fi
+source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
+@exec $@
 
 popd >> /dev/null

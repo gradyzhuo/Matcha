@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# basic/func
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f show_help_if_needed
+declare -f welcome
+
+function welcome(){
+  if [[ $BUILD_CI != 0 ]]; then
+    echo -e '\033[32m'
+  else
+    echo ""
+  fi
+  echo '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  echo '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  echo '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
+  echo '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
+  echo '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
+  echo '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  echo '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  if [[ $BUILD_CI != 0 ]]; then
+    echo -e '\033[m'
+  else
+    echo ""
+  fi
+}
+
+function show_help_if_needed(){
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+  	more "README.md"
+  	exit 0
+  fi
+}

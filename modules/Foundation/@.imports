@@ -7,7 +7,6 @@
 #
 
 source defines
-source subscript
 source provision_profile
 source utlits
 
