@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# utlits
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f exists
+declare -f function_exists
+declare -f send_mail
+declare -f terminate
+
+function function_exists() {
+    declare -f -F $1 > /dev/null
+    echo "$?"
+}
+
+function command_exists() {
+    command -v $1 > /dev/null
+    echo "$?"
+}
+
+# -f : function
+# -c : command
+function exists() {
+	_type="$1"
+	_command="$2"
+
+    if [[ "$_type" == "-f" ]]; then
+    	function_exists $_command
+    fi
+
+    if [[ "$_type" == "-c" ]]; then
+    	command_exists $_command
+    fi
+}
+
+function terminate(){
+
+  declare error_code="$1"
+  declare error_message="$2"
+
+  if [[ "$error_message" != "" ]]; then
+    print -c "red" -s bold "-- $error_message ----------"
+  fi
+
+  exit $1
+}

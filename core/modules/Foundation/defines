@@ -1,0 +1,235 @@
+#!/bin/bash
+#
+# defines
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+declare -f define
+declare -f defines
+declare -f setup_parameters
+declare -f setup_delegate
+declare -f validate_parameters
+
+BUILD_DATETIME="$(date +"%Y%m%d-%H%M")"
+
+function define() {
+  if [[ "$1" == "app_info" ]]; then
+    EXPORT_OPTION="appstore"
+    NEED_DOWNLOAD_PROVISION_PROFILE="YES"
+
+  elif [[ "$1" == "git" ]]; then
+    GIT_BRANCH_APP="master"
+
+  fi
+}
+
+function defines() {
+  for df in "$@"
+  do
+    define "$df"
+  done
+}
+
+function setup_delegate(){
+
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-project"  ]]; then
+        PROJECT_FOLDER_NAME="$param"
+        DELEGATE="$WORKSPACE/projects/$PROJECT_FOLDER_NAME/delegate"
+        code=""
+      elif [[ "$code" == "-delegate"  ]]; then
+        DELEGATE="$param"
+        code=""
+      fi
+    fi
+  done
+
+  if [[ "$DELEGATE" == "" ]]; then
+    print -c red -s bold '[DELEGATE] is not setting. Please setting it by pass -delegate in the command line.'
+    terminate
+  fi
+}
+
+function validate_env_variables(){
+
+  declare -i result=0
+  if [[ "$PROJ_NAME" == "" ]]; then
+    print -c red -s bold "[PROJ_NAME] is not setting."
+    result=1
+  fi
+
+  if [[ "$SOURCE_TYPE" == "git" && "$GIT_APP" == "" ]]; then
+    print -c red -s bold '[GIT_APP] is not setting.'
+    result=1
+  fi
+
+  if [[ "$PROJ_SCHEME" == "" ]]; then
+    print -c red -s bold '[PROJ_SCHEME] is not setting. Please setting it by pass -s in the command line.'
+    result=1
+  fi
+
+  if [[ "$TEAM_NAME" == "" ]]; then
+    print -c red -s bold "[TEAM_NAME] is not setting. Please setting it by pass -tn in the command line."
+    result=1
+  fi
+
+  if [[ $result == 1 ]]; then
+    terminate
+  fi
+
+}
+
+function setup_variables_from_project {
+  cmd="xcodebuild -showBuildSettings"
+
+  cmd="$cmd -scheme $PROJ_SCHEME"
+  if [[ "$BUILD_CONFIGURATION" != "" ]]; then
+    cmd="$cmd -configuration \"$BUILD_CONFIGURATION\""
+  fi
+
+  # cmd="$cmd -sdk iphoneos"
+  # cmd="$cmd -xcconfig \"$codesign_xcconfig\""
+
+  #fetch APP_ID
+  if [[ "$APP_ID" == "" ]]; then
+  	APP_ID=$(eval "$cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
+  fi
+
+  #fetch INFO_PLIST
+  if [[ "$INFO_PLIST" == "" ]]; then
+    INFO_PLIST=$(eval "$cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
+  fi
+
+  if [[ "$BUILD_CONFIGURATIONS" == "" ]]; then
+    BUILD_CONFIGURATIONS=($(eval "$cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g'))
+  fi
+
+  CURRENT_PROJECT_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString)
+  CURRENT_PROJECT_BUILD_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleVersion)
+
+  DEVELOPMENT_TEAM=$(eval "$cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
+  if [[ "$DEVELOPMENT_TEAM" != "" ]]; then
+    AUTOMATICALLY_MANAGE_SIGIN=0
+  else
+    AUTOMATICALLY_MANAGE_SIGIN=1
+  fi
+}
+
+function setup_input_params() {
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-v" ]]; then
+				VERSION="$param"
+      elif [[ "$code" == "-bv" ]]; then
+        BUILD_VERSION="$param"
+      elif [[ "$code" == "-t" ]]; then
+        PROJECT_TARGET="$param"
+      elif [[ "$code" == "-conf" ]]; then
+        BUILD_CONFIGURATIONS=($param)
+      elif [[ "$code" == "-project" ]]; then
+        PROJECT_FOLDER_NAME="$param"
+      elif [[ "$code" == "-a" ]]; then
+        ARCHIVE_NAME="$param"
+			elif [[ "$code" == "-s" ]]; then
+				PROJ_SCHEME="$param"
+			elif [[ "$code" == "-p" ]]; then
+				PROVISIONING_PROFILE_NAME="$param"
+      elif [[ "$code" == "-u" ]]; then
+        UUID="$param"
+      elif [[ "$code" == "-i" ]]; then
+        APP_ID="$param"
+      elif [[ "$code" == "-ti" ]]; then
+        #732962646X
+        SPECIFICS_TEAM_ID="$param"
+      elif [[ "$code" == "-tn" ]]; then
+        #iPhone Distribution: Hiiir, Inc. Taiwan Branch
+        TEAM_NAME="$param"
+      elif [[ "$code" == "-si" ]]; then
+        SPECIFICS_SIGNING_IDENTITY="$param"
+      elif [[ "$code" == "-b" ]]; then
+        GIT_BRANCH_APP="$param"
+      elif [[ "$code" == "-eo" ]]; then
+        EXPORT_OPTION="$param"
+      elif [[ "$code" == "-w" ]]; then
+        define workspace_path "$param"
+      elif [[ "$code" == "-ep" ]]; then
+        EXPORT_FOLDER="$param/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
+      elif [[ "$code" == "-lp" ]]; then
+        LOG_FOLDER="${param}/$BUILD_DATETIME"
+      elif [[ "$code" == "-aid" ]]; then
+        APPLE_ID="$param"
+      elif [[ "$code" == "-apwd" ]]; then
+        APPLE_ID_PASSWORD="$param"
+      elif [[ "$code" == "-app_tag" ]]; then
+        GIT_TAG_APP="$param"
+      elif [[ "$code" == "-ein" ]]; then
+        EXPORT_IPA_NAME="$param"
+      elif [[ "$code" == "-path" ]]; then
+        SOURCE_TYPE="path"
+        APP_PATH="$param"
+      elif [[ "$code" == "-passwd" ]]; then
+        PASSWD="$param"
+      fi
+		fi
+
+  done
+
+  #default is git.
+  if [[ "$SOURCE_TYPE" == "" ]]; then
+    SOURCE_TYPE="git"
+    APP_PATH="$TMP_PATH/app"
+  fi
+
+}
+
+function config_env_variables(){
+
+  #====
+
+  if [[ $BUILD_ID == 0 ]]; then
+    LOG_FOLDER="$LOG_FOLDER/${BUILD_DATETIME}"
+  else
+    LOG_FOLDER="$LOG_FOLDER/${PROJ_NAME}_${BUILD_DATETIME}"
+  fi
+
+  ARCHIVE_NAME="${PROJ_NAME}"
+  EXPORT_SUB_FOLDER="${BUILD_DATETIME}"
+
+  if [[ "$PROJ_SCHEME" == "" ]]; then
+    PROJ_SCHEME="$PROJ_NAME"
+  fi
+
+  PROVISIONING_PROFILE="profile.mobileprovision"
+  if [[ "$PROVISIONING_PROFILE_NAME" != "" ]]; then
+    PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME.mobileprovision"
+  fi
+}
+
+function configure_signing_identity() {
+  #=============================
+  pem_content=$(security find-certificate -c "$TEAM_NAME" -p)
+  if [[ "$SPECIFICS_SIGNING_IDENTITY" == "" ]]; then
+    #https://www.jamf.com/jamf-nation/discussions/18317/ext-attribute-to-list-certificates
+    SIGNING_IDENTITY=$(openssl x509 -noout -text <<< "$pem_content" | grep Subject: | sed 's/        Subject: UID=.*, CN=//g' | sed 's/, O=.*//g' | sed 's/, OU=.*//g')
+    print -c green "using 'signing identity': $SIGNING_IDENTITY (by certificate)"
+  else
+    SIGNING_IDENTITY="$SPECIFICS_SIGNING_IDENTITY"
+  fi
+
+  if [[ "$SPECIFICS_TEAM_ID" == "" ]]; then
+    TEAM_ID=$(openssl x509 -noout -text <<< "$pem_content" | grep Subject: | sed 's/        Subject: UID=//g' | sed 's/,.*//g')
+    print -c green "using 'team id': $TEAM_ID (by certificate)"
+  else
+    TEAM_ID="$SPECIFICS_TEAM_ID"
+  fi
+}

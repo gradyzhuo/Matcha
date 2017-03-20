@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# delegate.template
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+
+## delegate functions
+
+function builder_will_launch() {
+  # the builder will launch to cleaning and setup parameters from command line.
+  # setup the env variables.
+
+  PROJ_NAME=""    # the name of *.xcodeproj or *.xcworkspace
+  GIT_APP=""      # the git url of app.
+  TEAM_NAME=""    # the team name in apple developer.
+}
+
+function builder_did_launch() {
+  # the builder did launch finishing.
+
+}
+
+
+
+function builder_will_exec() {
+  # actions :
+  # * builder     : Builder Phase.        { will: 全部 Phase 進行前 | did: 全部 Phase 完成後 }
+  # * setup_codesign  : Setup Codesign & TEAM_ID   { will: setup_codesign 進行前 | did: setup_codesign 完成後 }
+  # * build_app   : Build & Archive App.  { will: build app 前 | did: build app 完成後 }
+  # * git         : Git clone app.        { will: clone git app 前 | did: clone git app 完成後 }
+  # * export_ipa  : Export to ipa file.   { will: export 進行前 | did: export 完成後 }
+
+
+  action="$1"
+
+  # if [[ "$action" == "builder" ]]; then
+  #   # do something before builder executes.
+  #
+  # fi
+
+  # if [[ "$action" == "setup_codesign" ]]; then
+  #   # do something before codesign setups.
+  #
+  # fi
+
+  # if [[ "$action" == "build_app" ]]; then
+  #   # do something before app builds.
+  #
+  # fi
+
+  # if [[ "$action" == "git" ]]; then
+  #   # do something before git clones.
+  #
+  # fi
+
+  # if [[ "$action" == "export_ipa" ]]; then
+  #   # do something before app exports.
+  #
+  # fi
+
+}
+
+
+function builder_did_exec() {
+  # actions :
+  # * builder     : Builder Phase.        { will: 全部 Phase 進行前 | did: 全部 Phase 完成後 }
+  # * setup_codesign  : Setup Codesign & TEAM_ID   { will: setup_codesign 進行前 | did: setup_codesign 完成後 }
+  # * build_app   : Build & Archive App.  { will: build app 前 | did: build app 完成後 }
+  # * git         : Git clone app.        { will: clone git app 前 | did: clone git app 完成後 }
+  # * export_ipa  : Export to ipa file.   { will: export 進行前 | did: export 完成後 }
+
+  action="$1"
+
+  # if [[ "$action" == "builder" ]]; then
+  #   # do something after builder executes.
+
+  # fi
+
+  # if [[ "$action" == "setup_codesign" ]]; then
+  #   # do something before codesign setups.
+  #
+  # fi
+
+  # if [[ "$action" == "build_app" ]]; then
+  #   # do something after app builds.
+
+  # fi
+
+  # if [[ "$action" == "git" ]]; then
+  #   # do something after git clones.
+
+  # fi
+
+  # if [[ "$action" == "export_ipa" ]]; then
+  #   # do something after app exports.
+
+  # fi
+}
+
+function builder_did_end() {
+  # the builder did end all phase.
+  # now you can reset all configs in file system.
+
+}
+
+function builder_did_terminate(){
+  # oops, the builder did terminate forcibly.
+
+}

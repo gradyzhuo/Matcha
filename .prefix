@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# build
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+CORE_DIR="$BUILDER_BASE/core"
+MODULES_DIR="$CORE_DIR/modules"
+SUBSCRIPT_DIR="$CORE_DIR/subscript"
+
+declare -f switch_dir_to
+declare -f restore_dir
+declare -f @import
+declare -f show_help_if_needed
+
+function switch_dir_to {
+  path="$1"
+  pushd "$path" >> /dev/null
+}
+
+function restore_dir {
+  popd >> /dev/null
+}
+
+function welcome(){
+  print -c green '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  print -c green '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  print -c green '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
+  print -c green '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
+  print -c green '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
+  print -c green '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  print -c green '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+}
+
+function @import() {
+  declare module="$1"
+  declare module_path="$MODULES_DIR/$module"
+
+  if [[ -e "$module_path" ]]; then
+    switch_dir_to "$module_path"
+    source @.imports >> /dev/null
+    restore_dir
+    print -c cyan -s bold ">> Module [$module] import succeed."
+  else
+    print -c "red" -s bold "-- Module [$module] not found! ----------"
+  fi
+}
+
+function show_help_if_needed(){
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+  	more "README"
+  	exit 0
+  fi
+}
+
+declare -a array=($@)
+if [[ "${array[@]}" =~ "-ci" ]]; then
+  BUILD_CI=0
+fi
+
+if [[ "${array[@]}" =~ "-ndp" ]]; then
+  NEED_DOWNLOAD_PROVISION_PROFILE=1
+fi
+
+@import Prints
+@import BashSupport

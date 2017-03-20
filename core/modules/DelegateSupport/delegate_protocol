@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# delegate_protocol
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+#for public
+declare -f builder_will_launch
+declare -f builder_did_launch
+declare -f builder_will_exec
+declare -f builder_did_exec
+declare -f builder_did_end
+declare -f builder_did_terminate

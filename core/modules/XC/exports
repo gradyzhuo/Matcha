@@ -1,0 +1,84 @@
+#!/bin/bash
+#
+# XC/exports
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f exports_option
+declare -f appstore
+declare -f inhouse
+declare -f ad-hoc
+declare -f development
+
+# Parameter Rule
+# @key value
+# @key -type value
+function exports_option() {
+  PARAMS="$@"
+  filepath="$1"
+  declare -i filepath_len=${#filepath}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
+
+  declare type
+  declare code
+  for param in $PARAMS
+  do
+    if [[ "$param" =~ ^@ ]]; then
+      code="${param#@}" #把 prefix: - 去掉
+		else
+      if [[ "$param" =~ ^- ]]; then
+        type="$param"
+      else
+        defaults write "$filepath" "$code" $type $param
+        code=""
+        type=""
+      fi
+    fi
+  done
+
+
+}
+
+function appstore(){
+  PARAMS="$@"
+  filepath="$1"
+  declare -i filepath_len=${#filepath}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
+
+  exports_option "$filepath" @method appstore @uploadSymbols '-bool YES' $PARAMS
+
+}
+
+function inhouse() {
+  PARAMS="$@"
+  filepath="$1"
+  declare -i filepath_len=${#filepath}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
+
+  exports_option "$filepath" @method enterprise $PARAMS
+}
+
+function ad-hoc() {
+  PARAMS="$@"
+  filepath="$1"
+  declare -i filepath_len=${#filepath}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
+
+  exports_option "$filepath" @method ad-hoc $PARAMS
+}
+
+function development(){
+  PARAMS="$@"
+  filepath="$1"
+  declare -i filepath_len=${#filepath}+2
+  declare -i params_len=${#PARAMS}
+  PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
+
+  exports_option "$filepath" @method ad-hoc $PARAMS
+}

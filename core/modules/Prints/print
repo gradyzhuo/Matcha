@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Prints/print
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f print
+declare -f prints
+declare -f phase_print
+
+function print() {
+
+  declare result_str=""
+  result_str=$(get_format_string $@)
+  reset_format=$(get_format "reset_all" "" "")
+
+  if [[ $BUILD_CI == 0 ]]; then
+    echo "$result_str"
+  else
+    echo -e "$result_str$reset_format"
+  fi
+
+}
+
+function prints() {
+
+  declare result_str=""
+
+  for var in "$@"
+  do
+     formated_string=$(get_format_string $var)
+     result_str="${result_str}${formated_string}"
+  done
+
+  reset_format=$(get_format "reset_all" "" "")
+
+  if [[ $BUILD_CI == 0 ]]; then
+    echo "$result_str"
+  else
+    echo -e "$result_str$reset_format"
+  fi
+}
+
+function phase_print() {
+  title="$1"
+  echo ""
+  print -c cyan -s bold "++ $title ----------"
+}

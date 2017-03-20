@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# MailSupport/send_mail
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f send_mail
+
+function send_mail() {
+
+  declare fromuser
+  declare touser
+  declare subject
+  declare content
+  declare footer
+  declare charset
+  declare ccuser
+  declare ctype
+  declare mime_version="1.1"
+
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-from" ]]; then
+        fromuser="$param"
+      elif [[ "$code" == "-to" ]]; then
+        touser="$param"
+      elif [[ "$code" == "-subject" ]]; then
+        subject="$param"
+      elif [[ "$code" == "-content" ]]; then
+        content="$param"
+      elif [[ "$code" == "-footer" ]]; then
+        footer="$param"
+      elif [[ "$code" == "-charset" ]]; then
+        charset="$param"
+      elif [[ "$code" == "-cc" ]]; then
+        ccuser="$param"
+      elif [[ "$code" == "-ctype" ]]; then
+        ctype="$param"
+      fi
+    fi
+  done
+
+  if [[ "$charset" == "" ]]; then
+    charset="UTF-8"
+  fi
+  if [[ "$ctype" == "" ]]; then
+    ctype="text/html"
+  fi
+
+  if [[ "$ctype" == "text/html" ]]; then
+    content=$(echo "$content" | sed 's/^/<div>/g'  | sed 's/$/<\/div>/g' | sed 's/<div><\/div>/<br \/>/g')
+  fi
+
+  {
+  echo "Mime-Version: $mime_version";
+  echo "Content-type:$ctype ; charset=\"$charset\"";
+  echo "From: $fromuser";
+  echo "To: $touser";
+  echo "CC: $ccuser";
+  echo "Subject: $subject";
+
+  echo "$content"
+
+  echo "$footer"
+  } | sendmail -t
+}

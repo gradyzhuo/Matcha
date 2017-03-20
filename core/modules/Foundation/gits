@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# gits
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f clone
+
+function clone() {
+
+declare code
+declare respo
+declare branch
+declare target
+declare tag
+
+	for ctx in "$@"
+  do
+		if [[ "$ctx" =~ ^- ]]; then
+			code="$ctx"
+		else
+			if [[ "$code" == "-r" ]]; then
+				respo="$ctx"
+			elif [[ "$code" == "-b" ]]; then
+				branch="$ctx --single-branch"
+			elif [[ "$code" == "-t" ]]; then
+				target="$ctx"
+			elif [[ "$code" == "-tag" ]]; then
+				tag=$"$ctx"
+			fi
+		fi
+
+		if [[ "$branch" == "" ]]; then
+			branch="master"
+		fi
+
+		if [[ "$target" == "" ]]; then
+			target="."
+		fi
+  done
+
+	print -c blue -s bold "$respo cloning..."
+
+	mkdirFolder "${target}"
+	git clone -b ${branch} ${respo} "${target}" || exit $GIT_CLOME_FAIL_CODE
+
+	if [[ "$tag" != "" && `git tag -l $tag` == $tag ]]; then
+		cd "${target}"
+		git checkout tags/$tag
+		cd ..
+	fi
+
+	print -c blue -s bold "$respo cloned..."
+
+}

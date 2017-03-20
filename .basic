@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# basic
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+#從執行 shell 路徑判定builder路徑
+if [[ "$BUILDER_BASE" == "" ]]; then
+  declare -x -r EXEC_PATH="$BASH_SOURCE"
+  declare -x -r EXEC_DIR=$(dirname $EXEC_PATH)
+  pushd "$EXEC_DIR"
+  BUILDER_BASE=$(pwd)
+  popd
+fi
+
+source "$BUILDER_BASE/.envs" $@ >> /dev/null
+source "$BUILDER_BASE/.prefix" $@ >> /dev/null
+
+welcome
+
+print -c cyan -s bold ">> Import basic functions succeed."

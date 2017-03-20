@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# provision_profile
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f keychain
+declare -f download
+declare -f getUUIDTo
+
+function keychain() {
+
+  if [ "$1" == "unlock" ]; then
+    if [ "$2" != "" ]; then
+      security unlock-keychain -p "$2";
+    else
+      security unlock-keychain; #security find-generic-password -ga /Users/mruser/.ssh/id_dsa 2>&1 > /dev/null
+    fi
+  elif [ "$1" == "lock" ]; then
+    security lock-keychain
+  else
+    echo "keychain should input a action: lock or unlock."
+  fi
+}
+
+function download() {
+
+  declare -a parameters=($@)
+  if [[ "${parameters[@]}" =~ "-need_ci" && $BUILD_CI != 0  ]]; then
+    return
+  fi
+
+  for cmd in $parameters
+  do
+
+    if [ "$cmd" == "provision_profile" ]; then
+      mkdirFolder "${PROVISIONING_FOLDER}"
+      switch_dir_to "${PROVISIONING_FOLDER}"
+      # echo "${apple_id}" "${SIGNING_IDENTITY}" "${PROVISIONING_PROFILE}" "${APP_ID}" "${PROVISIONING_PROFILE}"
+
+      if [ "${APPLE_ID_PASSWORD}" != "" ]; then
+        fastlane-credentials add --username "${APPLE_ID}" --password "${APPLE_ID_PASSWORD}"
+      fi
+
+      cmd_sigh="fastlane sigh -z"
+      if [[ "$APPLE_ID" != "" ]]; then
+        cmd_sigh="$cmd_sigh -u $APPLE_ID"
+      fi
+
+      if [[ "$EXPORT_OPTION" == "ad-hoc" ]]; then
+        cmd_sigh="$cmd_sigh --adhoc true"
+      elif [[ "$EXPORT_OPTION" == "development" ]]; then
+        cmd_sigh="$cmd_sigh --development true"
+      fi
+
+      if [[ "$TEAM_NAME" != "" ]]; then
+        cmd_sigh="$cmd_sigh -l \"$TEAM_NAME\""
+      fi
+      if [[ "$PROVISIONING_PROFILE_NAME" != "" ]]; then
+        cmd_sigh="$cmd_sigh -n \"$PROVISIONING_PROFILE_NAME\""
+      fi
+      if [[ "$APP_ID" != "" ]]; then
+        cmd_sigh="$cmd_sigh -a \"$APP_ID\""
+      fi
+      if [[ "$PROVISIONING_PROFILE" != "" ]]; then
+        cmd_sigh="$cmd_sigh -q \"$PROVISIONING_PROFILE\""
+      fi
+
+      eval "$cmd_sigh"
+      restore_dir
+
+    fi
+
+  done
+
+
+}
+
+function setupUUID(){
+  profile_file="$PROVISIONING_FOLDER/$PROVISIONING_PROFILE"
+  #
+  # unlock the keychain, automatically lock keychain on script exit
+  #
+
+  # security unlock-keychain -p `pwd` $HOME/Library/Keychains/login.keychain
+  # trap "security lock-keychain $HOME/Library/Keychains/login.keychain" EXIT
+
+  #
+  # Extract the profile UUID from the checked in Provisioning Profile.
+  #
+
+  mobileprovision=$(security cms -D -i "$profile_file")
+  UUID=$(/usr/libexec/plistbuddy -c Print:UUID /dev/stdin <<< ${mobileprovision})
+
+  #
+  # Copy the profile to the location XCode expects to find it and start the build,
+  # specifying which profile and signing identity to use for the archived app
+  #
+  cp -f "$profile_file" \
+          "$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
+
+}

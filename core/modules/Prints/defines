@@ -1,0 +1,226 @@
+#!/bin/bash
+#
+# Prints/defines
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f text_color_code
+declare -f style_code
+declare -f background_color_code
+declare -f get_format
+declare -f get_format_string
+
+function text_color_code() {
+
+  if [[ "$1" == "black" ]]; then
+    code='30'
+  elif [[ "$1" == "red" ]]; then
+    code='31'
+  elif [[ "$1" == "green" ]]; then
+    code='32'
+  elif [[ "$1" == "yellow" ]]; then
+    code='33'
+  elif [[ "$1" == "blue" ]]; then
+    code='34'
+  elif [[ "$1" == "magenta" ]]; then
+    code='35'
+  elif [[ "$1" == "cyan" ]]; then
+    code='36'
+  elif [[ "$1" == "light_gray" ]]; then
+    code='37'
+  elif [[ "$1" == "dark_gray" ]]; then
+    code='90'
+  elif [[ "$1" == "light_red" ]]; then
+    code='91'
+  elif [[ "$1" == "light_green" ]]; then
+    code='92'
+  elif [[ "$1" == "light_yellow" ]]; then
+    code='93'
+  elif [[ "$1" == "light_blue" ]]; then
+    code='94'
+  elif [[ "$1" == "light_magenta" ]]; then
+    code='95'
+  elif [[ "$1" == "light_cyan" ]]; then
+    code='96'
+  elif [[ "$1" == "white" ]]; then
+    code='97'
+  else
+    code=''
+  fi
+
+  echo "${code}"
+
+}
+
+function style_code() {
+  if [[ "$1" == "reset_all" ]]; then
+    code='0'
+  elif [[ "$1" == "bold" ]]; then
+    code='1'
+  elif [[ "$1" == "dim" ]]; then
+    code='2'
+  elif [[ "$1" == "underlined" ]]; then
+    code='4'
+  elif [[ "$1" == "blink" ]]; then
+    code='5'
+  elif [[ "$1" == "reverse" ]]; then
+    code='7'
+  elif [[ "$1" == "hidden" ]]; then
+    code='8'
+  elif [[ "$1" == "reset_bold" ]]; then
+    code='21'
+  elif [[ "$1" == "reset_dim" ]]; then
+    code='22'
+  elif [[ "$1" == "reset_underlined" ]]; then
+    code='24'
+  elif [[ "$1" == "reset_blink" ]]; then
+    code='25'
+  elif [[ "$1" == "reset_reverse" ]]; then
+    code='27'
+  elif [[ "$1" == "reset_hidden" ]]; then
+    code='28'
+  else
+    code=''
+  fi
+
+  echo "${code}"
+}
+
+function background_color_code() {
+  if [[ "$1" == "default" ]]; then
+    code='49'
+  elif [[ "$1" == "black" ]]; then
+    code='40'
+  elif [[ "$1" == "red" ]]; then
+    code='41'
+  elif [[ "$1" == "green" ]]; then
+    code='42'
+  elif [[ "$1" == "yellow" ]]; then
+    code='43'
+  elif [[ "$1" == "blue" ]]; then
+    code='44'
+  elif [[ "$1" == "magenta" ]]; then
+    code='45'
+  elif [[ "$1" == "cyan" ]]; then
+    code='46'
+  elif [[ "$1" == "light_gray" ]]; then
+    code='47'
+  elif [[ "$1" == "dark_gray" ]]; then
+    code='100'
+  elif [[ "$1" == "light_red" ]]; then
+    code='101'
+  elif [[ "$1" == "light_green" ]]; then
+    code='102'
+  elif [[ "$1" == "light_yellow" ]]; then
+    code='103'
+  elif [[ "$1" == "light_blue" ]]; then
+    code='104'
+  elif [[ "$1" == "light_magenta" ]]; then
+    code='105'
+  elif [[ "$1" == "light_cyan" ]]; then
+    code='106'
+  elif [[ "$1" == "white" ]]; then
+    code='107'
+  else
+    code=''
+  fi
+
+  echo "$code"
+}
+
+function get_format() {
+
+  format=""
+
+  if [[ "$1" != "" ]]; then
+    text_color=$(text_color_code $1)
+    format="${text_color}"
+  fi
+
+  if [[ "$2" != "" ]]; then
+
+    declare style
+    for style_name in $2
+    do
+      if [[ "$style" == "" ]]; then
+        style="$(style_code $style_name)"
+      else
+        style="${style};$(style_code $style_name)"
+      fi
+    done
+
+    format="${format};${style}"
+  fi
+
+  if [[ "$3" != "" ]]; then
+    background_color=$(background_color_code $3)
+    format="${format};${background_color}"
+  fi
+
+  format="\033[${format}m"
+  echo "$format"
+}
+
+function get_format_string() {
+
+  declare code
+  declare color
+  declare style
+  declare background
+  declare text
+
+  for var in "$@"
+  do
+    if [[ "$var" == "-c" ]]; then
+      code="c"
+    elif [[ "$var" == "-s" ]]; then
+      code="s"
+    elif [[ "$var" == "-b" ]]; then
+      code="b"
+    else
+
+      if [[ "$code" == "c" ]]; then
+        color="$var"
+        code=""
+      elif [[ "$code" == "s" ]]; then
+
+        if [[ "$(style_code $var)" ==  "" ]]; then
+          #代表這是text 不是style
+          if [[ "$text" == "" ]]; then
+            text="$var"
+          else
+            text="$text $var"
+          fi
+
+        else
+          if [[ "$style" == "" ]]; then
+            style="$var"
+          else
+            style="$style $var"
+          fi
+        fi
+      elif [[ "$code" == "b" ]]; then
+        background="$var"
+        code=""
+      elif [[ "$code" == "" ]]; then
+        #代表這是text 不是style
+        if [[ "$text" == "" ]]; then
+          text="$var"
+        else
+          text="$text $var"
+        fi
+        code=""
+      fi
+
+    fi
+  done
+
+  format=$(get_format "$color" "$style" "$background")
+  if [[ $BUILD_CI == 0 ]]; then
+    echo "$text"
+  else
+    echo "${format}${text}"
+  fi
+}

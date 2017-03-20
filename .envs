@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# envs
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+# Gobal variables
+declare -x DELEGATE
+declare -i BUILD_CI
+
+declare -x PROJ_NAME
+declare -x PROJ_SCHEME
+declare -x VERSION
+declare -x BUILD_VERSION
+declare -x CURRENT_PROJECT_VERSION
+declare -x CURRENT_PROJECT_BUILD_VERSION
+declare -x -i AUTOMATICALLY_MANAGE_SIGING
+
+declare -x BUILD_CONFIGURATION
+declare -x -a BUILD_CONFIGURATIONS
+declare -x APP_ID
+declare -x INFO_PLIST
+declare -x ARCHIVE_NAME
+declare -x UUID
+
+declare -x GIT_APP
+declare -x GIT_BRANCH_APP
+declare -x GIT_TAG_APP
+
+declare -x PASSWD
+declare -x APPLE_ID
+declare -x APPLE_ID_PASSWORD
+declare -x PROVISIONING_PROFILE_NAME
+declare -x PROVISIONING_PROFILE
+declare -x TEAM_ID
+declare -x SPECIFICS_TEAM_ID
+declare -x TEAM_NAME
+# declare -x SIGNING_IDENTITY="iPhone Distribution: Hiiir, Inc. Taiwan Branch (${TEAM_ID})"
+declare -x SIGNING_IDENTITY
+declare -x SPECIFICS_SIGNING_IDENTITY
+
+declare -x TMP_FOLDER
+declare -x TMP_PATH
+declare -x APP_PATH
+declare -x BUILD_PATH
+
+declare -x SUBSCRIPT_DIR
+declare -x CORE_DIR
+declare -x MODULES_FOLDER
+declare -x MODULES_DIR
+declare -x LOG_FOLDER
+declare -x EXPORT_OPTION
+declare -x EXPORT_OPTION_PLIST_FOLDER
+declare -x EXPORT_FOLDER
+declare -x EXPORT_IPA_NAME
+declare -x PROVISIONING_FOLDER
+
+
+declare -x -i NEED_DOWNLOAD_PROVISION_PROFILE=0
+
+declare -x PROJECT_FOLDER_NAME
+
+declare -x WORKSPACE
+declare -x SOURCE_TYPE #git/path
