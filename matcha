@@ -18,8 +18,8 @@ fi
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
-MATCHA_BUILDER_BASE=$(pwd)
 pushd "$EXEC_DIR" >> /dev/null
+MATCHA_BUILDER_BASE=$(pwd)
 
 source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
 @exec $@
