@@ -31,31 +31,6 @@ function defines() {
   done
 }
 
-function setup_delegate(){
-
-  declare code
-  for param in "$@"
-  do
-    if [[ "$param" =~ ^- ]]; then
-			code="$param"
-		else
-      if [[ "$code" == "-project"  ]]; then
-        PROJECT_FOLDER_NAME="$param"
-        DELEGATE="$WORKSPACE/projects/$PROJECT_FOLDER_NAME/delegate"
-        code=""
-      elif [[ "$code" == "-delegate"  ]]; then
-        DELEGATE="$param"
-        code=""
-      fi
-    fi
-  done
-
-  if [[ "$DELEGATE" == "" ]]; then
-    print -c red -s bold '[DELEGATE] is not setting. Please setting it by pass -delegate in the command line.'
-    terminate
-  fi
-}
-
 function validate_env_variables(){
 
   declare -i result=0
@@ -83,42 +58,6 @@ function validate_env_variables(){
     terminate
   fi
 
-}
-
-function setup_variables_from_project {
-  cmd="xcodebuild -showBuildSettings"
-
-  cmd="$cmd -scheme $PROJ_SCHEME"
-  if [[ "$BUILD_CONFIGURATION" != "" ]]; then
-    cmd="$cmd -configuration \"$BUILD_CONFIGURATION\""
-  fi
-
-  # cmd="$cmd -sdk iphoneos"
-  # cmd="$cmd -xcconfig \"$codesign_xcconfig\""
-
-  #fetch APP_ID
-  if [[ "$APP_ID" == "" ]]; then
-  	APP_ID=$(eval "$cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
-  fi
-
-  #fetch INFO_PLIST
-  if [[ "$INFO_PLIST" == "" ]]; then
-    INFO_PLIST=$(eval "$cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
-  fi
-
-  if [[ "$BUILD_CONFIGURATIONS" == "" ]]; then
-    BUILD_CONFIGURATIONS=($(eval "$cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g'))
-  fi
-
-  CURRENT_PROJECT_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString)
-  CURRENT_PROJECT_BUILD_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleVersion)
-
-  DEVELOPMENT_TEAM=$(eval "$cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
-  if [[ "$DEVELOPMENT_TEAM" != "" ]]; then
-    AUTOMATICALLY_MANAGE_SIGIN=0
-  else
-    AUTOMATICALLY_MANAGE_SIGIN=1
-  fi
 }
 
 function setup_input_params() {

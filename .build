@@ -41,11 +41,17 @@ show_help_if_needed $@
 #=====Common imports=====
 @import Foundation
 @import DelegateSupport
+@import XC
 
 define app_info
 define git
 
 setup_delegate "$@"
+setup_input_params "$@"
+
+if [[ "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" ]]; then
+  DELEGATE="$APP_PATH/$DELEGATE_FILE_NAME"
+fi
 
 if [[ "$DELEGATE" != "" ]]; then
   declare delegate=$(basename "$DELEGATE")
@@ -57,7 +63,6 @@ if [[ "$DELEGATE" != "" ]]; then
   print -c "green" "using delegate: $delegate_dir_name/$delegate"
 fi
 
-setup_input_params "$@"
 will_launch "$@"
 
 clean tmp
@@ -80,7 +85,6 @@ if [[ "$SOURCE_TYPE" == "git" ]]; then
   exec_script clone_app
 fi
 
-
 declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
 if [[ $configurations_count == 0 ]]; then
   switch_dir_to "$APP_PATH"
@@ -100,7 +104,7 @@ do
 	fi
 
   #===== variables from xcode projects
-  setup_variables_from_project
+  xc_setup_variables
   #=============================
 	ARCHIVE_NAME="${PROJ_NAME}_${BUILD_CONFIGURATION}"
 	EXPORT_SUB_FOLDER="${BUILD_CONFIGURATION}_${BUILD_DATETIME}"

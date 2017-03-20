@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# setup
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f setup_delegate
+
+function setup_delegate(){
+
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-project"  ]]; then
+        PROJECT_FOLDER_NAME="$param"
+        DELEGATE="$WORKSPACE/projects/$PROJECT_FOLDER_NAME/delegate"
+        code=""
+      elif [[ "$code" == "-delegate"  ]]; then
+        DELEGATE="$param"
+        code=""
+      fi
+    fi
+  done
+
+  if [[ "$DELEGATE_FILE_NAME" == "" ]]; then
+    DELEGATE_FILE_NAME="delegate"
+  fi
+
+  if [[ "$DELEGATE" == "" ]]; then
+    print -c red -s bold '[DELEGATE] is not setting. Please setting it by pass -delegate in the command line.'
+    terminate
+  fi
+}

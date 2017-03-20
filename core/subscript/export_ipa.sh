@@ -6,8 +6,6 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-@import XC
-
 will_exec "export_ipa"
 
 phase_print "Exporting app"
