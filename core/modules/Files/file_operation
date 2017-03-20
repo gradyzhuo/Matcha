@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Files/file_operation
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f delete
+
+function delete(){
+  path="$1"
+  rm -rf "$path"
+}
