@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# gits
+# Git/clone
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
@@ -44,14 +44,19 @@ declare tag
 	print -c blue -s bold "$respo cloning..."
 
 	mkdirFolder "${target}"
-	git clone -b ${branch} ${respo} "${target}" || exit $GIT_CLOME_FAIL_CODE
+	git clone -b ${branch} ${respo} "${target}"
 
 	if [[ "$tag" != "" && `git tag -l $tag` == $tag ]]; then
-		cd "${target}"
+		switch_dir_to "${target}"
 		git checkout tags/$tag
-		cd ..
+		restore_dir
 	fi
 
-	print -c blue -s bold "$respo cloned..."
+  if [[ $? == 0 ]]; then
+    print -c blue -s bold "$respo cloned..."
+  else
+    print -c red -s bold "$respo failed..."
+  fi
+
 
 }

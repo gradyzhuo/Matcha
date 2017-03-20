@@ -10,9 +10,9 @@
 if [[ "$BUILDER_BASE" == "" ]]; then
   declare -x -r EXEC_PATH="$BASH_SOURCE"
   declare -x -r EXEC_DIR=$(dirname $EXEC_PATH)
-  pushd "$EXEC_DIR"
+  pushd "$EXEC_DIR" >> /dev/null
   BUILDER_BASE=$(pwd)
-  popd
+  popd >> /dev/null
 fi
 
 #如無預設之 WORKSPACE ，預設與 BUILDER_BASE 一致
@@ -49,9 +49,12 @@ define git
 setup_delegate "$@"
 setup_input_params "$@"
 
-if [[ "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" ]]; then
+switch_dir_to "$APP_PATH"
+app_files=$(echo **)
+if [[ "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" && ${app_files[*]} =~ "$DELEGATE_FILE_NAME" ]]; then
   DELEGATE="$APP_PATH/$DELEGATE_FILE_NAME"
 fi
+restore_dir
 
 if [[ "$DELEGATE" != "" ]]; then
   declare delegate=$(basename "$DELEGATE")

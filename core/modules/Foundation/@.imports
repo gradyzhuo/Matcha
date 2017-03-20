@@ -7,8 +7,45 @@
 #
 
 source defines
-source files
-source gits
 source subscript
 source provision_profile
 source utlits
+
+@import Git
+@import Files
+
+declare -f clean
+
+function clean() {
+
+  declare parameters="$@"
+  if [[ "${parameters[@]}" =~ "-need_ci" && $BUILD_CI != 0  ]]; then
+    return
+  fi
+
+  for cmd in $parameters
+  do
+    if [[ "$cmd" =~ ^-  ]]; then
+      continue
+    fi
+
+    lower="$(echo $cmd | tr '[:upper:]' '[:lower:]')"
+    phase_print "cleanning $lower files"
+    if [[ "$cmd" == "built" ]]; then
+      delete "${BUILD_PATH}"
+      print -c "green" "deleted built path: ${BUILD_PATH}..."
+    elif [[ "$cmd" == "tmp" ]]; then
+      delete "${TMP_PATH}"
+      print -c "green" "deleted tmp path: ${TMP_PATH}..."
+    elif [[ "$cmd" == "provision_profile" ]]; then
+      delete "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE"
+      if [ "${APPLE_ID_PASSWORD}" != "" ]; then
+            fastlane-credentials remove --username "${APPLE_ID}"
+      fi
+      print -c "green" "deleted profile path: $PROVISIONING_FOLDER/$PROVISIONING_PROFILE..."
+    elif [[ "$cmd" == "exports" ]]; then
+      delete "$EXPORT_FOLDER"
+      print -c "green" "deleted export path: $EXPORT_FOLDER..."
+    fi
+  done
+}

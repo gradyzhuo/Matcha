@@ -10,9 +10,9 @@
 if [[ "$BUILDER_BASE" == "" ]]; then
   declare -x -r EXEC_PATH="$BASH_SOURCE"
   declare -x -r EXEC_DIR=$(dirname $EXEC_PATH)
-  pushd "$EXEC_DIR"
+  pushd "$EXEC_DIR" >> /dev/null
   BUILDER_BASE=$(pwd)
-  popd
+  popd >> /dev/null
 fi
 
 source "$BUILDER_BASE/.envs" $@ >> /dev/null

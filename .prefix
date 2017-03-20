@@ -10,19 +10,8 @@ CORE_DIR="$BUILDER_BASE/core"
 MODULES_DIR="$CORE_DIR/modules"
 SUBSCRIPT_DIR="$CORE_DIR/subscript"
 
-declare -f switch_dir_to
-declare -f restore_dir
 declare -f @import
 declare -f show_help_if_needed
-
-function switch_dir_to {
-  path="$1"
-  pushd "$path" >> /dev/null
-}
-
-function restore_dir {
-  popd >> /dev/null
-}
 
 function welcome(){
   print -c green '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
@@ -39,9 +28,9 @@ function @import() {
   declare module_path="$MODULES_DIR/$module"
 
   if [[ -e "$module_path" ]]; then
-    switch_dir_to "$module_path"
+    pushd "$module_path" >> /dev/null
     source @.imports >> /dev/null
-    restore_dir
+    popd >> /dev/null
     print -c cyan -s bold ">> Module [$module] import succeed."
   else
     print -c "red" -s bold "-- Module [$module] not found! ----------"
@@ -50,7 +39,7 @@ function @import() {
 
 function show_help_if_needed(){
   if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-  	more "README"
+  	more "README.md"
   	exit 0
   fi
 }
@@ -64,5 +53,7 @@ if [[ "${array[@]}" =~ "-ndp" ]]; then
   NEED_DOWNLOAD_PROVISION_PROFILE=1
 fi
 
+
 @import Prints
+@import Files
 @import BashSupport

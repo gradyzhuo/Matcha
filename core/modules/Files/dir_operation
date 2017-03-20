@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+# Files/dir_operation
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f mkdirFolder
+declare -f mkdirs
+declare -f open_finder
+declare -f switch_dir_to
+declare -f restore_dir
+
+function mkdirFolder() {
+
+  for mf in "$@"
+  do
+    if [ ! -d "$mf" ]; then
+      mkdir -p "$mf"
+    fi
+  done
+
+}
+
+function mkdirs(){
+  for dir in "$@"
+  do
+    if [[ "$dir" == "log" && $BUILD_CI != 0 ]]; then
+      mkdirFolder "$LOG_FOLDER"
+    fi
+
+    if [[ "$dir" == "export" ]]; then
+      mkdirFolder "$EXPORT_FOLDER"
+    fi
+
+  done
+}
+
+function open_finder() {
+
+  if [[ $BUILD_CI == 0 ]]; then
+    return
+  fi
+
+  path="$1"
+  if [[ "$1" == "export" ]]; then
+    path="$EXPORT_FOLDER"
+  fi
+  open "$path"
+}
+
+
+function switch_dir_to {
+  path="$1"
+  pushd "$path" >> /dev/null
+}
+
+function restore_dir {
+  popd >> /dev/null
+}
