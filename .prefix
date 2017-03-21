@@ -6,6 +6,7 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+declare -x COMMAND_BASE
 declare -f @exec
 
 function @exec() {
@@ -15,8 +16,12 @@ function @exec() {
   declare -i params_len=${#PARAMS}
   PARAMS=$( echo $PARAMS | cut -c $cmd_len-$params_len )
 
-  COMMAND_BASE="$MATCHA_BUILDER_BASE/command/$command"
+  PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
+  COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$command"
   pushd "$COMMAND_BASE" >> /dev/null
   source main $PARAMS
   popd >> /dev/null
+  if [[ "$PREVIOUS_COMMAND_BASE" != "" ]]; then
+    COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
+  fi
 }

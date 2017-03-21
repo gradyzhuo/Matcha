@@ -7,6 +7,7 @@
 #
 
 declare -f setup_delegate
+declare -f check_delegate
 
 function setup_delegate(){
 
@@ -18,7 +19,7 @@ function setup_delegate(){
 		else
       if [[ "$code" == "-project"  ]]; then
         PROJECT_FOLDER_NAME="$param"
-        DELEGATE="$WORKSPACE/projects/$PROJECT_FOLDER_NAME/delegate"
+        DELEGATE="$MATCHA_BUILDER_BASE/projects/$PROJECT_FOLDER_NAME/delegate"
         code=""
       elif [[ "$code" == "-delegate"  ]]; then
         DELEGATE="$param"
@@ -31,8 +32,20 @@ function setup_delegate(){
     DELEGATE_FILE_NAME="delegate"
   fi
 
-  if [[ "$DELEGATE" == "" ]]; then
+}
+
+function read_delegate(){
+  declare delegate=$(basename "$1")
+  declare delegate_dir=$(dirname "$1")
+  declare delegate_dir_name=$(basename "$delegate_dir")
+
+  if [[ "$delegate" == "" ]]; then
     print -c red -s bold '[DELEGATE] is not setting. Please setting it by pass -delegate in the command line.'
     terminate
   fi
+
+  switch_dir_to "$delegate_dir"
+  source "$delegate"
+  restore_dir
+  print -c "green" "using delegate: $delegate_dir_name/$delegate"
 }

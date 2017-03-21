@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+# build
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+
+@exec basic
+
+source .envs
+source .prefix "$@"
+
+if [[ "${array[@]}" =~ "-ndp" ]]; then
+  NEED_DOWNLOAD_PROVISION_PROFILE=1
+fi
+
+#如無預設之 WORKSPACE ，預設與 BUILDER_BASE 一致
+if [[ "$WORKSPACE" == "" ]]; then
+
+  if [[ "$APP_PATH" != "" ]]; then
+    WORKSPACE="$APP_PATH"
+  else
+    WORKSPACE="$MATCHA_BUILDER_BASE"
+  fi
+
+fi
+
+#相關路徑之預設
+OUTCOME_PATH="$WORKSPACE/outcome"
+EXPORT_FOLDER="$OUTCOME_PATH/export"
+LOG_FOLDER="$OUTCOME_PATH/log"
+
+TEMP_FOLDER=".tmp"
+TMP_PATH="$WORKSPACE/$TEMP_FOLDER"
+PROVISIONING_FOLDER="$TMP_PATH/ProvisioningProfiles"
+BUILD_PATH="$TMP_PATH/build"
+EXPORT_OPTION_PLIST_FOLDER="$TMP_PATH/export_option"
+if [[ "$APP_PATH" == "" ]]; then
+  APP_PATH="$TMP_PATH/app"
+fi
+
+show_help_if_needed $@
+
+#=====Common imports=====
+@import Foundation
+@import DelegateSupport
+@import XC
+
+define app_info
+define git
+
+setup_delegate "$@"
+
+if [[ -e "$APP_PATH" ]]; then
+  switch_dir_to "$APP_PATH"
+  app_files=$(echo **)
+  if [[ "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" && ${app_files[*]} =~ "$DELEGATE_FILE_NAME" ]]; then
+    DELEGATE="$APP_PATH/$DELEGATE_FILE_NAME"
+  fi
+  restore_dir
+fi
+
+read_delegate "$DELEGATE"
+
+will_launch "$@"
+
+clean tmp
+
+phase_print "Configuring"
+
+config_env_variables
+validate_env_variables
+
+mkdirs "log" "export"
+
+keychain unlock $PASSWD
+
+did_launch
+
+will_exec "builder"
+exec_script _init
+
+if [[ "$SOURCE_TYPE" == "git" ]]; then
+  exec_script clone_app
+fi
+
+declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
+if [[ $configurations_count == 0 ]]; then
+  switch_dir_to "$APP_PATH"
+  BUILD_CONFIGURATIONS=($(xcodebuild -showBuildSettings | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g'))
+  restore_dir
+fi
+
+for (( i=0; i<${configurations_count}; i++ ));
+do
+  switch_dir_to "$APP_PATH"
+
+	BUILD_CONFIGURATION=${BUILD_CONFIGURATIONS[$i]}
+	print -c green "using configuration: $BUILD_CONFIGURATION"
+
+	if [[ $BUILD_CI != 0 ]]; then
+		EXPORT_FOLDER="$EXPORT_FOLDER/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
+	fi
+
+  #===== variables from xcode projects
+  xc_setup_variables
+  #=============================
+	ARCHIVE_NAME="${PROJ_NAME}_${BUILD_CONFIGURATION}"
+	EXPORT_SUB_FOLDER="${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
+
+  exec_script setup_codesign
+  exec_script archive_app
+	exec_script export_ipa
+
+	APP_ID=""
+	UUID=""
+
+  restore_dir
+done
+
+did_exec "builder"
+
+did_end
+
+popd >> /dev/null

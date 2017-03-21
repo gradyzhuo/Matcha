@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# basic/.envs
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+# Gobal variables
+declare -x MATCHA_BUILDER_BASE
+declare -x COMMAND_BASE
+
+declare -x MODULES_FOLDER
+declare -x MODULES_DIR

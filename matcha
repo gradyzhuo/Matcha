@@ -18,10 +18,9 @@ fi
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
-pushd "$EXEC_DIR" >> /dev/null
+cd "$EXEC_DIR" >> /dev/null
 MATCHA_BUILDER_BASE=$(pwd)
+cd -
 
 source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
 @exec $@
-
-popd >> /dev/null

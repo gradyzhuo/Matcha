@@ -49,7 +49,7 @@ function appstore(){
   declare -i params_len=${#PARAMS}
   PARAMS=$( echo $PARAMS | cut -c $filepath_len-$params_len )
 
-  exports_option "$filepath" @method appstore @uploadSymbols '-bool YES' $PARAMS
+  exports_option "$filepath" @method app-store @uploadSymbols '-bool YES' $PARAMS
 
 }
 

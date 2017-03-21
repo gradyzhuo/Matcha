@@ -1,0 +1,101 @@
+#!/bin/bash
+#
+# build/.prefix
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f exec_script
+declare -f exec_scripts
+declare -f setup_input_params
+
+function exec_script () {
+  script_name=$1
+  parameter=$2
+
+  SUBSCRIPT_DIR="$COMMAND_BASE/subscripts"
+  source "$SUBSCRIPT_DIR/$script_name.sh" "$parameter"
+}
+
+function exec_scripts () {
+
+  for name in $@
+  do
+      exec_script "$name"
+  done
+}
+
+function setup_input_params() {
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-v" ]]; then
+				VERSION="$param"
+      elif [[ "$code" == "-bv" ]]; then
+        BUILD_VERSION="$param"
+      elif [[ "$code" == "-t" ]]; then
+        PROJECT_TARGET="$param"
+      elif [[ "$code" == "-conf" ]]; then
+        BUILD_CONFIGURATIONS=($param)
+      elif [[ "$code" == "-project" ]]; then
+        PROJECT_FOLDER_NAME="$param"
+      elif [[ "$code" == "-a" ]]; then
+        ARCHIVE_NAME="$param"
+			elif [[ "$code" == "-s" ]]; then
+				PROJ_SCHEME="$param"
+			elif [[ "$code" == "-p" ]]; then
+				PROVISIONING_PROFILE_NAME="$param"
+      elif [[ "$code" == "-u" ]]; then
+        UUID="$param"
+      elif [[ "$code" == "-i" ]]; then
+        APP_ID="$param"
+      elif [[ "$code" == "-ti" ]]; then
+        #732962646X
+        SPECIFICS_TEAM_ID="$param"
+      elif [[ "$code" == "-tn" ]]; then
+        #iPhone Distribution: Hiiir, Inc. Taiwan Branch
+        TEAM_NAME="$param"
+      elif [[ "$code" == "-si" ]]; then
+        SPECIFICS_SIGNING_IDENTITY="$param"
+      elif [[ "$code" == "-b" ]]; then
+        GIT_BRANCH_APP="$param"
+      elif [[ "$code" == "-eo" ]]; then
+        EXPORT_OPTION="$param"
+      elif [[ "$code" == "-ep" ]]; then
+        EXPORT_FOLDER="$param/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
+      elif [[ "$code" == "-lp" ]]; then
+        LOG_FOLDER="${param}/$BUILD_DATETIME"
+      elif [[ "$code" == "-aid" ]]; then
+        APPLE_ID="$param"
+      elif [[ "$code" == "-apwd" ]]; then
+        APPLE_ID_PASSWORD="$param"
+      elif [[ "$code" == "-app_tag" ]]; then
+        GIT_TAG_APP="$param"
+      elif [[ "$code" == "-ein" ]]; then
+        EXPORT_IPA_NAME="$param"
+      elif [[ "$code" == "-path" ]]; then
+        SOURCE_TYPE="path"
+        APP_PATH="$param"
+      elif [[ "$code" == "-passwd" ]]; then
+        PASSWD="$param"
+      elif [[ "$code" == "-project"  ]]; then
+        PROJECT_FOLDER_NAME="$param"
+        DELEGATE="$MATCHA_BUILDER_BASE/projects/$PROJECT_FOLDER_NAME/$DELEGATE_FILE_NAME"
+        code=""
+      elif [[ "$code" == "-delegate"  ]]; then
+        DELEGATE="$param"
+        code=""
+      fi
+		fi
+
+  done
+
+}
+
+SOURCE_TYPE="git"
+DELEGATE_FILE_NAME="delegate"
+setup_input_params "$@"
