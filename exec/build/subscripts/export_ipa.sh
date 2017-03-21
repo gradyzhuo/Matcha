@@ -41,8 +41,6 @@ if [[ "$EXPORT_IPA_NAME" == "" ]]; then
 	EXPORT_IPA_NAME="${PROJ_NAME}_${BUILD_CONFIGURATION} $VERSION($BUILD_VERSION)"
 fi
 
-echo "$EXPORT_IPA_NAME"
-
 if [[ $BUILD_CI == 0 ]]; then
   mv "$EXPORT_FOLDER/$output_tmp_folder/${PROJ_SCHEME}.ipa" "${EXPORT_FOLDER}/${EXPORT_IPA_NAME}.ipa"
 else
