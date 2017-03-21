@@ -12,24 +12,6 @@ declare -f validate_parameters
 
 BUILD_DATETIME="$(date +"%Y%m%d-%H%M")"
 
-function define() {
-  if [[ "$1" == "app_info" ]]; then
-    EXPORT_OPTION="appstore"
-    NEED_DOWNLOAD_PROVISION_PROFILE="YES"
-
-  elif [[ "$1" == "git" ]]; then
-    GIT_BRANCH_APP="master"
-
-  fi
-}
-
-function defines() {
-  for df in "$@"
-  do
-    define "$df"
-  done
-}
-
 function validate_env_variables(){
 
   declare -i result=0

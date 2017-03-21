@@ -26,7 +26,7 @@ declare -x ARCHIVE_NAME
 declare -x UUID
 
 declare -x GIT_APP
-declare -x GIT_BRANCH_APP
+declare -x GIT_BRANCH_APP="master"
 declare -x GIT_TAG_APP
 
 declare -x PASSWD
@@ -48,7 +48,7 @@ declare -x BUILD_PATH
 
 declare -x SUBSCRIPT_DIR
 declare -x LOG_FOLDER
-declare -x EXPORT_OPTION
+declare -x EXPORT_OPTION="appstore"
 declare -x EXPORT_OPTION_PLIST_FOLDER
 declare -x EXPORT_FOLDER
 declare -x EXPORT_IPA_NAME

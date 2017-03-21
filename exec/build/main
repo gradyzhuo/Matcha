@@ -49,9 +49,6 @@ show_help_if_needed $@
 @import DelegateSupport
 @import XC
 
-define app_info
-define git
-
 setup_delegate "$@"
 
 if [[ -e "$APP_PATH" ]]; then

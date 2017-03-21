@@ -43,8 +43,6 @@ else
   fi
 fi
 
-echo "$TMP_PATH"
-
 #####
 
 will_exec "build_app"
