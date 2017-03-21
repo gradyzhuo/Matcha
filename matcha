@@ -7,7 +7,7 @@
 #
 
 
-declare -i BUILD_CI=1
+declare -i -x BUILD_CI=1
 
 declare -a array=($@)
 if [[ "${array[@]}" =~ "-ci" ]]; then

@@ -38,7 +38,7 @@ rvm default
 
 #如果成功會略過 exit
 if [[ "$EXPORT_IPA_NAME" == "" ]]; then
-	EXPORT_IPA_NAME="$PROJ_SCHEME"
+	EXPORT_IPA_NAME="$PROJ_NAME_$BUILD_CONFIGURATION $VERSION($BUILD_VERSION)"
 fi
 
 if [[ $BUILD_CI == 0 ]]; then

@@ -7,8 +7,6 @@
 #
 
 # Gobal variables
-declare -i BUILD_CI
-
 declare -x PROJ_TYPE="project" #project or workspace
 declare -x PROJ_NAME
 declare -x PROJ_SCHEME
