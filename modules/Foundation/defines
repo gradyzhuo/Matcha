@@ -5,7 +5,7 @@
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
-declare -f setup_delegate
+declare -f config_env_variables
 declare -f validate_parameters
 
 BUILD_DATETIME="$(date +"%Y%m%d-%H%M")"
