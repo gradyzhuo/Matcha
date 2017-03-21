@@ -43,6 +43,8 @@ else
   fi
 fi
 
+echo "$TMP_PATH"
+
 #####
 
 will_exec "build_app"
@@ -53,13 +55,12 @@ phase_print "Archiving app"
 
 cmd="xcodebuild archive"
 
-xcworkspaces=$(echo **)
-if [[ ${xcworkspaces[*]} =~ $PROJ_NAME.xcworkspace ]]; then
+if [[ "$PROJ_TYPE" == "workspace" ]]; then
   print -c "green" "using $PROJ_NAME.xcworkspace"
   cmd="$cmd -workspace \"$PROJ_NAME.xcworkspace\""
 else
   print -c "green" "using $PROJ_NAME.xcodeproj"
- cmd="$cmd -project \"$PROJ_NAME.xcodeproj\""
+  cmd="$cmd -project \"$PROJ_NAME.xcodeproj\""
 fi
 
 cmd="$cmd -scheme $PROJ_SCHEME"

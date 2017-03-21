@@ -10,16 +10,12 @@ declare -x COMMAND_BASE
 declare -f @exec
 
 function @exec() {
-  PARAMS="$@"
   command="$1"
-  declare -i cmd_len=${#command}+2
-  declare -i params_len=${#PARAMS}
-  PARAMS=$( echo $PARAMS | cut -c $cmd_len-$params_len )
 
   PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
   COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$command"
   pushd "$COMMAND_BASE" >> /dev/null
-  source main $PARAMS
+  source main "$@"
   popd >> /dev/null
   if [[ "$PREVIOUS_COMMAND_BASE" != "" ]]; then
     COMMAND_BASE="$PREVIOUS_COMMAND_BASE"

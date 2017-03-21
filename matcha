@@ -23,4 +23,4 @@ MATCHA_BUILDER_BASE=$(pwd)
 cd -
 
 source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
-@exec $@
+@exec "$@"
