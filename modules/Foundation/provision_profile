@@ -8,7 +8,7 @@
 
 declare -f keychain
 declare -f download
-declare -f getUUIDTo
+declare -f setupUUID
 
 function keychain() {
 
