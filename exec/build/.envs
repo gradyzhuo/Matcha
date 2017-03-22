@@ -57,5 +57,4 @@ declare -x -i NEED_DOWNLOAD_PROVISION_PROFILE=0
 
 declare -x PROJECT_FOLDER_NAME
 
-declare -x WORKSPACE
 declare -x SOURCE_TYPE #git/path

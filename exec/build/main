@@ -20,15 +20,16 @@ fi
 if [[ "$WORKSPACE" == "" ]]; then
 
   if [[ "$APP_PATH" != "" ]]; then
-    WORKSPACE="$APP_PATH"
+    declare -x WORKSPACE="$APP_PATH"
   else
-    WORKSPACE="$MATCHA_BUILDER_BASE"
+    declare -x WORKSPACE="$MATCHA_BUILDER_BASE"
   fi
 
 fi
 
 #相關路徑之預設
 OUTCOME_PATH="$WORKSPACE/outcome"
+echo "OUTCOME_PATH: $OUTCOME_PATH"
 EXPORT_FOLDER="$OUTCOME_PATH/export"
 LOG_FOLDER="$OUTCOME_PATH/log"
 

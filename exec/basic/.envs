@@ -7,8 +7,5 @@
 #
 
 # Gobal variables
-declare -x MATCHA_BUILDER_BASE
-declare -x COMMAND_BASE
-
 declare -x MODULES_FOLDER
 declare -x MODULES_DIR
