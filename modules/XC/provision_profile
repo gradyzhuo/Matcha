@@ -1,0 +1,192 @@
+#!/bin/bash
+#
+# provision_profile
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f keychain
+declare -f download
+declare -f setupUUID
+
+function keychain() {
+
+  if [ "$1" == "unlock" ]; then
+    if [ "$2" != "" ]; then
+      security unlock-keychain -p "$2";
+    else
+      security unlock-keychain; #security find-generic-password -ga /Users/mruser/.ssh/id_dsa 2>&1 > /dev/null
+    fi
+  elif [ "$1" == "lock" ]; then
+    security lock-keychain
+  else
+    echo "keychain should input a action: lock or unlock."
+  fi
+}
+
+function profile() {
+
+  declare command="profile_$1"
+
+  if [[ $(function_exists $command) == 0 ]]; then
+    $command "$@"
+  else
+    print -c red -s bold ">> Command 'profile $1' not found"
+  fi
+
+
+}
+
+function profile_download() {
+
+  declare apple_id=""
+  declare apple_id_password=""
+  declare export_option=""
+  declare team_name=""
+  declare output=""
+  declare fetch_name=""
+  declare app_id=""
+  declare target_folder=""
+  declare provision_profile=""
+
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-id" ]]; then
+        apple_id="$param"
+      elif [[ "$code" == "-passwd" ]]; then
+        apple_id_password="$param"
+      elif [[ "$code" == "-option" ]]; then
+        export_option="$param"
+      elif [[ "$code" == "-team" ]]; then
+        team_name="$param"
+      elif [[ "$code" == "-output" ]]; then
+        output="$param"
+      elif [[ "$code" == "-fetch" ]]; then
+        fetch_name="$param"
+      elif [[ "$code" == "-app_id" ]]; then
+        app_id="$param"
+      fi
+    fi
+
+  done
+
+  if [[ "$output" == "" ]]; then
+    if [[ "$fetch_name" != "" ]]; then
+      output="$fetch_name"
+    else
+      output="profile"
+    fi
+  fi
+
+  if [[ "$output" != *".mobileprovision"* ]]; then
+    output="$output.mobileprovision"
+  fi
+
+  target_folder=$(dirname "$output")
+  provision_profile=$(basename "$output")
+
+  mkdirFolder "$target_folder"
+
+  if [ "$apple_id_password" != "" ]; then
+    fastlane-credentials add --username "$apple_id" --password "$apple_id_password"
+  fi
+
+  cmd_sigh="fastlane sigh -z"
+  if [[ "$apple_id" != "" ]]; then
+    cmd_sigh="$cmd_sigh -u $apple_id"
+  fi
+
+  if [[ "$export_option" == "ad-hoc" ]]; then
+    cmd_sigh="$cmd_sigh --adhoc true"
+  elif [[ "$export_option" == "development" ]]; then
+    cmd_sigh="$cmd_sigh --development true"
+  fi
+
+  if [[ "$team_name" != "" ]]; then
+    cmd_sigh="$cmd_sigh -l \"$team_name\""
+  fi
+  if [[ "$fetch_name" != "" ]]; then
+    cmd_sigh="$cmd_sigh -n \"$fetch_name\""
+  fi
+  if [[ "$app_id" != "" ]]; then
+    cmd_sigh="$cmd_sigh -a \"$app_id\""
+  fi
+  if [[ "$output" != "" ]]; then
+    cmd_sigh="$cmd_sigh -q '$output'"
+  fi
+
+  eval "$cmd_sigh" #execute
+
+}
+
+function profile_showUUID() {
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-profile" ]]; then
+        provision_profile=$(basename "$param")
+        profile_dir=$(dirname "$param")
+
+        cd "$profile_dir" >> /dev/null
+        target_folder=$(pwd)
+        cd -
+      fi
+    fi
+
+  done
+
+  declare profile_file="$target_folder/$provision_profile"
+  #
+  # unlock the keychain, automatically lock keychain on script exit
+  #
+
+  # security unlock-keychain -p `pwd` $HOME/Library/Keychains/login.keychain
+  # trap "security lock-keychain $HOME/Library/Keychains/login.keychain" EXIT
+
+  #
+  # Extract the profile UUID from the checked in Provisioning Profile.
+  #
+
+  mobileprovision=$(security cms -D -i "$profile_file")
+  uuid=$(/usr/libexec/plistbuddy -c Print:UUID /dev/stdin <<< ${mobileprovision})
+
+  echo "$uuid"
+}
+
+function profile_install() {
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-profile" ]]; then
+        declare provision_profile=$(basename "$param")
+        declare profile_dir=$(dirname "$param")
+
+        cd "$profile_dir" >> /dev/null
+        target_folder=$(pwd)
+        cd -
+      fi
+    fi
+
+  done
+
+  declare profile_file="$target_folder/$provision_profile"
+  uuid=$(profile_showUUID -profile "$profile_file")
+
+  INSTALL_TARGET="$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+
+  cp -f "$profile_file" "$INSTALL_TARGET"
+
+  if [[ -e $INSTALL_TARGET ]]; then
+    print -c green -s bold ">> $provision_profile($uuid) installed to $INSTALL_TARGET."
+  else
+    print -c red -s bold ">> $provision_profile($uuid) install failed."
+  fi
+}

@@ -8,18 +8,58 @@
 
 declare -x MATCHA_BUILDER_BASE
 declare -x COMMAND_BASE
+declare -x COMMAND
 
 declare -f @exec
+declare -f function_exists
+declare -f command_exists
+declare -f exists
+declare -f terminate
 
 function @exec() {
-  command="$1"
+  COMMAND="$1"
 
   PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
-  COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$command"
+  COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$COMMAND"
   pushd "$COMMAND_BASE" >> /dev/null
   source main "$@"
   popd >> /dev/null
-  if [[ "$PREVIOUS_COMMAND_BASE" != "" ]]; then
-    COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
+  COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
+}
+
+function function_exists() {
+    declare -f -F $1 > /dev/null
+    echo "$?"
+}
+
+function command_exists() {
+    command -v $1 > /dev/null
+    echo "$?"
+}
+
+# -f : function
+# -c : command
+function exists() {
+	_type="$1"
+	_command="$2"
+
+    if [[ "$_type" == "-f" ]]; then
+    	function_exists $_command
+    fi
+
+    if [[ "$_type" == "-c" ]]; then
+    	command_exists $_command
+    fi
+}
+
+function terminate(){
+
+  declare error_code="$1"
+  declare error_message="$2"
+
+  if [[ "$error_message" != "" ]]; then
+    print -c "red" -s bold "-- $error_message ----------"
   fi
+
+  exit 1
 }

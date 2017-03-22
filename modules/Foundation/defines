@@ -63,11 +63,7 @@ function config_env_variables(){
   if [[ "$PROJ_SCHEME" == "" ]]; then
     PROJ_SCHEME="$PROJ_NAME"
   fi
-
-  PROVISIONING_PROFILE="profile.mobileprovision"
-  if [[ "$PROVISIONING_PROFILE_NAME" != "" ]]; then
-    PROVISIONING_PROFILE="$PROVISIONING_PROFILE_NAME.mobileprovision"
-  fi
+  
 }
 
 function configure_signing_identity() {
