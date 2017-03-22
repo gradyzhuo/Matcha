@@ -14,12 +14,13 @@ configure_signing_identity
 
 if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
   phase_print "Downloading provision profile"
- profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_FOLDER/profile"
+  profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_FOLDER/profile"
+  profile install -profile "$PROVISIONING_FOLDER/profile"
 fi
 
 if [[ $AUTOMATICALLY_MANAGE_SIGIN != 0 && "$UUID" == "" ]]; then
   phase_print "Fetching UUID"
-  UUID=$(profile showUUID)
+  UUID=$(profile showUUID -profile "$PROVISIONING_FOLDER/profile")
   print -c green "using provision profile: $PROVISIONING_PROFILE($UUID)"
 fi
 
