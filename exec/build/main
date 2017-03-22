@@ -33,9 +33,10 @@ echo "OUTCOME_PATH: $OUTCOME_PATH"
 EXPORT_FOLDER="$OUTCOME_PATH/export"
 LOG_FOLDER="$OUTCOME_PATH/log"
 
+PROVISIONING_FOLDER="$WORKSPACE/ProvisioningProfiles"
+
 TEMP_FOLDER=".tmp"
 TMP_PATH="$WORKSPACE/$TEMP_FOLDER"
-PROVISIONING_FOLDER="$TMP_PATH/ProvisioningProfiles"
 BUILD_PATH="$TMP_PATH/build"
 EXPORT_OPTION_PLIST_FOLDER="$TMP_PATH/export_option"
 if [[ "$APP_PATH" == "" ]]; then
@@ -49,15 +50,11 @@ show_help_if_needed $@
 @import DelegateSupport
 @import XC
 
-define app_info
-define git
-
 setup_delegate "$@"
 
 if [[ -e "$APP_PATH" ]]; then
   switch_dir_to "$APP_PATH"
-  app_files=$(echo **)
-  if [[ "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" && ${app_files[*]} =~ "$DELEGATE_FILE_NAME" ]]; then
+  if [[ -e "$DELEGATE_FILE_NAME" && "$SOURCE_TYPE" == "path" && "$APP_PATH" != "" && "$DELEGATE" == "" ]]; then
     DELEGATE="$APP_PATH/$DELEGATE_FILE_NAME"
   fi
   restore_dir
@@ -69,12 +66,7 @@ will_launch "$@"
 
 clean tmp
 
-phase_print "Configuring"
-
-config_env_variables
 validate_env_variables
-
-mkdirs "log" "export"
 
 keychain unlock $PASSWD
 
@@ -86,6 +78,12 @@ exec_script _init
 if [[ "$SOURCE_TYPE" == "git" ]]; then
   exec_script clone_app
 fi
+
+phase_print "Configuring path..."
+
+config_env_variables
+mkdirs "log" "export"
+mkdirFolder "$TMP_PATH"
 
 declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
 if [[ $configurations_count == 0 ]]; then
@@ -124,5 +122,3 @@ done
 did_exec "builder"
 
 did_end
-
-popd >> /dev/null

@@ -45,5 +45,5 @@ function terminate(){
     print -c "red" -s bold "-- $error_message ----------"
   fi
 
-  exit $1
+  exit 1
 }

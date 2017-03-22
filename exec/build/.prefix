@@ -41,14 +41,14 @@ function setup_input_params() {
         PROJECT_TARGET="$param"
       elif [[ "$code" == "-conf" ]]; then
         BUILD_CONFIGURATIONS=($param)
-      elif [[ "$code" == "-project" ]]; then
-        PROJECT_FOLDER_NAME="$param"
       elif [[ "$code" == "-a" ]]; then
         ARCHIVE_NAME="$param"
 			elif [[ "$code" == "-s" ]]; then
 				PROJ_SCHEME="$param"
 			elif [[ "$code" == "-p" ]]; then
 				PROVISIONING_PROFILE_NAME="$param"
+      elif [[ "$code" == "-pn" ]]; then
+        PROJ_NAME="$param"
       elif [[ "$code" == "-u" ]]; then
         UUID="$param"
       elif [[ "$code" == "-i" ]]; then
@@ -99,3 +99,7 @@ function setup_input_params() {
 SOURCE_TYPE="git"
 DELEGATE_FILE_NAME="delegate"
 setup_input_params "$@"
+
+if [[ "$APPLE_ID_PASSWORD" != "" ]]; then
+  export FASTLANE_PASSWORD="$APPLE_ID_PASSWORD"
+fi

@@ -7,8 +7,7 @@
 #
 
 # Gobal variables
-declare -i BUILD_CI
-
+declare -x PROJ_TYPE="project" #project or workspace
 declare -x PROJ_NAME
 declare -x PROJ_SCHEME
 declare -x VERSION
@@ -25,7 +24,7 @@ declare -x ARCHIVE_NAME
 declare -x UUID
 
 declare -x GIT_APP
-declare -x GIT_BRANCH_APP
+declare -x GIT_BRANCH_APP="master"
 declare -x GIT_TAG_APP
 
 declare -x PASSWD
@@ -47,7 +46,7 @@ declare -x BUILD_PATH
 
 declare -x SUBSCRIPT_DIR
 declare -x LOG_FOLDER
-declare -x EXPORT_OPTION
+declare -x EXPORT_OPTION="app-store"
 declare -x EXPORT_OPTION_PLIST_FOLDER
 declare -x EXPORT_FOLDER
 declare -x EXPORT_IPA_NAME

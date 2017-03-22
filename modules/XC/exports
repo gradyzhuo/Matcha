@@ -42,7 +42,7 @@ function exports_option() {
 
 }
 
-function appstore(){
+function app-store(){
   PARAMS="$@"
   filepath="$1"
   declare -i filepath_len=${#filepath}+2
@@ -53,7 +53,7 @@ function appstore(){
 
 }
 
-function inhouse() {
+function enterprise() {
   PARAMS="$@"
   filepath="$1"
   declare -i filepath_len=${#filepath}+2

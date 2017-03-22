@@ -37,7 +37,7 @@ Help	   : $./build -h  or $./build.sh --help
 -bv   		  	BUILD_VERSION					      	  # **by project
 -ein		  		EXPORT_IPA_NAME				      		# **same as Archive_Name. e.g. -ein "beta.ipa"
 -conf 		  	BUILD_CONFIGURATION 	      		# no default, e.g. Debug, Release, it's case sensitive.
--eo   		  	EXPORT_OPTION 					    	  # **appstore, inhouse, ad-hoc, development
+-eo   		  	EXPORT_OPTION 					    	  # **app-store, enterprise, ad-hoc, development
 -u    		  	PROVISIONING_UUID           	  # **Default from PROVISIONING_PROFILE_NAME
 -ep   		  	EXPORT_FOLDER               		# **Default Export path "./export/"
 -lp	  		  	LOG_FOLDER						      	  # **Default Log path "./log"

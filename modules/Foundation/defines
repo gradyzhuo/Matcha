@@ -5,38 +5,14 @@
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
-declare -f define
-declare -f defines
-declare -f setup_delegate
+declare -f config_env_variables
 declare -f validate_parameters
 
 BUILD_DATETIME="$(date +"%Y%m%d-%H%M")"
 
-function define() {
-  if [[ "$1" == "app_info" ]]; then
-    EXPORT_OPTION="appstore"
-    NEED_DOWNLOAD_PROVISION_PROFILE="YES"
-
-  elif [[ "$1" == "git" ]]; then
-    GIT_BRANCH_APP="master"
-
-  fi
-}
-
-function defines() {
-  for df in "$@"
-  do
-    define "$df"
-  done
-}
-
 function validate_env_variables(){
 
   declare -i result=0
-  if [[ "$PROJ_NAME" == "" ]]; then
-    print -c red -s bold "[PROJ_NAME] is not setting."
-    result=1
-  fi
 
   if [[ "$SOURCE_TYPE" == "git" && "$GIT_APP" == "" ]]; then
     print -c red -s bold '[GIT_APP] is not setting.'
@@ -60,6 +36,18 @@ function validate_env_variables(){
 }
 
 function config_env_variables(){
+
+  switch_dir_to "$APP_PATH"
+  check_type=$(basename *.xcworkspace)
+  if [[ "$check_type" != "*.xcworkspace" ]]; then
+    PROJ_TYPE="workspace"
+  else
+    check_type=$(basename *.xcodeproj)
+    PROJ_TYPE="project"
+  fi
+  PROJ_NAME=$(echo "$check_type" | sed 's/\..*$//g')
+
+  restore_dir
 
   #====
 
