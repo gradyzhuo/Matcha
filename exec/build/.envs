@@ -46,7 +46,7 @@ declare -x BUILD_PATH
 
 declare -x SUBSCRIPT_DIR
 declare -x LOG_FOLDER
-declare -x EXPORT_OPTION="appstore"
+declare -x EXPORT_OPTION="app-store"
 declare -x EXPORT_OPTION_PLIST_FOLDER
 declare -x EXPORT_FOLDER
 declare -x EXPORT_IPA_NAME
