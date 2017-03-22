@@ -29,7 +29,6 @@ fi
 
 #相關路徑之預設
 OUTCOME_PATH="$WORKSPACE/outcome"
-echo "OUTCOME_PATH: $OUTCOME_PATH"
 EXPORT_FOLDER="$OUTCOME_PATH/export"
 LOG_FOLDER="$OUTCOME_PATH/log"
 
@@ -39,6 +38,16 @@ TEMP_FOLDER=".tmp"
 TMP_PATH="$WORKSPACE/$TEMP_FOLDER"
 BUILD_PATH="$TMP_PATH/build"
 EXPORT_OPTION_PLIST_FOLDER="$TMP_PATH/export_option"
+
+print -c 'blue' -s 'bold' "=> [OUTCOME_PATH]: $OUTCOME_PATH"
+print -c 'blue' -s 'bold' "=> [EXPORT_FOLDER]: $EXPORT_FOLDER"
+print -c 'blue' -s 'bold' "=> [LOG_FOLDER]: $LOG_FOLDER"
+print -c 'blue' -s 'bold' "=> [PROVISIONING_FOLDER]: $PROVISIONING_FOLDER"
+print -c 'blue' -s 'bold' "=> [TEMP_FOLDER]: $TEMP_FOLDER"
+print -c 'blue' -s 'bold' "=> [BUILD_PATH]: $BUILD_PATH"
+print -c 'blue' -s 'bold' "=> [EXPORT_OPTION_PLIST_FOLDER]: $EXPORT_OPTION_PLIST_FOLDER"
+
+
 if [[ "$APP_PATH" == "" ]]; then
   APP_PATH="$TMP_PATH/app"
 fi
