@@ -177,7 +177,10 @@ function profile_showUUID() {
 }
 
 function profile_install() {
-  profile_file=$(get_profile_parameter "$@")
+  _profile_file=$(get_profile_parameter "$@")
+  if [[ "$_profile_file" != "" ]]; then
+    profile_file="$_profile_file"
+  fi
   uuid=$(profile_showUUID "$@")
 
   install_lib_target="$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
@@ -193,7 +196,10 @@ function profile_install() {
 }
 
 function profile_clean(){
-  profile_file=$(get_profile_parameter "$@")
+  _profile_file=$(get_profile_parameter "$@")
+  if [[ "$_profile_file" != "" ]]; then
+    profile_file="$_profile_file"
+  fi
   if [[ -e "$profile_file" ]]; then
     delete "$profile_file"
     print -c "green" "deleted profile path: $profile_file..."
