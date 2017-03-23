@@ -22,7 +22,7 @@ $sudo gem install fastlane -NV
 2. 基本操作方式
 - CI      : matcha build -ci
 - 建構環境 : source matcha basic 
-  - import moudle : @import Builder
+- import moudle : @import Builder
   
 ### 自訂參數 ( `**` is the default value. )
 ```
