@@ -1,5 +1,6 @@
-#Matcha Scripting
-##用你習慣的方式Shell Scripting
+# Matcha Scripting
+## 用你習慣的方式Shell Scripting
+
 * 這個工具能做什麼?     
   - 用模組化的方式撰寫 Shell Script (bash)
   - 自動化建置 iOS Xcode Project
