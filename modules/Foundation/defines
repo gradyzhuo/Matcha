@@ -38,15 +38,8 @@ function validate_env_variables(){
 function config_env_variables(){
 
   switch_dir_to "$APP_PATH"
-  check_type=$(basename *.xcworkspace)
-  if [[ "$check_type" != "*.xcworkspace" ]]; then
-    PROJ_TYPE="workspace"
-  else
-    check_type=$(basename *.xcodeproj)
-    PROJ_TYPE="project"
-  fi
+  check_type=$(basename *.xcodeproj)
   PROJ_NAME=$(echo "$check_type" | sed 's/\..*$//g')
-
   restore_dir
 
   #====
@@ -63,7 +56,7 @@ function config_env_variables(){
   if [[ "$PROJ_SCHEME" == "" ]]; then
     PROJ_SCHEME="$PROJ_NAME"
   fi
-  
+
 }
 
 function configure_signing_identity() {

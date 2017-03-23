@@ -48,12 +48,12 @@ fi
 will_exec "build_app"
 
 #####
-
 phase_print "Archiving app"
 
 cmd="xcodebuild archive"
 
-if [[ "$PROJ_TYPE" == "workspace" ]]; then
+check_type=$(basename *.xcworkspace)
+if [[ "$check_type" != "*.xcworkspace" ]]; then
   print -c "green" "using $PROJ_NAME.xcworkspace"
   cmd="$cmd -workspace \"$PROJ_NAME.xcworkspace\""
 else
