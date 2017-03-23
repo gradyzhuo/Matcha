@@ -19,9 +19,7 @@ fi
 show_help_if_needed $@
 
 #=====Common imports=====
-@import Foundation
-@import DelegateSupport
-@import XC
+@import Builder
 
 setup_delegate "$@"
 

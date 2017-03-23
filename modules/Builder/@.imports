@@ -10,6 +10,8 @@ source defines
 
 @import Git
 @import Files
+@import DelegateSupport
+@import XC
 
 declare -f clean
 
