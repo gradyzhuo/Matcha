@@ -1,11 +1,14 @@
-#
-# README
-#
-# Matcha 1.0, Created by gradyzhuo, enoch_lee.
-# Copyright © 2017, Matcha Inc. All rights reserved.
-#
+#Matcha Scripting
+##用你習慣的方式Shell Scripting
+* 這個工具能做什麼?     
+  - 用模組化的方式撰寫 Shell Script (bash)
+  - 自動化建置 iOS Xcode Project
+  - 使用 delegate 的方式客製化 Xcode Project Build Phase
+  - 與 Jenkins 整合使用
+  
+*一些工具的參數及準備工作 
 
-1.預先設置環境
+1. 預先設置環境
 fastlane sigh :安裝 Fastlane
 
 $sudo gem install fastlane -NV
@@ -13,14 +16,13 @@ $sudo gem install fastlane -NV
 
 
 憑證遷移  	   :確認Certificate是否位於login的項目中，如不是，請先將需要的憑證從 KeyChain "System(系統)" 移至 "login(登入)"
-電腦帳號密碼設置:填寫至 Builder/.pass 內，Build 流程中，便不會再詢問密碼。
 
 
-2. 執行：
-CI         : $./build -ci
-Help	   : $./build -h  or $./build.sh --help
-
-
+2. 基本操作方式
+- CI      : matcha build -ci
+- 建構環境 : source matcha basic 
+  - import moudle : @import Builder
+  
 3. 可自訂參數 ( `**` is the default value. )
 
 -------------------------[ Required ]--------------------------------
