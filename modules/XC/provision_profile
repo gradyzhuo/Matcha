@@ -7,8 +7,11 @@
 #
 
 declare -f keychain
-declare -f download
-declare -f setupUUID
+declare -f profile
+declare -f profile_download
+declare -f profile_showUUID
+declare -f profile_install
+declare -f profile_clean
 
 function keychain() {
 

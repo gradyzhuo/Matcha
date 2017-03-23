@@ -6,40 +6,45 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-declare -f xc_setup_variables
+declare -f xc_show
 
-function xc_setup_variables {
-  cmd="xcodebuild -showBuildSettings"
+function xc_show() {
+  command="$1"
 
-  cmd="$cmd -scheme $PROJ_SCHEME"
-  if [[ "$BUILD_CONFIGURATION" != "" ]]; then
-    cmd="$cmd -configuration \"$BUILD_CONFIGURATION\""
+  declare scheme=""
+  declare configuration=""
+
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-s" ]]; then
+        scheme="$param"
+      elif [[ "$code" == "-conf" ]]; then
+        configuration=($param)
+      fi
+		fi
+  done
+
+  build_settings_cmd="xcodebuild -showBuildSettings"
+  if [[ "$scheme" != "" ]]; then
+    build_settings_cmd="$build_settings_cmd -scheme $scheme"
   fi
-
+  if [[ "$configuration" != "" ]]; then
+    build_settings_cmd="$build_settings_cmd -configuration \"$configuration\""
+  fi
   # cmd="$cmd -sdk iphoneos"
   # cmd="$cmd -xcconfig \"$codesign_xcconfig\""
 
-  #fetch APP_ID
-  if [[ "$APP_ID" == "" ]]; then
-  	APP_ID=$(eval "$cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
-  fi
-
-  #fetch INFO_PLIST
-  if [[ "$INFO_PLIST" == "" ]]; then
-    INFO_PLIST=$(eval "$cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
-  fi
-
-  if [[ "$BUILD_CONFIGURATIONS" == "" ]]; then
-    BUILD_CONFIGURATIONS=($(eval "$cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g'))
-  fi
-
-  CURRENT_PROJECT_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString)
-  CURRENT_PROJECT_BUILD_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleVersion)
-
-  DEVELOPMENT_TEAM=$(eval "$cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
-  if [[ "$DEVELOPMENT_TEAM" != "" ]]; then
-    AUTOMATICALLY_MANAGE_SIGIN=0
-  else
-    AUTOMATICALLY_MANAGE_SIGIN=1
+  if [[ "$command" == "app_id" ]]; then
+    echo $(eval "$build_settings_cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
+  elif [[ "$command" == "info_plist" ]]; then
+    echo $(eval "$cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
+  elif [[ "$command" == "default_conf" ]]; then
+    echo $(eval "$cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g')
+  elif [[ "$command" == "team" ]]; then
+    echo $(eval "$cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
   fi
 }
