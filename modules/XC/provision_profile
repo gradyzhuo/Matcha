@@ -184,6 +184,7 @@ function profile_install() {
 
   cp -f "$profile_file" "$install_lib_target"
 
+  provision_profile=$(basename $profile_file)
   if [[ -e $install_lib_target ]]; then
     print -c green -s bold ">> $provision_profile($uuid) installed to $install_lib_target."
   else
@@ -199,7 +200,7 @@ function profile_clean(){
   fi
 
   #remove all expired
-  {
-    echo "yes"
-  } | sigh manage -e >> /dev/null
+  # {
+  #   echo "yes"
+  # } | sigh manage -e >> /dev/null
 }
