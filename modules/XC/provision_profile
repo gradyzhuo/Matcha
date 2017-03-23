@@ -13,6 +13,8 @@ declare -f profile_showUUID
 declare -f profile_install
 declare -f profile_clean
 
+declare -x profile_shared_file
+
 function keychain() {
 
   if [ "$1" == "unlock" ]; then
@@ -91,6 +93,8 @@ function profile_download() {
   target_folder=$(dirname "$output")
   provision_profile=$(basename "$output")
 
+  profile_shared_file="$target_folder/$provision_profile"
+
   mkdirFolder "$target_folder"
 
   switch_dir_to "$target_folder"
@@ -132,24 +136,35 @@ function profile_download() {
 }
 
 function get_profile_parameter() {
+
+  if [[ "$profile_shared_file" != "" ]]; then
+    profile_file="$profile_shared_file"
+  fi
+
   for param in "$@"
   do
     if [[ "$param" =~ ^- ]]; then
       code="$param"
     else
       if [[ "$code" == "-profile" ]]; then
-        provision_profile=$(basename "$param")
-        profile_dir=$(dirname "$param")
-
-        cd "$profile_dir" >> /dev/null
-        target_folder=$(pwd)
-        cd - >> /dev/null
+        profile_tmp="$param"
       fi
     fi
   done
 
+  if [[ "$profile_file" == "" ]]; then
+    profile_file="./profile" #default name
+  fi
+
+  provision_profile=$(basename "$profile_file")
+  profile_dir=$(dirname "$profile_file")
+
+  cd "$profile_dir" >> /dev/null
+  target_folder=$(pwd)
+  cd - >> /dev/null
+
   declare profile_file="$target_folder/$provision_profile"
-  if [[ "$profile_file" != *".mobileprovision"* ]]; then
+  if [[ "$profile_file" != "" && "$profile_file" != *".mobileprovision"* ]]; then
     profile_file="$profile_file.mobileprovision"
   fi
 
@@ -177,17 +192,14 @@ function profile_showUUID() {
 }
 
 function profile_install() {
-  _profile_file=$(get_profile_parameter "$@")
-  if [[ "$_profile_file" != "" ]]; then
-    profile_file="$_profile_file"
-  fi
+  profile_file=$(get_profile_parameter "$@")
   uuid=$(profile_showUUID "$@")
 
   install_lib_target="$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
 
   cp -f "$profile_file" "$install_lib_target"
 
-  provision_profile=$(basename $profile_file)
+  declare provision_profile=$(basename "$profile_file")
   if [[ -e $install_lib_target ]]; then
     print -c green -s bold ">> $provision_profile($uuid) installed to $install_lib_target."
   else
@@ -196,10 +208,7 @@ function profile_install() {
 }
 
 function profile_clean(){
-  _profile_file=$(get_profile_parameter "$@")
-  if [[ "$_profile_file" != "" ]]; then
-    profile_file="$_profile_file"
-  fi
+  profile_file=$(get_profile_parameter "$@")
   if [[ -e "$profile_file" ]]; then
     delete "$profile_file"
     print -c "green" "deleted profile path: $profile_file..."
