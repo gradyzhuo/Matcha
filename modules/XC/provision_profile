@@ -39,7 +39,6 @@ function profile() {
 }
 
 function profile_download() {
-
   declare apple_id=""
   declare apple_id_password=""
   declare export_option=""
@@ -123,9 +122,13 @@ function profile_download() {
 
   eval "$cmd_sigh" #execute
   restore_dir
+
+  if [ "$apple_id_password" != "" ]; then
+        fastlane-credentials remove --username "$apple_id"
+  fi
 }
 
-function profile_showUUID() {
+function get_profile_parameter() {
   for param in "$@"
   do
     if [[ "$param" =~ ^- ]]; then
@@ -137,15 +140,21 @@ function profile_showUUID() {
 
         cd "$profile_dir" >> /dev/null
         target_folder=$(pwd)
-        cd -
+        cd - >> /dev/null
       fi
     fi
   done
 
   declare profile_file="$target_folder/$provision_profile"
   if [[ "$profile_file" != *".mobileprovision"* ]]; then
-    output="$profile_file.mobileprovision"
+    profile_file="$profile_file.mobileprovision"
   fi
+
+  echo "$profile_file"
+
+}
+
+function profile_showUUID() {
   #
   # unlock the keychain, automatically lock keychain on script exit
   #
@@ -157,6 +166,7 @@ function profile_showUUID() {
   # Extract the profile UUID from the checked in Provisioning Profile.
   #
 
+  profile_file=$(get_profile_parameter "$@")
   mobileprovision=$(security cms -D -i "$profile_file")
   uuid=$(/usr/libexec/plistbuddy -c Print:UUID /dev/stdin <<< ${mobileprovision})
 
@@ -164,37 +174,29 @@ function profile_showUUID() {
 }
 
 function profile_install() {
-  echo "xxxx: $@"
-  for param in "$@"
-  do
-    if [[ "$param" =~ ^- ]]; then
-      code="$param"
-    else
-      if [[ "$code" == "-profile" ]]; then
-        declare provision_profile=$(basename "$param")
-        declare profile_dir=$(dirname "$param")
+  profile_file=$(get_profile_parameter "$@")
+  uuid=$(profile_showUUID "$@")
 
-        cd "$profile_dir" >> /dev/null
-        target_folder=$(pwd)
-        cd -
-      fi
-    fi
+  install_lib_target="$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
 
-  done
+  cp -f "$profile_file" "$install_lib_target"
 
-  declare profile_file="$target_folder/$provision_profile"
-  if [[ "$profile_file" != *".mobileprovision"* ]]; then
-    output="$profile_file.mobileprovision"
-  fi
-  uuid=$(profile_showUUID -profile "$profile_file")
-
-  INSTALL_TARGET="$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
-
-  cp -f "$profile_file" "$INSTALL_TARGET"
-
-  if [[ -e $INSTALL_TARGET ]]; then
-    print -c green -s bold ">> $provision_profile($uuid) installed to $INSTALL_TARGET."
+  if [[ -e $install_lib_target ]]; then
+    print -c green -s bold ">> $provision_profile($uuid) installed to $install_lib_target."
   else
     print -c red -s bold ">> $provision_profile($uuid) install failed."
   fi
+}
+
+function profile_clean(){
+  profile_file=$(get_profile_parameter "$@")
+  if [[ -e "$profile_file" ]]; then
+    delete "$profile_file"
+    print -c "green" "deleted profile path: $profile_file..."
+  fi
+
+  #remove all expired
+  {
+    echo "yes"
+  } | sigh manage -e >> /dev/null
 }

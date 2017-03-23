@@ -35,10 +35,7 @@ function clean() {
       delete "${TMP_PATH}"
       print -c "green" "deleted tmp path: ${TMP_PATH}..."
     elif [[ "$cmd" == "provision_profile" ]]; then
-      delete "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE"
-      if [ "${APPLE_ID_PASSWORD}" != "" ]; then
-            fastlane-credentials remove --username "${APPLE_ID}"
-      fi
+      delete "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE.mobileprovision"
       print -c "green" "deleted profile path: $PROVISIONING_FOLDER/$PROVISIONING_PROFILE..."
     elif [[ "$cmd" == "exports" ]]; then
       delete "$EXPORT_FOLDER"

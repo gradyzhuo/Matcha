@@ -20,7 +20,7 @@ declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
 cd "$EXEC_DIR" >> /dev/null
 MATCHA_BUILDER_BASE=$(pwd)
-cd -
+cd - >> /dev/null
 
 source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
 @exec "$@"
