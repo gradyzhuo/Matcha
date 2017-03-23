@@ -43,3 +43,30 @@ function clean() {
     fi
   done
 }
+
+#如無預設之 WORKSPACE ，預設與 BUILDER_BASE 一致
+if [[ "$WORKSPACE" == "" ]]; then
+
+  if [[ "$APP_PATH" != "" ]]; then
+    declare -x WORKSPACE="$APP_PATH"
+  else
+    declare -x WORKSPACE="$MATCHA_BUILDER_BASE"
+  fi
+
+fi
+
+#相關路徑之預設
+OUTCOME_PATH="$WORKSPACE/outcome"
+EXPORT_FOLDER="$OUTCOME_PATH/export"
+LOG_FOLDER="$OUTCOME_PATH/log"
+
+PROVISIONING_FOLDER="$WORKSPACE/ProvisioningProfiles"
+
+TEMP_FOLDER=".tmp"
+TMP_PATH="$WORKSPACE/$TEMP_FOLDER"
+BUILD_PATH="$TMP_PATH/build"
+EXPORT_OPTION_PLIST_FOLDER="$TMP_PATH/export_option"
+
+if [[ "$APP_PATH" == "" ]]; then
+  APP_PATH="$TMP_PATH/app"
+fi
