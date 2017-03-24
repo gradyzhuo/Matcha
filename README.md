@@ -1,7 +1,6 @@
 ![](logo1.jpg)
 
-# Matcha Scripting
-## 用你習慣的方式Shell Scripting
+## 用模組的方式Shell Scripting
 
 ### 這個工具能做什麼?    
  - 用模組化的方式撰寫 Shell Script (bash)
