@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# update/main
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+@import Git
+
+declare TAG="1.0"
+declare UPDATE_PATH="$INSTALL_LIB_TARGET/update"
+mkdirFolder "$UPDATE_PATH"
+
+clone -r "https://github.com/gradyzhuo/Matcha.git" -b "master" -t "$UPDATE_PATH" -tag "$TAG"
+
+sh "$UPDATE_PATH/install.sh"
+
+delete "$UPDATE_PATH"

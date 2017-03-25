@@ -10,6 +10,7 @@
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
+
 cd "$EXEC_DIR" >> /dev/null
 MATCHA_BUILDER_BASE=$(pwd)
 cd - >> /dev/null
@@ -39,7 +40,6 @@ welcome
 @import Prints
 @import Files
 
-
-if [[ -n "$@" ]]; then
+if [[ "$1" != "" && "$(ls exec)" == *"$1"* ]]; then
   @exec "$@"
 fi

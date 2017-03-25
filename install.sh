@@ -6,13 +6,13 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-source matcha >> /dev/null
+source "$(pwd)/matcha" >> /dev/null
 
-declare INSTALL_LIB_TARGET="/usr/local/lib/Matcha"
 declare INSTALL_TARGET="/usr/local/bin/matcha"
 
 declare CURRENT_SOURCE=$(readlink "$INSTALL_TARGET")
 if [[ -n $CURRENT_SOURCE && "$CURRENT_SOURCE" != "$INSTALL_TARGET" ]]; then
+  delete $(dirname "$CURRENT_SOURCE")
   delete "$INSTALL_TARGET"
 fi
 

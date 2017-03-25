@@ -7,6 +7,7 @@
 #
 
 declare -x VERSION='1.0'
+declare -x INSTALL_LIB_TARGET="$HOME/.Matcha"
 
 declare -x MATCHA_BUILDER_BASE
 declare -x COMMAND_BASE
@@ -46,6 +47,12 @@ function welcome(){
 }
 
 function @exec() {
+
+  if [[ "$0" == "-bash" ]]; then
+    print -c "red" -s "bold" "@exec not support when running matcha by \`source\` in terminal. please run \`\$ matcha $1\` insteaded."
+    return 0
+  fi
+
   COMMAND="$1"
 
   if [[ -z $COMMAND ]]; then

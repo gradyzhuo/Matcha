@@ -45,24 +45,26 @@ $ source matcha
   * XC
   
 ```bash
-# 引入 Modules ([MODULE_NAME]可用的模組，請參考表2)
-$ @import [Matcha Path]/[MODULE_NAME] 
-#or use the module name.
+# 從內建的模組引入 Module
+$ @import [MODULE_NAME] 
+# 或是從其他路徑引入 Module，請引入到包含 @.imports 的該層資料夾層級即可。
+$ @import [Matcha Path]
  
-# 在 Terminal 看到以下畫面表示 Module 載入完成
+# 在 Terminal 看到類似以下畫面表示 Module 載入完成
 $ @import XC
->> Module [XC] import succeed.
+[17-03-26 01:10:24] >> Module [XC] import succeed.
 ```
 
 ### Matcha Commands
 
 ```bash
-
+# 你可以在執行 matcha 後面攜帶 Command 及其參數，以執行所需的動作。
 $ matcha [COMMAND_NAME] [PARAMETERS]
 
 #或使用 @exec 以執行 command.
 $ source matcha
 @exec [COMMAND_NAME] [PARAMETERS]
+# 注意，@exec 並不支持在終端機(terminal) 直接使用，但您可在撰寫其他腳本做為內文使用。
 ```
 
 -- 
