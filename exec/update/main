@@ -9,13 +9,18 @@
 @import Git
 
 declare TAG="1.0"
-declare UPDATE_PATH="$INSTALL_LIB_TARGET/update"
+declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
+@log 'Cloning Matcha...'
 clone -r "https://github.com/gradyzhuo/Matcha.git" -b "unstable" -t "$UPDATE_PATH" -tag "$TAG"
 
 cd "$UPDATE_PATH" >> /dev/null
-sh "install.sh"
+./install.sh
 cd - >> /dev/null
 
 delete "$UPDATE_PATH"
+
+if [[ $? == true ]]; then
+  @log 'Update succeed.'
+fi
