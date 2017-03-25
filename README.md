@@ -1,31 +1,76 @@
 ![](logo1.jpg)
 
-## 用模組的方式Shell Scripting
+# 用模組的方式Shell Scripting
 
-### 這個工具能做什麼?    
- - 用模組化的方式撰寫 Shell Script (bash)
- - 自動化建置 iOS Xcode Project
- - 使用 delegate 的方式客製化 Xcode Project Build Phase
- - 與 Jenkins 整合使用
-  
-### 一些工具的參數及準備工作 
+## 這個工具能做什麼?    
+* 用模組化的方式撰寫 Shell Script (bash)
+* 自動化建置 iOS Xcode Project
+* 使用 delegate 的方式客製化 Xcode Project Build Phase
+* 與 Jenkins 整合使用
+ 
 
-1. 預先設置環境
-fastlane sigh :安裝 Fastlane
+## 使用方式
 
-$sudo gem install fastlane -NV
-#[Reference] https://github.com/fastlane/fastlane
+### 基本操作指令 
 
+```bash
+# 在現在的 shell process 引用 Matcha
+$ source matcha 
 
-憑證遷移  	   :確認Certificate是否位於login的項目中，如不是，請先將需要的憑證從 KeyChain "System(系統)" 移至 "login(登入)"
+# 看到以下畫面表示 Matcha 載入完成
 
+＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
+＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃
+＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃
+＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃
+＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃
+＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃
+＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
 
-2. 基本操作方式
-- CI      : matcha build -ci
-- 建構環境 : source matcha basic 
-- import moudle : @import Builder
+```
+
+### 使用模組
+
+* 載入模組的路徑：
+  * [Matcha Path]/modules/[MODULE_NAME]
+* 預載的模組：
+  * Prints 
+  * Files
+* 現行可用的內建模組：
+  * Prints
+  * Files
+  * Builder
+  * Git
+  * MailSupport
+  * XC
   
-### 自訂參數 ( `**` is the default value. )
+```bash
+# 引入 Modules ([MODULE_NAME]可用的模組，請參考表2)
+$ @import [Matcha Path]/[MODULE_NAME] 
+#or use the module name.
+ 
+# 在 Terminal 看到以下畫面表示 Module 載入完成
+$ @import XC
+>> Module [XC] import succeed.
+```
+
+### Matcha Commands
+
+```bash
+
+$ matcha [COMMAND_NAME] [PARAMETERS]
+
+#或使用 @exec 以執行 command.
+$ source matcha
+@exec [COMMAND_NAME] [PARAMETERS]
+```
+
+-- 
+待更新…
+
+#### 表1: 可用的參數
+
+##### archive
 ```
 -------------------------[ Required ]--------------------------------
 -s		PROJ_SCHEME			# (required) no default.  it's required, if project is built by xcworkspace.
@@ -56,26 +101,24 @@ $sudo gem install fastlane -NV
 -b		GIT_BRANCH_APP			# **master
 -app_tag	GIT_TAG_APP			# no default
 
--------------------------[ Mode switch ]--------------------------------
--ci		BUILD_CI			# don't give a value, it will switch to ci mode.
-
 -------------------------[ Not important anymore ]--------------------------------
 -ti		TEAM_ID				# default from provision profile.
 -si		SIGNING_IDENTITY		# **iPhone Distribution: [TEAM_NAME].
 ```
 
-### delegate protocol 
 
-- Functions 定義
-  * (optional) builder_will_launch(launch_parameter) : Builder 將進行前置作業/清除舊資料前呼叫。
-  * (optional) builder_did_launch()                  : Builder 完成進行前置作業，即將進行Build Script動作。
-  * (optional) builder_will_exec(action)             : 即將進行特定動作前呼叫，所進行的動作將透過 action/$1 提供
-  * (optional) builder_did_exec(action)              : 完成特定動作時呼叫，所進行的動作將透過 action/$1 提供
-  * (optional) builder_did_end()                     : Builder 完成所有動作，並清除資料後進行
+### delegate protocol
 
-- Action 定義
-  * builder     : Builder Phase.        { will: 全部 Phase 進行前 | did: 全部 Phase 完成後 }
-  * build_app   : Build & Archive App.  { will: build app 前 | did: build app 完成後 }
-  * git         : Git clone app.        { will: clone git app 前 | did: clone git app 完成後 }
-  * export_ipa  : Export to ipa file.   { will: export 進行前 | did: export 完成後 }
- 
+* Functions 定義
+	* (optional) builder_will_launch(launch_parameter) : Builder 將進行前置作業/清除舊資料前呼叫。
+	* (optional) builder_did_launch()                  : Builder 完成進行前置作業，即將進行Build Script動作。
+	* (optional) builder_will_exec(action)             : 即將進行特定動作前呼叫，所進行的動作將透過 action/$1 提供
+	* (optional) builder_did_exec(action)              : 完成特定動作時呼叫，所進行的動作將透過 action/$1 提供
+	* (optional) builder_did_end()                     : Builder 完成所有動作，並清除資料後進行
+
+* Action 定義
+	* builder     : Builder Phase.        { will: 全部 Phase 進行前 | did: 全部 Phase 完成後 }
+	* build_app   : Build & Archive App.  { will: build app 前 | did: build app 完成後 }
+	* git         : Git clone app.        { will: clone git app 前 | did: clone git app 完成後 }
+	* export_ipa  : Export to ipa file.   { will: export 進行前 | did: export 完成後 }
+
