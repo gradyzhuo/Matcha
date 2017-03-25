@@ -7,6 +7,9 @@
 #
 
 source "./matcha" >> /dev/null
+@import Prints >> /dev/null
+@import Files >> /dev/null
+
 
 declare INSTALL_TARGET="/usr/local/bin/matcha"
 
@@ -31,3 +34,6 @@ do
     cp -R "$EXEC_DIR/$item" "$INSTALL_LIB_TARGET/$item"
 done
 ln -s "$INSTALL_LIB_TARGET/matcha" "$INSTALL_TARGET"
+
+print -c 'green' -s 'bold' "Install succeed to \`$INSTALL_LIB_TARGET\`!"
+print -c 'green' -s 'bold' "You can start by entering \`matcha help\`"
