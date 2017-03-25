@@ -13,7 +13,7 @@ declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
 @log 'Cloning Matcha...'
-clone -r "https://github.com/gradyzhuo/Matcha.git" -b "unstable" -t "$UPDATE_PATH" -tag "$TAG"
+clone -r "https://github.com/gradyzhuo/Matcha.git" -b "unstable" -t "$UPDATE_PATH"
 
 cd "$UPDATE_PATH" >> /dev/null
 ./install.sh
