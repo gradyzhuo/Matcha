@@ -12,8 +12,10 @@ declare TAG="1.0"
 declare UPDATE_PATH="$INSTALL_LIB_TARGET/update"
 mkdirFolder "$UPDATE_PATH"
 
-clone -r "https://github.com/gradyzhuo/Matcha.git" -b "master" -t "$UPDATE_PATH" -tag "$TAG"
+clone -r "https://github.com/gradyzhuo/Matcha.git" -b "unstable" -t "$UPDATE_PATH" -tag "$TAG"
 
-sh "$UPDATE_PATH/install.sh"
+cd "$UPDATE_PATH" >> /dev/null
+sh "install.sh"
+cd - >> /dev/null
 
 delete "$UPDATE_PATH"

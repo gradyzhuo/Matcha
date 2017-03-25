@@ -6,7 +6,7 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-source "$(pwd)/matcha" >> /dev/null
+source "./matcha" >> /dev/null
 
 declare INSTALL_TARGET="/usr/local/bin/matcha"
 
