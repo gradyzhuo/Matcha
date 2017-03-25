@@ -14,7 +14,11 @@ declare -f did_end
 declare -f did_terminate
 
 function will_launch() {
-  if [[ $(function_exists builder_will_launch) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_will_launch) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_will_launch $@
@@ -23,7 +27,11 @@ function will_launch() {
 }
 
 function did_launch() {
-  if [[ $(function_exists builder_did_launch) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_did_launch) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_did_launch $@
@@ -32,7 +40,11 @@ function did_launch() {
 }
 
 function will_exec() {
-  if [[ $(function_exists builder_will_exec) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_will_exec) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_will_exec $@
@@ -41,7 +53,11 @@ function will_exec() {
 }
 
 function did_exec() {
-  if [[ $(function_exists builder_did_exec) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_did_exec) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_did_exec $@
@@ -50,7 +66,11 @@ function did_exec() {
 }
 
 function did_end() {
-  if [[ $(function_exists builder_did_end) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_did_end) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_did_end $@
@@ -60,7 +80,11 @@ function did_end() {
 }
 
 function did_terminate(){
-  if [[ $(function_exists builder_did_terminate) == 0 ]]; then
+  type="$1"
+  if [[ "$type" == "" ]]; then
+    type="builder"
+  fi
+  if [[ $(function_exists ${type}_did_terminate) == 0 ]]; then
     dir_path=$(dirname "$DELEGATE")
     switch_dir_to "$dir_path"
     builder_did_terminate $@

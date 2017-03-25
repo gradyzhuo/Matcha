@@ -12,8 +12,7 @@
 function builder_will_launch() {
   # the builder will launch to cleaning and setup parameters from command line.
   # setup the env variables.
-
-  PROJ_NAME=""    # the name of *.xcodeproj or *.xcworkspace
+  
   GIT_APP=""      # the git url of app.
   TEAM_NAME=""    # the team name in apple developer.
 }

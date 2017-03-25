@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# modules/init
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f @import
+
+function @import() {
+
+  declare module=$(basename "$1")
+  declare module_dir=$(dirname "$1")
+  declare module_path="$module_dir/$module"
+  if [[ ! -e "$module_path/@.imports" ]]; then
+    module_path="$MODULES_FOLDER/$module"
+  fi
+
+  cd "$EXEC_DIR" >> /dev/null
+  MATCHA_BUILDER_BASE=$(pwd)
+  cd - >> /dev/null
+
+  if [[ "$module" == "" ]]; then
+    @log "-- Module name can't be empty! ----------"
+    return 1
+  fi
+
+  if [[ -e "$module_path" ]]; then
+    pushd "$module_path" >> /dev/null
+    source @.imports >> /dev/null
+    popd >> /dev/null
+
+    @log ">> Module [$module] import succeed."
+  else
+    @log "-- Module [$module] not found! ----------"
+  fi
+}

@@ -13,3 +13,9 @@ declare -f builder_will_exec
 declare -f builder_did_exec
 declare -f builder_did_end
 declare -f builder_did_terminate
+
+declare -f matcha_will_launch
+declare -f matcha_did_launch
+declare -f matcha_did_end
+declare -f matcha_did_terminate
+declare -f matcha_exec

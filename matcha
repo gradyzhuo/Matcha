@@ -6,14 +6,6 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-
-declare -i -x BUILD_CI=1
-
-declare -a array=($@)
-if [[ "${array[@]}" =~ "-ci" ]]; then
-  BUILD_CI=0
-fi
-
 #從執行 shell 路徑判定builder路徑
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
@@ -23,4 +15,31 @@ MATCHA_BUILDER_BASE=$(pwd)
 cd - >> /dev/null
 
 source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
-@exec "$@"
+MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
+source "$MODULES_FOLDER/@.imports" >> /dev/null
+
+declare -a array=($@)
+if [[ "${array[@]}" =~ "-ci" ]]; then
+  BUILD_CI=0
+elif [[ "${array[@]}" =~ "-debug" ]]; then
+  DEBUG_MODE=0
+fi
+
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+  more "README.md"
+  exit 0
+elif [[ "$1" == "--version" || "$1" == "-v" ]]; then
+  echo "$VERSION"
+  exit 0
+fi
+
+
+welcome
+
+@import Prints
+@import Files
+
+
+if [[ -n "$@" ]]; then
+  @exec "$@"
+fi
