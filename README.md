@@ -30,9 +30,8 @@ $ source matcha
 ```
 
 ### 使用模組
-
 * 載入模組的路徑：
-  * [Matcha Path]/modules/[MODULE_NAME]
+  * [Matcha Path]/modules/[MODULE_NAME].mm
 * 預載的模組：
   * Prints 
   * Files
@@ -53,6 +52,18 @@ $ @import [Matcha Path]
 # 在 Terminal 看到類似以下畫面表示 Module 載入完成
 $ @import XC
 [17-03-26 01:10:24] >> Module [XC] import succeed.
+```
+
+### 安裝模組
+透過模組的製作，您也可以將你自已撰寫的模組安裝到Matcha中，模組預設會安裝至 `[HOME]/.Matcha/usr/modules` 並會建立捷徑至 `[HOME]/.Matcha/modules/[MODULE_NAME].mm`
+
+```bash
+# 請指定到包含 @.imports 的該層資料夾層級即可
+# 預設的模組名稱會是資料夾的名字
+$ matcha module install [MODULE_PATH] 
+
+#你也可以指定模組的名稱，請在路徑後方打入自訂模組的名稱即可
+$ matcha module install [MODULE_PATH]  [MODULE_NAME]
 ```
 
 ### Matcha Commands

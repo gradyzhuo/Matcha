@@ -19,6 +19,8 @@ source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
 MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
 source "$MODULES_FOLDER/@.imports" >> /dev/null
 
+@import Prints --silent
+
 declare -a array=($@)
 if [[ "${array[@]}" =~ "-ci" ]]; then
   BUILD_CI=0

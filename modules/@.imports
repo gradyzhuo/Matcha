@@ -7,32 +7,50 @@
 #
 
 declare -f @import
+declare -f load_module
+declare -x -i SILENT_IMPORT=1
 
 function @import() {
 
-  declare module=$(basename "$1")
-  declare module_dir=$(dirname "$1")
-  declare module_path="$module_dir/$module"
-  if [[ ! -e "$module_path/@.imports" ]]; then
-    module_path="$MODULES_FOLDER/$module"
+  if [[ "$@" == *"--silent"* ]]; then
+    SILENT_IMPORT=0
   fi
 
-  cd "$EXEC_DIR" >> /dev/null
-  MATCHA_BUILDER_BASE=$(pwd)
-  cd - >> /dev/null
+  declare module=$(basename "$1")
 
   if [[ "$module" == "" ]]; then
     @log "-- Module name can't be empty! ----------"
     return 1
   fi
 
-  if [[ -e "$module_path" ]]; then
-    pushd "$module_path" >> /dev/null
-    source @.imports >> /dev/null
-    popd >> /dev/null
+  declare module_dir=$(dirname "$1")
+  declare module_path="$module_dir/$module"
+  if [[ ! -e "$module_path/@.imports" ]]; then
+    module_path="$MODULES_FOLDER/$module"
+  fi
 
-    @log ">> Module [$module] import succeed."
+  if [[ -L "$module_path.mm" ]]; then
+    real=$(readlink "$module_path.mm")
+    module_path=$(dirname "$real")
+  fi
+
+  if [[ -e "$module_path" ]]; then
+    load_module "$module_path"
   else
-    @log "-- Module [$module] not found! ----------"
+    if [[ $SILENT_IMPORT == 1 ]]; then
+      @log "-- Module [$module] not found! ----------"
+    fi
+  fi
+
+  SILENT_IMPORT=1
+}
+
+function load_module() {
+  pushd "$1" >> /dev/null
+  source @.imports >> /dev/null
+  popd >> /dev/null
+
+  if [[ $SILENT_IMPORT == 1 ]]; then
+    @log ">> Module [$module] import succeed."
   fi
 }

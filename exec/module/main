@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# update/main
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+@import Files --silent
+
+if [[ "$2" == "install" ]]; then
+  path="$3"
+  module_name="$4"
+  if [[ -z $module_name ]]; then
+    module_name=$(basename "$path")
+  fi
+
+  cp_path="$MODULES_FOLDER/.tmp"
+  cp -R "$path" "$cp_path"
+
+  if [[ $BUILTIN_MODULE == 0 ]]; then
+    INSTALL_PATH="$MODULES_FOLDER"
+  else
+    INSTALL_PATH="$MATCHA_BUILDER_BASE/usr/modules"
+  fi
+
+
+  if [[ ! -d "$INSTALL_PATH" ]]; then
+    mkdirFolder "$INSTALL_PATH"
+  fi
+
+  if [[ -e "$INSTALL_PATH/$module_name" ]]; then
+    delete "$INSTALL_PATH/$module_name"
+  fi
+
+  if [[ -e "$MODULES_FOLDER/$module_name.mm" ]]; then
+    delete "$MODULES_FOLDER/$module_name.mm"
+  fi
+
+  cp -R "$cp_path" "$INSTALL_PATH/$module_name"
+  ln -s "$INSTALL_PATH/$module_name/@.import" "$MODULES_FOLDER/$module_name.mm"
+  delete "$cp_path"
+
+  print -c 'green' -s 'bold' "++ Install \`$module_name\` to \`modules/$module_name.mm\` succeed."
+
+fi
