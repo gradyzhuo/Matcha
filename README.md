@@ -9,14 +9,18 @@
 * 與 Jenkins 整合使用
 
 ## 安裝
+
 ```bash
 # 切換至 Clone 的 Match 路徑
 $ cd [CLONED_MATCHA_FOLDER]
 
 # 執行 install.sh 啟動安裝程序
 $ ./install.sh
+```
 
-# 看到類似以下的畫面表示 Matcha 安裝成功
+#### 看到以下的畫面表示 Matcha 安裝成功
+
+```bash
 [17-03-27 19:11:05] Preparing Matcha 1.0 ...
 [17-03-27 19:11:05] Draining ...
 [17-03-27 19:11:06] Bubbling Matcha ...
@@ -70,6 +74,7 @@ $ @import [Matcha Path]
 # 在 Terminal 看到類似以下畫面表示 Module 載入完成
 $ @import XC
 [17-03-26 01:10:24] >> Module [XC] import succeed.
+
 ```
 
 ### 安裝模組
