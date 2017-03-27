@@ -28,7 +28,7 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
   DEBUG_MODE=0
 fi
 
-if [[ "$1" != "" && "$(ls exec)" == *"$1"* ]]; then
+if [[ "$1" != "" && $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"* ]]; then
   @exec "$@"
 else
   welcome
