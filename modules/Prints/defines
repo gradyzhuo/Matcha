@@ -211,11 +211,14 @@ function get_format_string() {
         else
           text="$text $var"
         fi
+
         code=""
       fi
 
     fi
   done
+
+  text=$(echo $text | sed "s/\\\'/’/g" | sed 's/\"/”/g' | sed "s/'//g" | sed 's/"//g' | sed "s/’/'/g" | sed 's/”/"/g' )
 
   format=$(get_format "$color" "$style" "$background")
   if [[ $BUILD_CI == 0 ]]; then

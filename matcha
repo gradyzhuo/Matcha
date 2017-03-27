@@ -34,6 +34,14 @@ if [[ "$1" != "" ]]; then
   else
     print -c 'red' -s 'bold' "Command \`$1\` not found."
   fi
+elif [[ "$0" == "-bash" ]]; then
+  welcome
+
+  print -c "green" "============================"
+  print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
+  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints2\n    print -c "blue" "Hello Matcha!"\n```'
+  prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
+  print -c green -s bold "Enjoy it!"
 else
   welcome
 fi
