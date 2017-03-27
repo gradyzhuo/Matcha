@@ -7,15 +7,33 @@
 * 自動化建置 iOS Xcode Project
 * 使用 delegate 的方式客製化 Xcode Project Build Phase
 * 與 Jenkins 整合使用
- 
+
+## 安裝
+```bash
+# 切換至 Clone 的 Match 路徑
+$ cd [CLONED_MATCHA_FOLDER]
+
+# 執行 install.sh 啟動安裝程序
+$ ./install.sh
+
+# 看到類似以下的畫面表示 Matcha 安裝成功
+[17-03-27 19:11:05] Preparing Matcha 1.0 ...
+[17-03-27 19:11:05] Draining ...
+[17-03-27 19:11:06] Bubbling Matcha ...
+[17-03-27 19:11:06] Installing modules...
+[17-03-27 19:11:07] Cleaning...
+
+Bubbling succeed to `/Users/grady_zhuo/.Matcha`!🍵 🍵 🍵
+You can start by `matcha help`.
+``` 
 
 ## 使用方式
 
-### 基本操作指令 
+### 基本操作指令
 
 ```bash
 # 在現在的 shell process 引用 Matcha
-$ source matcha 
+$ source matcha
 
 # 看到以下畫面表示 Matcha 載入完成
 
@@ -33,7 +51,7 @@ $ source matcha
 * 載入模組的路徑：
   * [Matcha Path]/modules/[MODULE_NAME].mm
 * 預載的模組：
-  * Prints 
+  * Prints
   * Files
 * 現行可用的內建模組：
   * Prints
@@ -42,13 +60,13 @@ $ source matcha
   * Git
   * MailSupport
   * XC
-  
+
 ```bash
 # 從內建的模組引入 Module
-$ @import [MODULE_NAME] 
+$ @import [MODULE_NAME]
 # 或是從其他路徑引入 Module，請引入到包含 @.imports 的該層資料夾層級即可。
 $ @import [Matcha Path]
- 
+
 # 在 Terminal 看到類似以下畫面表示 Module 載入完成
 $ @import XC
 [17-03-26 01:10:24] >> Module [XC] import succeed.
@@ -60,7 +78,7 @@ $ @import XC
 ```bash
 # 請指定到包含 @.imports 的該層資料夾層級即可
 # 預設的模組名稱會是資料夾的名字
-$ matcha module install [MODULE_PATH] 
+$ matcha module install [MODULE_PATH]
 
 #你也可以指定模組的名稱，請在路徑後方打入自訂模組的名稱即可
 $ matcha module install [MODULE_PATH]  [MODULE_NAME]
@@ -78,7 +96,7 @@ $ source matcha
 # 注意，@exec 並不支持在終端機(terminal) 直接使用，但您可在撰寫其他腳本做為內文使用。
 ```
 
--- 
+--
 待更新…
 
 #### 表1: 可用的參數
@@ -134,4 +152,3 @@ $ source matcha
 	* build_app   : Build & Archive App.  { will: build app 前 | did: build app 完成後 }
 	* git         : Git clone app.        { will: clone git app 前 | did: clone git app 完成後 }
 	* export_ipa  : Export to ipa file.   { will: export 進行前 | did: export 完成後 }
-

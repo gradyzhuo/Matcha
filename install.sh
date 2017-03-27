@@ -6,6 +6,8 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+
+
 if [[ "$@" == *"-ci"* ]]; then
   source "./matcha" -ci >> /dev/null
 else
@@ -45,11 +47,6 @@ fi
 @log "Bubbling Matcha ..."
 mkdirFolder "$INSTALL_LIB_TARGET"
 
-if [[ -d "$HOME/.matcha_tmp/usr" ]]; then
-  cp -R "$HOME/.matcha_tmp/usr" "$INSTALL_LIB_TARGET/"
-  delete "$HOME/.matcha_tmp"
-fi
-
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
@@ -61,18 +58,40 @@ done
 
 source matcha >> /dev/null
 
-export BUILTIN_MODULE=0
+
 
 @log "Installing modules..."
-_MODULES_FOLDER="$INSTALL_LIB_TARGET/modules"
-_MODULES_TO_INSTAll=$(ls "$INSTALL_LIB_TARGET/modules")
-
-for module_name in $_MODULES_TO_INSTAll
+BUILTIN_MODULES_FOLDER="$INSTALL_LIB_TARGET/modules"
+BUILTIN_MODULES_TO_INSTAll=$(ls "$BUILTIN_MODULES_FOLDER")
+export BUILTIN_MODULE=0
+for module_name in $BUILTIN_MODULES_TO_INSTAll
 do
-  if [[ -d "$_MODULES_FOLDER/$module_name" ]]; then
-    @exec module install "$_MODULES_FOLDER/$module_name" >> /dev/null
+  if [[ -d "$BUILTIN_MODULES_FOLDER/$module_name" ]]; then
+    @exec module install "$BUILTIN_MODULES_FOLDER/$module_name" >> /dev/null
   fi
 done
 
-print -c 'green' -s 'bold' "Bubbling succeed to \`$INSTALL_LIB_TARGET\`!"
-print -c 'green' -s 'bold' "You can start by \`matcha help\`"
+#Usr installed Module
+
+USR_MODULES_FOLDER="$HOME/.matcha_tmp/usr/modules"
+if [[ -d "$USR_MODULES_FOLDER" ]]; then
+  USR_MODULES_TO_INSTAll=$(ls "$USR_MODULES_FOLDER")
+
+  export BUILTIN_MODULE=1
+  for module_name in $USR_MODULES_TO_INSTAll
+  do
+    if [[ -d "$USR_MODULES_FOLDER/$module_name" ]]; then
+      @exec module install "$USR_MODULES_FOLDER/$module_name" >> /dev/null
+    fi
+  done
+fi
+
+
+@log "Cleaning..."
+if [[ -d "$HOME/.matcha_tmp/usr" ]]; then
+  delete "$HOME/.matcha_tmp"
+fi
+
+
+print -c 'green' -s 'bold' "\nBubbling succeed to \`$INSTALL_LIB_TARGET\`!🍵 🍵 🍵"
+print -c 'green' -s 'bold' "You can start by \`matcha help\`".
