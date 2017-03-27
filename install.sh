@@ -7,7 +7,7 @@
 #
 
 if [[ "$@" == *"-ci"* ]]; then
-  source "./matcha" -ci >> /dev/nul
+  source "./matcha" -ci >> /dev/null
 else
   source "./matcha" >> /dev/null
 fi
