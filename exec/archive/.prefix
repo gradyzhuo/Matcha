@@ -68,7 +68,7 @@ function setup_input_params() {
 			code="$param"
 		else
       if [[ "$code" == "-v" ]]; then
-				VERSION="$param"
+				APP_VERSION="$param"
       elif [[ "$code" == "-bv" ]]; then
         BUILD_VERSION="$param"
       elif [[ "$code" == "-t" ]]; then

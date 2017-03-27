@@ -14,10 +14,10 @@ phase_print "Setting version"
 
 #get version/build version in project.
 
-if [[ "$VERSION" != "" && "$VERSION" != "$CURRENT_PROJECT_VERSION" ]]; then
-  defaults write "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString "$VERSION"
+if [[ "$APP_VERSION" != "" && "$APP_VERSION" != "$CURRENT_PROJECT_VERSION" ]]; then
+  defaults write "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString "$APP_VERSION"
 else
-  VERSION="$CURRENT_PROJECT_VERSION"
+  APP_VERSION="$CURRENT_PROJECT_VERSION"
 fi
 
 if [[ "$BUILD_VERSION" != "" && "$BUILD_VERSION" != "$CURRENT_PROJECT_BUILD_VERSION" ]]; then
@@ -26,7 +26,7 @@ else
   BUILD_VERSION="$CURRENT_PROJECT_BUILD_VERSION"
 fi
 
-print -c "green" "Version       => $VERSION"
+print -c "green" "Version       => $APP_VERSION"
 print -c "green" "Build Version => $BUILD_VERSION"
 
 #######產生 codesign.xcconfig

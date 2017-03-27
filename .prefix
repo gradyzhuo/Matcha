@@ -6,7 +6,7 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-declare -x VERSION='1.0'
+declare -x MATCHA_VERSION='1.0'
 declare -x INSTALL_LIB_TARGET="$HOME/.Matcha"
 
 declare -x MATCHA_BUILDER_BASE

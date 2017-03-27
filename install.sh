@@ -15,7 +15,7 @@ fi
 @import Prints --silent
 @import Files --silent
 
-@log "Preparing Matcha $VERSION ..."
+@log "Preparing Matcha $MATCHA_VERSION ..."
 
 @log "Draining ..."
 #Match 在 /usr/local/bin 的捷徑

@@ -90,7 +90,7 @@ $ source matcha
 -delegate 	DELEGATE                    	# (required) no default, should implement functions of delegate.
 
 -------------------------[ Optional ]--------------------------------
--v		VERSION				# **by project, e.g. -v 1.0
+-v		APP_VERSION				# **by project, e.g. -v 1.0
 -bv		BUILD_VERSION			# **by project
 -ein		EXPORT_IPA_NAME			# **same as Archive_Name. e.g. -ein "beta.ipa"
 -conf		BUILD_CONFIGURATION		# default from scheme in xcode project, e.g. Debug, Release, it's case sensitive.
