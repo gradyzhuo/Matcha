@@ -18,8 +18,11 @@ declare MATCHA_BIN_LINKER="/usr/local/bin/matcha"
 #Matcha 的安裝路徑
 declare CURRENT_SOURCE=$(readlink "$MATCHA_BIN_LINKER")
 declare CURRENT_SOURCE_DIR=$(dirname "$CURRENT_SOURCE")
-if [[ -n $CURRENT_SOURCE && "$CURRENT_SOURCE" != "$INSTALL_LIB_TARGET/matcha" ]]; then
+if [[ "$CURRENT_SOURCE" != "$INSTALL_LIB_TARGET/matcha" ]]; then
   delete "$MATCHA_BIN_LINKER"
+fi
+
+if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
   ln -s "$INSTALL_LIB_TARGET/matcha" "$MATCHA_BIN_LINKER"
 fi
 
@@ -28,7 +31,11 @@ if [[ -d "$CURRENT_SOURCE_DIR/usr" ]]; then
   cp -R "$CURRENT_SOURCE_DIR/usr" "$HOME/.matcha_tmp/"
 fi
 
-delete "$CURRENT_SOURCE_DIR"
+#如果 CURRENT_SOURCE 不為空字串，且 CURRENT_SOURCE_DIR 也存在，就先移除現在的資料夾
+if [[ -n $CURRENT_SOURCE && -d "$CURRENT_SOURCE_DIR" ]]; then
+  delete "$CURRENT_SOURCE_DIR"
+fi
+
 
 @log "Bubbling Matcha ..."
 mkdirFolder "$INSTALL_LIB_TARGET"
