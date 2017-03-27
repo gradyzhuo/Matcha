@@ -28,8 +28,12 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
   DEBUG_MODE=0
 fi
 
-if [[ "$1" != "" && $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"* ]]; then
-  @exec "$@"
+if [[ "$1" != "" ]]; then
+  if [[ $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"*  ]]; then
+    @exec "$@"
+  else
+    print -c 'red' -s 'bold' "Command \`$1\` not found."
+  fi
 else
   welcome
 fi
