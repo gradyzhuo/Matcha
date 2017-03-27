@@ -6,7 +6,12 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-source "./matcha" >> /dev/null
+if [[ "$@" == *"-ci"* ]]; then
+  source "./matcha" -ci >> /dev/nul
+else
+  source "./matcha" >> /dev/null
+fi
+
 @import Prints --silent
 @import Files --silent
 
