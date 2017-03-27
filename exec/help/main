@@ -6,4 +6,4 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-more "$MATCHA_BUILDER_BASE/README.md"
+more "$COMMAND_BASE/content"
