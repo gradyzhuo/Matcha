@@ -30,7 +30,7 @@ $ ./install.sh
 Bubbling succeed to `/Users/grady_zhuo/.Matcha`!🍵 🍵 🍵
 You can start by `matcha help`.
 
-```\
+```
 
 ## 使用方式
 
