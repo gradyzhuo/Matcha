@@ -6,6 +6,8 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+@import Files
+
 source exports
 source setup
 source provision_profile

@@ -33,8 +33,8 @@ function xc_setup_variables {
     BUILD_CONFIGURATIONS=$(xc_show default_conf -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
   fi
 
-  CURRENT_PROJECT_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString)
-  CURRENT_PROJECT_BUILD_VERSION=$(defaults read "$APP_PATH/$INFO_PLIST"  CFBundleVersion)
+  CURRENT_PROJECT_VERSION=$(xc_show version -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
+  CURRENT_PROJECT_BUILD_VERSION=$(xc_show build_version -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
 
   DEVELOPMENT_TEAM=$(xc_show team -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
   if [[ "$DEVELOPMENT_TEAM" != "" ]]; then

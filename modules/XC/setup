@@ -6,6 +6,7 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+declare -x XC_INFO_PLIST_PATH
 declare -f xc_show
 
 function xc_show() {
@@ -37,14 +38,28 @@ function xc_show() {
   fi
   # cmd="$cmd -sdk iphoneos"
   # cmd="$cmd -xcconfig \"$codesign_xcconfig\""
-
   if [[ "$command" == "app_id" ]]; then
     echo $(eval "$build_settings_cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
   elif [[ "$command" == "info_plist" ]]; then
-    echo $(eval "$cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
-  elif [[ "$command" == "default_conf" ]]; then
-    echo $(eval "$cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g')
+    XC_INFO_PLIST_PATH=$(eval "$build_settings_cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
+    echo "$XC_INFO_PLIST_PATH"
+  elif [[ "$command" == "configuration" ]]; then
+    echo $(eval "$build_settings_cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g')
   elif [[ "$command" == "team" ]]; then
-    echo $(eval "$cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
+    echo $(eval "$build_settings_cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
+  elif [[ "$command" == "version" ]]; then
+    declare info_plist="$XC_INFO_PLIST_PATH"
+    if [[ -z $info_plist ]]; then
+      info_plist=$(xc_show 'info_plist')
+    fi
+    declare app_path=$(pwd)
+    echo $(defaults read "$app_path/$info_plist"  CFBundleShortVersionString)
+  elif [[ "$command" == "build_version" ]]; then
+    declare info_plist="$XC_INFO_PLIST_PATH"
+    if [[ -z $info_plist ]]; then
+      info_plist=$(xc_show 'info_plist')
+    fi
+    declare app_path=$(pwd)
+    echo $(defaults read "$app_path/$info_plist"  CFBundleVersion)
   fi
 }

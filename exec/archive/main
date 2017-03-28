@@ -59,7 +59,8 @@ mkdirFolder "$TMP_PATH"
 declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
 if [[ $configurations_count == 0 ]]; then
   switch_dir_to "$APP_PATH"
-  BUILD_CONFIGURATIONS=($(xcodebuild -showBuildSettings | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g'))
+  BUILD_CONFIGURATIONS=($(xc_show 'configuration'))
+  configurations_count=1
   restore_dir
 fi
 

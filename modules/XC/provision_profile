@@ -43,7 +43,7 @@ function profile() {
 
 }
 
-function profile_download() {
+function profile_download() {  
   declare apple_id=""
   declare apple_id_password=""
   declare export_option=""
