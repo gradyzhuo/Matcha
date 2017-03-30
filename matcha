@@ -32,13 +32,13 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
   DEBUG_MODE=0
 fi
 
-if [[ "$1" != "" ]]; then
+if [[ "$1" != "" && "$1" != *"-"*  ]]; then
   if [[ $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"*  ]]; then
     @exec "$@"
   else
     print -c 'red' -s 'bold' "Command \`$1\` not found."
   fi
-elif [[ "$0" == "-bash" ]]; then
+elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
   welcome
 
   print -c "green" "============================"
