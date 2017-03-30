@@ -33,7 +33,7 @@ function xc_setup_variables {
     BUILD_CONFIGURATIONS=$(xc_show default_conf -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
   fi
 
-  CURRENT_PROJECT_VERSION=$(xc_show version -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
+  CURRENT_PROJECT_VERSION=$(xc_show version -s "$PROJ_SCHEME" -conf "$BUILD_CONFIGURATION")
   CURRENT_PROJECT_BUILD_VERSION=$(xc_show build_version -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
 
   DEVELOPMENT_TEAM=$(xc_show team -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
@@ -118,7 +118,7 @@ function setup_input_params() {
         PASSWD="$param"
       elif [[ "$code" == "-project"  ]]; then
         PROJECT_FOLDER_NAME="$param"
-        DELEGATE="$MATCHA_BUILDER_BASE/projects/$PROJECT_FOLDER_NAME/$DELEGATE_FILE_NAME"
+        DELEGATE="$MATCHA_BASE/projects/$PROJECT_FOLDER_NAME/$DELEGATE_FILE_NAME"
         code=""
       elif [[ "$code" == "-delegate"  ]]; then
         DELEGATE="$param"

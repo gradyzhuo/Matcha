@@ -9,7 +9,7 @@
 declare -x MATCHA_VERSION='1.0'
 declare -x INSTALL_LIB_TARGET="$HOME/.Matcha"
 
-declare -x MATCHA_BUILDER_BASE
+declare -x MATCHA_BASE
 declare -x COMMAND_BASE
 declare -x COMMAND
 declare -x MODULES_FOLDER
@@ -61,7 +61,7 @@ function @exec() {
   fi
 
   PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
-  COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$COMMAND"
+  COMMAND_BASE="$MATCHA_BASE/exec/$COMMAND"
   if [[ -e "$COMMAND_BASE/main" ]]; then
     pushd "$COMMAND_BASE" >> /dev/null
     source main "$@"

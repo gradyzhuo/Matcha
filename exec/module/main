@@ -21,7 +21,7 @@ if [[ "$2" == "install" ]]; then
   if [[ $BUILTIN_MODULE == 0 ]]; then
     INSTALL_PATH="$MODULES_FOLDER"
   else
-    INSTALL_PATH="$MATCHA_BUILDER_BASE/usr/modules"
+    INSTALL_PATH="$MATCHA_BASE/usr/modules"
   fi
 
 

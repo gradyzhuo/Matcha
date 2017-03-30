@@ -13,7 +13,7 @@ declare -f phase_print
 function print() {
 
   declare result_str=""
-  result_str=$(get_format_string "$@")
+  result_str=$(get_format_string $@)
   reset_format=$(get_format "reset_all" "" "")
 
   if [[ $BUILD_CI == 0 ]]; then
@@ -37,7 +37,7 @@ function prints() {
   reset_format=$(get_format "reset_all" "" "")
 
   if [[ $BUILD_CI == 0 ]]; then
-    echo $result_str
+    echo "$result_str"
   else
     echo -e "$result_str$reset_format"
   fi

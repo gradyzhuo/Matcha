@@ -6,20 +6,26 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-#從執行 shell 路徑判定builder路徑
-declare EXEC_PATH=$(readlink "$BASH_SOURCE")
-declare EXEC_DIR=$(dirname "$EXEC_PATH")
+if [[ "$BASH_SOURCE" == *"./"* ]]; then
+  MATCHA_BASE=$(pwd)
+elif [[ -z $MATCHA_BASE ]]; then
+  #從執行 shell 路徑判定builder路徑
+  declare EXEC_PATH=$(readlink "$BASH_SOURCE")
+  declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
 
-cd "$EXEC_DIR" >> /dev/null
-MATCHA_BUILDER_BASE=$(pwd)
-cd - >> /dev/null
+  cd "$EXEC_DIR" >> /dev/null
+  MATCHA_BASE=$(pwd)
+  cd - >> /dev/null
+fi
 
-source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
-MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
+source "$MATCHA_BASE/.prefix" >> /dev/null
+MODULES_FOLDER="$MATCHA_BASE/modules"
 source "$MODULES_FOLDER/@.imports" >> /dev/null
 
 @import Prints --silent
+
+print -c green "executing from $MATCHA_BASE"
 
 declare -a array=($@)
 if [[ "${array[@]}" =~ "-ci" ]]; then
@@ -29,7 +35,7 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
 fi
 
 if [[ "$1" != "" ]]; then
-  if [[ $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"*  ]]; then
+  if [[ $(ls "$MATCHA_BASE/exec") == *"$1"*  ]]; then
     @exec "$@"
   else
     print -c 'red' -s 'bold' "Command \`$1\` not found."
