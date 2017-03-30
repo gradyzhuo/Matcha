@@ -25,8 +25,6 @@ source "$MODULES_FOLDER/@.imports" >> /dev/null
 
 @import Prints --silent
 
-print -c green "executing from $MATCHA_BASE"
-
 declare -a array=($@)
 if [[ "${array[@]}" =~ "-ci" ]]; then
   BUILD_CI=0
@@ -34,13 +32,15 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
   DEBUG_MODE=0
 fi
 
-if [[ "$1" != "" ]]; then
+print -c green "executing from $MATCHA_BASE"
+
+if [[ "$1" != "" && "$1" != *"-"* ]]; then
   if [[ $(ls "$MATCHA_BASE/exec") == *"$1"*  ]]; then
     @exec "$@"
   else
     print -c 'red' -s 'bold' "Command \`$1\` not found."
   fi
-elif [[ "$0" == "-bash" ]]; then
+elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
   welcome
 
   print -c "green" "============================"
