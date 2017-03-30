@@ -7,9 +7,13 @@
 #
 
 #從執行 shell 路徑判定builder路徑
-declare EXEC_PATH=$(readlink "$BASH_SOURCE")
+declare EXEC_PATH
+if [[ -L "$BASH_SOURCE" ]]; then
+  EXEC_PATH=$(readlink "$BASH_SOURCE")
+else
+  EXEC_PATH="$BASH_SOURCE"
+fi
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
-
 
 cd "$EXEC_DIR" >> /dev/null
 MATCHA_BUILDER_BASE=$(pwd)

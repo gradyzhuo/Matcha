@@ -14,6 +14,7 @@ function xc_show() {
 
   declare scheme=""
   declare configuration=""
+  declare settings=""
 
   declare code
   for param in "$@"
@@ -25,41 +26,38 @@ function xc_show() {
         scheme="$param"
       elif [[ "$code" == "-conf" ]]; then
         configuration=($param)
+      elif [[ "$code" == "-settings" ]]; then
+        settings="$param"
       fi
 		fi
   done
 
-  build_settings_cmd="xcodebuild -showBuildSettings"
-  if [[ "$scheme" != "" ]]; then
-    build_settings_cmd="$build_settings_cmd -scheme $scheme"
+  if [[ "build_settings app_id info_plist configuration team" == *"$command"* && -z $settings ]]; then
+    build_settings_cmd="xcodebuild -showBuildSettings"
+    if [[ "$scheme" != "" ]]; then
+      build_settings_cmd="$build_settings_cmd -scheme $scheme"
+    fi
+    if [[ "$configuration" != "" ]]; then
+      build_settings_cmd="$build_settings_cmd -configuration \"$configuration\""
+    fi
+
+    settings=$(eval "$build_settings_cmd")
   fi
-  if [[ "$configuration" != "" ]]; then
-    build_settings_cmd="$build_settings_cmd -configuration \"$configuration\""
-  fi
-  # cmd="$cmd -sdk iphoneos"
-  # cmd="$cmd -xcconfig \"$codesign_xcconfig\""
-  if [[ "$command" == "app_id" ]]; then
-    echo $(eval "$build_settings_cmd" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
+
+  if [[ "$command" == "build_settings" ]]; then
+    echo "$settings"
+  elif [[ "$command" == "app_id" ]]; then
+    echo $(echo "$settings" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
   elif [[ "$command" == "info_plist" ]]; then
-    XC_INFO_PLIST_PATH=$(eval "$build_settings_cmd" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
+    XC_INFO_PLIST_PATH=$(echo "$settings" | grep 'INFOPLIST_FILE' | sed 's/    INFOPLIST_FILE = //g')
     echo "$XC_INFO_PLIST_PATH"
   elif [[ "$command" == "configuration" ]]; then
-    echo $(eval "$build_settings_cmd" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g')
+    echo $(echo "$settings" | grep 'CONFIGURATION =' | sed 's/    CONFIGURATION = //g')
   elif [[ "$command" == "team" ]]; then
-    echo $(eval "$build_settings_cmd" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
+    echo $(echo "$settings" | grep 'DEVELOPMENT_TEAM' | sed 's/    DEVELOPMENT_TEAM = //g')
   elif [[ "$command" == "version" ]]; then
-    declare info_plist="$XC_INFO_PLIST_PATH"
-    if [[ -z $info_plist ]]; then
-      info_plist=$(xc_show 'info_plist')
-    fi
-    declare app_path=$(pwd)
-    echo $(defaults read "$app_path/$info_plist"  CFBundleShortVersionString)
+    echo $(agvtool what-marketing-version | grep -m 1 'Found CFBundleShortVersionString of "' | sed 's/^.*Found CFBundleShortVersionString of \"//g' | sed 's/\".*$//g')
   elif [[ "$command" == "build_version" ]]; then
-    declare info_plist="$XC_INFO_PLIST_PATH"
-    if [[ -z $info_plist ]]; then
-      info_plist=$(xc_show 'info_plist')
-    fi
-    declare app_path=$(pwd)
-    echo $(defaults read "$app_path/$info_plist"  CFBundleVersion)
+    echo $(agvtool what-version | sed 's/^.* //g')
   fi
 }

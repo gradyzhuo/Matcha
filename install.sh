@@ -21,16 +21,12 @@ fi
 
 @log "Draining ..."
 #Match 在 /usr/local/bin 的捷徑
-declare MATCHA_BIN_LINKER="/usr/local/bin/matcha"
+declare MATCHA_BIN_LINKER="$INSTALL_LIB_TARGET/bin/matcha"
 #Matcha 的安裝路徑
 declare CURRENT_SOURCE=$(readlink "$MATCHA_BIN_LINKER")
 declare CURRENT_SOURCE_DIR=$(dirname "$CURRENT_SOURCE")
 if [[ "$CURRENT_SOURCE" != "$INSTALL_LIB_TARGET/matcha" ]]; then
   delete "$MATCHA_BIN_LINKER"
-fi
-
-if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
-  ln -s "$INSTALL_LIB_TARGET/matcha" "$MATCHA_BIN_LINKER"
 fi
 
 if [[ -d "$CURRENT_SOURCE_DIR/usr" ]]; then
@@ -44,6 +40,20 @@ if [[ -n $CURRENT_SOURCE && -d "$CURRENT_SOURCE_DIR" ]]; then
 fi
 
 
+if [[ ! -d  "$INSTALL_LIB_TARGET/bin" ]]; then
+  mkdirFolder "$INSTALL_LIB_TARGET/bin"
+fi
+
+if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
+  ln -s "$INSTALL_LIB_TARGET/matcha" "$MATCHA_BIN_LINKER"
+fi
+
+BASH_LINK="export \"PATH=$INSTALL_LIB_TARGET/bin:"'$PATH'"\""
+EXPORT_IN_BASH_PROFILE=$(grep "$BASH_LINK" "$HOME/.bash_profile")
+if [[ -z $EXPORT_IN_BASH_PROFILE ]]; then
+  echo "$BASH_LINK" >> "$HOME/.bash_profile"
+fi
+
 @log "Bubbling Matcha ..."
 mkdirFolder "$INSTALL_LIB_TARGET"
 
@@ -56,9 +66,9 @@ do
     cp -R "$EXEC_DIR/$item" "$INSTALL_LIB_TARGET/$item"
 done
 
-source matcha >> /dev/null
 
-
+cd "$INSTALL_LIB_TARGET"
+source "matcha" >> /dev/null
 
 @log "Installing modules..."
 BUILTIN_MODULES_FOLDER="$INSTALL_LIB_TARGET/modules"
@@ -92,6 +102,7 @@ if [[ -d "$HOME/.matcha_tmp/usr" ]]; then
   delete "$HOME/.matcha_tmp"
 fi
 
+cd - >> /dev/null
 
 print -c 'green' -s 'bold' "\nBubbling succeed to \`$INSTALL_LIB_TARGET\`!🍵 🍵 🍵"
 print -c 'green' -s 'bold' "You can start by \`matcha help\`".
