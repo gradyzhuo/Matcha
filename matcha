@@ -43,7 +43,7 @@ elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
 
   print -c "green" "============================"
   print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
-  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints2\n    print -c "blue" "Hello Matcha!"\n```'
+  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
   prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
   print -c green -s bold "Enjoy it!"
 else
