@@ -32,7 +32,7 @@ elif [[ "${array[@]}" =~ "-debug" ]]; then
   DEBUG_MODE=0
 fi
 
-print -c green "executing from $MATCHA_BASE"
+@log "executing from $MATCHA_BASE"
 
 if [[ "$1" != "" && "$1" != *"-"* ]]; then
   if [[ $(ls "$MATCHA_BASE/exec") == *"$1"*  ]]; then
