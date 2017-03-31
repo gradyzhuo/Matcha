@@ -75,7 +75,7 @@ fi
 cmd="$cmd -sdk iphoneos"
 cmd="$cmd -xcconfig \"$TMP_PATH/$codesign_xcconfig\""
 if [[ $BUILD_CI != 0 ]]; then
-  cmd="$cmd >> \"$LOG_FOLDER/app.log\""
+  cmd="$cmd >>\"$LOG_FOLDER/app.log\" 2>&1"
 fi
 
 prints "-c magenta Building" "-c magenta -s blink ..."

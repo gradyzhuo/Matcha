@@ -8,11 +8,7 @@
 
 
 
-if [[ "$@" == *"-ci"* ]]; then
-  source "./matcha" -ci >> /dev/null
-else
-  source "./matcha" >> /dev/null
-fi
+source "./matcha" "$@" >/dev/null 2>&1
 
 @import Prints --silent
 @import Files --silent
@@ -20,9 +16,9 @@ fi
 @log "Preparing Matcha $MATCHA_VERSION ..."
 
 @log "Draining ..."
-#Match 在 /usr/local/bin 的捷徑
-declare MATCHA_BIN_LINKER="$INSTALL_LIB_TARGET/bin/matcha"
-#Matcha 的安裝路徑
+# Match 的捷徑
+declare MATCHA_BIN_LINKER="$INSTALL_LIB_TARGET/bin/matcha.source"
+# Matcha 的安裝路徑
 declare CURRENT_SOURCE=$(readlink "$MATCHA_BIN_LINKER")
 declare CURRENT_SOURCE_DIR=$(dirname "$CURRENT_SOURCE")
 if [[ "$CURRENT_SOURCE" != "$INSTALL_LIB_TARGET/matcha" ]]; then
@@ -35,7 +31,7 @@ if [[ -d "$CURRENT_SOURCE_DIR/usr" ]]; then
 fi
 
 #如果 CURRENT_SOURCE 不為空字串，且 CURRENT_SOURCE_DIR 也存在，就先移除現在的資料夾
-if [[ -n $CURRENT_SOURCE && -d "$CURRENT_SOURCE_DIR" ]]; then
+if [[ -d "$CURRENT_SOURCE_DIR" ]]; then
   delete "$CURRENT_SOURCE_DIR"
 fi
 
@@ -45,13 +41,14 @@ if [[ ! -d  "$INSTALL_LIB_TARGET/bin" ]]; then
 fi
 
 if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
-  ln -s "$INSTALL_LIB_TARGET/matcha" "$MATCHA_BIN_LINKER"
+  ln -s "$INSTALL_LIB_TARGET/sources/matcha.source" "$MATCHA_BIN_LINKER"
 fi
 
-BASH_LINK="export \"PATH=$INSTALL_LIB_TARGET/bin:"'$PATH'"\""
+BASH_LINK=$(echo 'export "PATH=$HOME/.matcha/bin:$PATH"')
 EXPORT_IN_BASH_PROFILE=$(grep "$BASH_LINK" "$HOME/.bash_profile")
 if [[ -z $EXPORT_IN_BASH_PROFILE ]]; then
-  echo "$BASH_LINK" >> "$HOME/.bash_profile"
+  echo "$BASH_LINK"  >> "$HOME/.bash_profile"
+  echo '[[ -s "$HOME/.matcha/matcha" ]] && source "$HOME/.matcha/matcha"' >> "$HOME/.bash_profile"
 fi
 
 @log "Bubbling Matcha ..."
@@ -63,7 +60,7 @@ declare EXEC_DIR=$(dirname "$EXEC_PATH")
 SHOULD_COPY="exec modules .prefix matcha README.md"
 for item in $SHOULD_COPY
 do
-    cp -R "$EXEC_DIR/$item" "$INSTALL_LIB_TARGET/$item"
+    cp -R "$EXEC_DIR/$item" "$INSTALL_LIB_TARGET/"
 done
 
 
@@ -77,7 +74,7 @@ export BUILTIN_MODULE=0
 for module_name in $BUILTIN_MODULES_TO_INSTAll
 do
   if [[ -d "$BUILTIN_MODULES_FOLDER/$module_name" ]]; then
-    @exec module install "$BUILTIN_MODULES_FOLDER/$module_name" >> /dev/null
+    @exec module install "$BUILTIN_MODULES_FOLDER/$module_name" >/dev/null 2>&1
   fi
 done
 
@@ -91,7 +88,7 @@ if [[ -d "$USR_MODULES_FOLDER" ]]; then
   for module_name in $USR_MODULES_TO_INSTAll
   do
     if [[ -d "$USR_MODULES_FOLDER/$module_name" ]]; then
-      @exec module install "$USR_MODULES_FOLDER/$module_name" >> /dev/null
+      @exec module install "$USR_MODULES_FOLDER/$module_name" >/dev/null 2>&1
     fi
   done
 fi

@@ -15,37 +15,35 @@ else
 fi
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
-cd "$EXEC_DIR" >> /dev/null
+cd "$EXEC_DIR" >/dev/null 2>&1
 MATCHA_BUILDER_BASE=$(pwd)
 cd - >> /dev/null
 
-source "$MATCHA_BUILDER_BASE/.prefix" >> /dev/null
+source "$MATCHA_BUILDER_BASE/.prefix" >/dev/null 2>&1
 MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
-source "$MODULES_FOLDER/@.imports" >> /dev/null
+source "$MODULES_FOLDER/@.imports" >/dev/null 2>&1
 
 @import Prints --silent
 
-declare -a array=($@)
-if [[ "${array[@]}" =~ "-ci" ]]; then
-  BUILD_CI=0
-elif [[ "${array[@]}" =~ "-debug" ]]; then
-  DEBUG_MODE=0
-fi
-
-if [[ "$1" != "" && "$1" != *"-"*  ]]; then
-  if [[ $(ls "$MATCHA_BUILDER_BASE/exec") == *"$1"*  ]]; then
-    @exec "$@"
-  else
-    print -c 'red' -s 'bold' "Command \`$1\` not found."
+function matcha() {
+  declare -a array=($@)
+  if [[ "${array[@]}" =~ "-ci" ]]; then
+    BUILD_CI=0
+  elif [[ "${array[@]}" =~ "-debug" ]]; then
+    DEBUG_MODE=0
   fi
-elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
-  welcome
 
-  print -c "green" "============================"
-  print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
-  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
-  prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
-  print -c green -s bold "Enjoy it!"
-else
-  welcome
-fi
+  if [[ "$1" != "" && "$1" != *"-"*  ]]; then
+    @exec "$@"
+  elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
+    welcome
+
+    print -c "green" "============================"
+    print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
+    print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
+    prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
+    print -c green -s bold "Enjoy it!"
+  else
+    welcome
+  fi
+}

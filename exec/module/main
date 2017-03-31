@@ -42,5 +42,6 @@ if [[ "$2" == "install" ]]; then
   delete "$cp_path"
 
   print -c 'green' -s 'bold' "++ Install \`$module_name\` to \`modules/$module_name.mm\` succeed."
-
+elif [[ "$2" == "import" ]]; then
+  @exec import "$3"
 fi

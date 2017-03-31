@@ -8,10 +8,11 @@
 
 declare -f @import
 declare -f load_module
-declare -x -i SILENT_IMPORT=1
+
 
 function @import() {
 
+  declare -i SILENT_IMPORT=1
   if [[ "$@" == *"--silent"* ]]; then
     SILENT_IMPORT=0
   fi
@@ -19,7 +20,7 @@ function @import() {
   declare module=$(basename "$1")
 
   if [[ "$module" == "" ]]; then
-    @log "-- Module name can't be empty! ----------"
+    @error "-- Module name can't be empty! ----------"
     return 1
   fi
 
@@ -38,17 +39,15 @@ function @import() {
     load_module "$module_path"
   else
     if [[ $SILENT_IMPORT == 1 ]]; then
-      @log "-- Module [$module] not found! ----------"
+      @error "-- Module [$module] not found! ----------"
     fi
   fi
-
-  SILENT_IMPORT=1
 }
 
 function load_module() {
-  pushd "$1" >> /dev/null
-  source @.imports >> /dev/null
-  popd >> /dev/null
+  pushd "$1" >/dev/null 2>&1
+  source @.imports >/dev/null 2>&1
+  popd >/dev/null 2>&1
 
   if [[ $SILENT_IMPORT == 1 ]]; then
     @log ">> Module [$module] import succeed."
