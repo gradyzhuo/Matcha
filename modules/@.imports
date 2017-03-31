@@ -36,7 +36,13 @@ function @import() {
   fi
 
   if [[ -e "$module_path" ]]; then
-    load_module "$module_path"
+    pushd "$module_path" >/dev/null 2>&1
+    source @.imports >/dev/null 2>&1
+    popd >/dev/null 2>&1
+
+    if [[ $SILENT_IMPORT == 1 ]]; then
+      @log ">> Module [$module] import succeed."
+    fi
   else
     if [[ $SILENT_IMPORT == 1 ]]; then
       @error "-- Module [$module] not found! ----------"
@@ -45,11 +51,5 @@ function @import() {
 }
 
 function load_module() {
-  pushd "$1" >/dev/null 2>&1
-  source @.imports >/dev/null 2>&1
-  popd >/dev/null 2>&1
 
-  if [[ $SILENT_IMPORT == 1 ]]; then
-    @log ">> Module [$module] import succeed."
-  fi
 }
