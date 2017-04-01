@@ -8,8 +8,8 @@
 
 welcome
 
-@import Prints
-@import Files
+@import Prints --silent
+@import Files --silent
 
 source .envs
 source .prefix "$@"
@@ -19,7 +19,7 @@ if [[ "${array[@]}" =~ "-ndp" ]]; then
 fi
 
 #=====Common imports=====
-@import Builder
+@import Builder --silent
 
 setup_delegate "$@"
 

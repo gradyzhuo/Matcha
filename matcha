@@ -6,7 +6,6 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-
 #從執行 shell 路徑判定builder路徑
 declare EXEC_PATH
 
@@ -24,10 +23,14 @@ MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
 @import Prints --silent
 
 function matcha() {
-  declare -a array=($@)
 
-  BUILD_CI=1 && [[ "${array[@]}" =~ "-ci" ]] && BUILD_CI=0;
-  DEBUG_MODE=1 && [[ "${array[@]}" =~ "-debug" ]] && DEBUG_MODE=0;
+  if [[ "$@" == *"-ci"* ]]; then
+    BUILD_CI=0
+  fi
+
+  if [[ "$@" == *"-debug"* ]]; then
+    DEBUG_MODE=0
+  fi
 
   [[ -n $1 && "$1" != *"-"*  ]] && @exec "$@" && return 0;
   [[ "$0" == *"bash"* ]] && welcome \

@@ -65,17 +65,22 @@ function @exec() {
     return 0
   fi
 
-  PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
-  COMMAND_BASE="$MATCHA_BUILDER_BASE/command/$COMMAND"
+  COMMAND_DIR="$MATCHA_BUILDER_BASE/command/$COMMAND"
+  pushd "$COMMAND_DIR" >/dev/null 2>&1
+  if [[ -s "$COMMAND_DIR/source" ]]; then
 
-  [[ -s "$COMMAND_BASE/source" ]] && source "$COMMAND_BASE/source" && return 0;
+    source  "source" "$@"
 
-  if [[ -s "$COMMAND_BASE/main" ]]; then
-    pushd "$COMMAND_BASE" >/dev/null 2>&1
+  elif [[ -s "$COMMAND_DIR/main" ]]; then
+    PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
+    COMMAND_BASE="$COMMAND_DIR"
+
     bash -l main "$@"
-    popd >/dev/null 2>&1
+
+    COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
   fi
-  COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
+  popd >/dev/null 2>&1
+
 }
 
 function shell_function_exists() {
