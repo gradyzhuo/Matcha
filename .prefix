@@ -18,46 +18,45 @@ declare -i -x DEBUG_MODE=1
 declare -i -x BUILD_CI=1
 
 declare -f @exec
-declare -f function_exists
+declare -f @exists -f
 declare -f command_exists
 declare -f exists
 declare -f terminate
 declare -f welcome
+declare -f tips
 declare -f shell_session_update
 declare -f @log
 
 function welcome(){
-  if [[ $BUILD_CI != 0 ]]; then
-    echo -e '\033[32m'
-  else
-    echo ""
-  fi
-  echo '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
-  echo '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  echo '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
-  echo '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
-  echo '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
-  echo '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  echo '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
-  if [[ $BUILD_CI != 0 ]]; then
-    echo -e '\033[m'
-  else
-    echo ""
-  fi
+  print ''
+  print -c green -s bold '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  print -c green -s bold  '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
+  print -c green -s bold  '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
+  print -c green -s bold  '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
+  print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  print -c green -s bold  '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  print ''
+}
+
+function tips(){
+  print -c "green" "============================"
+  print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
+  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
+  prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
+  print -c green -s bold "Enjoy it!"
+}
+
+function @import() {
+  @exec import "$@"
 }
 
 function @exec() {
 
-
-  # if [[ "$0" == "-bash" ]]; then
-  #   print -c "red" -s "bold" "@exec not support when running matcha by \`source\` in terminal. please run \`\$ matcha $1\` insteaded."
-  #   return 0
-  # fi
-
   COMMAND="$1"
 
-  if [[ $(ls "$MATCHA_BUILDER_BASE/exec") != *"$COMMAND"*  ]]; then
-    print -c 'red' -s 'bold' "Command \`$1\` not found."
+  if [[ $(ls "$MATCHA_BUILDER_BASE/command") != *"$COMMAND"*  ]]; then
+    print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
     return 0
   fi
 
@@ -67,38 +66,40 @@ function @exec() {
   fi
 
   PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
-  COMMAND_BASE="$MATCHA_BUILDER_BASE/exec/$COMMAND"
-  if [[ -e "$COMMAND_BASE/main" ]]; then
+  COMMAND_BASE="$MATCHA_BUILDER_BASE/command/$COMMAND"
+
+  [[ -s "$COMMAND_BASE/source" ]] && source "$COMMAND_BASE/source" && return 0;
+
+  if [[ -s "$COMMAND_BASE/main" ]]; then
     pushd "$COMMAND_BASE" >/dev/null 2>&1
-    source main "$@"
+    bash -l main "$@"
     popd >/dev/null 2>&1
   fi
-
   COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
 }
 
-function function_exists() {
-    declare -f -F $1 > /dev/null
+function shell_function_exists() {
+    declare -f -F $1 >/dev/null 2>&1
     echo "$?"
 }
 
-function command_exists() {
-    command -v $1 > /dev/null
+function shell_command_exists() {
+    command -v $1 >/dev/null 2>&1
     echo "$?"
 }
 
 # -f : function
 # -c : command
-function exists() {
+function @exists() {
 	_type="$1"
 	_command="$2"
 
     if [[ "$_type" == "-f" ]]; then
-    	function_exists $_command
+      shell_function_exists $_command
     fi
 
     if [[ "$_type" == "-c" ]]; then
-    	command_exists $_command
+    	shell_command_exists $_command
     fi
 }
 

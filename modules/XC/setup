@@ -11,6 +11,9 @@ declare -f xc_show
 
 function xc_show() {
   command="$1"
+  path="$2"
+
+  [[ -n $path ]] && switch_dir_to $(dirname "$path");
 
   declare scheme=""
   declare configuration=""
@@ -59,4 +62,6 @@ function xc_show() {
   elif [[ "$command" == "build_version" ]]; then
     echo $(agvtool what-version | sed 's/^.* //g')
   fi
+
+  [[ -n $path ]] && restore_dir;
 }

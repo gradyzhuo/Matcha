@@ -34,7 +34,7 @@ function profile() {
 
   declare command="profile_$1"
 
-  if [[ $(function_exists $command) == 0 ]]; then
+  if [[ $(@exists -f $command) == 0 ]]; then
     $command "$@"
   else
     print -c red -s bold ">> Command 'profile $1' not found"

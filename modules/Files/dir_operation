@@ -53,9 +53,9 @@ function open_finder() {
 
 function switch_dir_to {
   path="$1"
-  pushd "$path" >> /dev/null
+  pushd "$path" >/dev/null 2>&1
 }
 
 function restore_dir {
-  popd >> /dev/null
+  popd >/dev/null 2>&1
 }

@@ -6,44 +6,36 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+
 #從執行 shell 路徑判定builder路徑
 declare EXEC_PATH
-if [[ -L "$BASH_SOURCE" ]]; then
-  EXEC_PATH=$(readlink "$BASH_SOURCE")
-else
-  EXEC_PATH="$BASH_SOURCE"
-fi
+
+EXEC_PATH="$BASH_SOURCE" && [[ -L "$BASH_SOURCE" ]] && EXEC_PATH=$(readlink "$BASH_SOURCE");
+
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
 cd "$EXEC_DIR" >/dev/null 2>&1
 MATCHA_BUILDER_BASE=$(pwd)
-cd - >> /dev/null
+cd - >/dev/null 2>&1
 
 source "$MATCHA_BUILDER_BASE/.prefix" >/dev/null 2>&1
 MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
-source "$MODULES_FOLDER/@.imports" >/dev/null 2>&1
 
 @import Prints --silent
 
 function matcha() {
   declare -a array=($@)
-  if [[ "${array[@]}" =~ "-ci" ]]; then
-    BUILD_CI=0
-  elif [[ "${array[@]}" =~ "-debug" ]]; then
-    DEBUG_MODE=0
-  fi
 
-  if [[ "$1" != "" && "$1" != *"-"*  ]]; then
-    @exec "$@"
-  elif [[ "$0" == "-bash" && $BUILD_CI == 1 ]]; then
-    welcome
+  BUILD_CI=1 && [[ "${array[@]}" =~ "-ci" ]] && BUILD_CI=0;
+  DEBUG_MODE=1 && [[ "${array[@]}" =~ "-debug" ]] && DEBUG_MODE=0;
 
-    print -c "green" "============================"
-    print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
-    print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
-    prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
-    print -c green -s bold "Enjoy it!"
-  else
-    welcome
-  fi
+  [[ -n $1 && "$1" != *"-"*  ]] && @exec "$@" && return 0;
+  [[ "$0" == *"bash"* ]] && welcome \
+  && [[ $BUILD_CI == 1 ]] && tips && return 0;
+
 }
+
+#相容舊版
+if [[ "$0" == *"bash" && -L "$BASH_SOURCE" ]]; then
+  matcha "$@"
+fi
