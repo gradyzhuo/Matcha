@@ -14,8 +14,8 @@ declare -x COMMAND_BASE
 declare -x COMMAND
 declare -x MODULES_FOLDER
 
-declare -i -x DEBUG_MODE=1
-declare -i -x BUILD_CI=1
+declare -i -x DEBUG_MODE
+declare -i -x BUILD_CI
 
 declare -f @exec
 declare -f @exists -f
