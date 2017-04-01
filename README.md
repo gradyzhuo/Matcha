@@ -11,8 +11,8 @@
 ## 安裝
 
 ```bash
-# 切換至 Clone 的 Match 路徑
-$ cd [CLONED_MATCHA_FOLDER]
+$ git clone https://github.com/gradyzhuo/Matcha.git
+$ cd Matcha 
 
 # 執行 install.sh 啟動安裝程序
 $ ./install.sh
@@ -27,7 +27,7 @@ $ ./install.sh
 [17-03-27 19:11:06] Installing modules...
 [17-03-27 19:11:07] Cleaning...
 
-Bubbling succeed to `/Users/grady_zhuo/.Matcha`!🍵 🍵 🍵
+Bubbling succeed to `/Users/grady_zhuo/.matcha`!🍵 🍵 🍵
 You can start by `matcha help`.
 
 ```
@@ -37,10 +37,9 @@ You can start by `matcha help`.
 ### 基本操作指令
 
 ```bash
-# 在現在的 shell process 引用 Matcha
-$ source matcha
-
-# 看到以下畫面表示 Matcha 載入完成
+# 你可執行 matcha
+$ matcha
+# 如看到以下畫面表示 Matcha 載入完成
 
 ＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
 ＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃
@@ -68,13 +67,16 @@ $ source matcha
 
 ```bash
 # 從內建的模組引入 Module
-$ @import [MODULE_NAME]
+$ matcha import [MODULE_NAME]
 # 或是從其他路徑引入 Module，請引入到包含 @.imports 的該層資料夾層級即可。
-$ @import [Matcha Path]
+$ matcha import [Matcha Path]
 
 # 在 Terminal 看到類似以下畫面表示 Module 載入完成
-$ @import XC
+$ matcha import XC
 [17-03-26 01:10:24] >> Module [XC] import succeed.
+
+# 或你也可使用 @import 簡化 matcha import 的操作
+$ @import XC
 
 ```
 
@@ -93,6 +95,9 @@ $ matcha module install [MODULE_PATH]  [MODULE_NAME]
 ### Matcha Commands
 
 ```bash
+# 列出現在支援的 command
+$ matcha command list
+
 # 你可以在執行 matcha 後面攜帶 Command 及其參數，以執行所需的動作。
 $ matcha [COMMAND_NAME] [PARAMETERS]
 
