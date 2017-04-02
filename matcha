@@ -24,11 +24,11 @@ MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
 
 function matcha() {
 
-  if [[ "$@" == *"-ci"* ]]; then
+  if [[ "$@" == *" -ci "* ]]; then
     BUILD_CI=0
   fi
 
-  if [[ "$@" == *"-debug"* ]]; then
+  if [[ "$@" == *" -debug "* ]]; then
     DEBUG_MODE=0
   fi
 
