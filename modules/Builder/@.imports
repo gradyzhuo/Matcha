@@ -14,6 +14,26 @@ source defines
 @import XC
 
 declare -f clean
+declare -f shell_session_update
+
+function shell_session_update() {
+  if [[ $? != 0 ]]; then
+    did_terminate
+    print -c "red" -s bold "Builder is terminated!"
+  fi
+}
+
+function terminate(){
+
+  declare error_code="$1"
+  declare error_message="$2"
+
+  if [[ "$error_message" != "" ]]; then
+    print -c "red" -s bold "-- $error_message ----------"
+  fi
+
+  exit 1
+}
 
 function clean() {
 
