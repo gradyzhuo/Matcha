@@ -46,11 +46,11 @@ declare tag
 	mkdirFolder "${target}"
 	git clone -b ${branch} ${respo} "${target}"
 
+	switch_dir_to "${target}"
 	if [[ "$tag" != "" && `git tag -l $tag` == $tag ]]; then
-		switch_dir_to "${target}"
 		git checkout tags/$tag
-		restore_dir
 	fi
+	restore_dir
 
   if [[ $? == 0 ]]; then
     print -c blue -s bold "$respo cloned..."
