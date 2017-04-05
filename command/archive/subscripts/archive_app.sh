@@ -9,7 +9,9 @@
 declare -r codesign_xcconfig="codesign.xcconfig"
 
 #===== Build =====
+#####
 
+will_exec "build_app"
 phase_print "Setting version"
 
 #get version/build version in project.
@@ -45,10 +47,6 @@ else
     echo "CODE_SIGN_IDENTITY=$SIGNING_IDENTITY" >> "$TMP_PATH/$codesign_xcconfig"
   fi
 fi
-
-#####
-
-will_exec "build_app"
 
 #####
 phase_print "Archiving app"
