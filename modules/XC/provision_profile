@@ -43,7 +43,7 @@ function profile() {
 
 }
 
-function profile_download() {  
+function profile_download() {
   declare apple_id=""
   declare apple_id_password=""
   declare export_option=""
@@ -100,7 +100,7 @@ function profile_download() {
   switch_dir_to "$target_folder"
 
   if [ "$apple_id_password" != "" ]; then
-    fastlane-credentials add --username "$apple_id" --password "$apple_id_password"
+    fastlane fastlane-credentials add --username "$apple_id" --password "$apple_id_password"
   fi
 
   cmd_sigh="fastlane sigh -z"
