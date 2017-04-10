@@ -52,7 +52,7 @@ function send_mail() {
     ctype="text/html"
   fi
 
-  if [[ "$ctype" == "text/html" ]]; then
+  if [[ "$ctype" != "text/plain" ]]; then
     content=$(echo "$content" | sed 's/^/<div>/g'  | sed 's/$/<\/div>/g' | sed 's/<div><\/div>/<br \/>/g')
   fi
 
