@@ -9,7 +9,6 @@
 declare -r codesign_xcconfig="codesign.xcconfig"
 
 #===== Build =====
-#####
 
 will_exec "build_app"
 phase_print "Setting version"
@@ -55,11 +54,18 @@ cmd="xcodebuild archive"
 
 check_type=$(basename *.xcworkspace)
 if [[ "$check_type" != "*.xcworkspace" ]]; then
-  print -c "green" "using $PROJ_NAME.xcworkspace"
-  cmd="$cmd -workspace \"$PROJ_NAME.xcworkspace\""
+  print -c "green" "using $check_type"
+  cmd="$cmd -workspace \"$check_type\""
 else
-  print -c "green" "using $PROJ_NAME.xcodeproj"
-  cmd="$cmd -project \"$PROJ_NAME.xcodeproj\""
+  check_type=$(basename *.xcodeproj)
+  if [[ "$check_type" != "*.xcodeproj" ]]; then
+    print -c "green" "using $check_type"
+    cmd="$cmd -project \"$check_type\""
+  else
+    print -c "red" "xcodeproj not found."
+    exit 1
+  fi
+
 fi
 
 cmd="$cmd -scheme $PROJ_SCHEME"

@@ -39,7 +39,7 @@ function config_env_variables(){
 
   switch_dir_to "$APP_PATH"
   check_type=$(basename *.xcodeproj)
-  PROJ_NAME=$(echo "$check_type" | sed 's/\..*$//g')
+  PROJ_NAME=$(echo "$check_type" | sed 's/\.xcodeproj//g')
   restore_dir
 
   #====
