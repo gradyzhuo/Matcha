@@ -57,7 +57,13 @@ function xc_show() {
   elif [[ "$command" == "version" ]]; then
     echo $(agvtool mvers -terse1)
   elif [[ "$command" == "build_version" ]]; then
-    echo $(defaults read "$(pwd)/$(xc_show info_plist)"  CFBundleVersion)
+
+    agv=$(agvtool vers -terse)
+    if [[ -n $agv ]]; then
+      echo "$agv"
+    else
+      echo  $(defaults read "$(pwd)/$(xc_show info_plist)"  CFBundleVersion)
+    fi
   fi
 
 }
