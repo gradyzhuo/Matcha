@@ -47,6 +47,8 @@ else
   fi
 fi
 
+echo "CONFIGURATION_BUILD_DIR=\"$BUILD_PATH\"" >> "$TMP_PATH/$codesign_xcconfig"
+
 #####
 phase_print "Archiving app"
 
@@ -69,7 +71,10 @@ else
 fi
 
 cmd="$cmd -scheme $PROJ_SCHEME"
-cmd="$cmd -derivedDataPath \"$BUILD_PATH\""
+
+if [[ -n $DERIVED_DATA_PATH ]]; then
+  cmd="$cmd -derivedDataPath \"$DERIVED_DATA_PATH\""
+fi
 cmd="$cmd -archivePath \"$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive\""
 
 if [[ "$BUILD_CONFIGURATION" != "" ]]; then

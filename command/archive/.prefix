@@ -118,6 +118,8 @@ function setup_input_params() {
         PROJECT_FOLDER_NAME="$param"
         DELEGATE="$MATCHA_BUILDER_BASE/projects/$PROJECT_FOLDER_NAME/$DELEGATE_FILE_NAME"
         code=""
+      elif [[ "$code" == "-derived_path" ]]; then
+        DERIVED_DATA_PATH="$param"
       elif [[ "$code" == "-delegate"  ]]; then
         DELEGATE="$param"
         code=""

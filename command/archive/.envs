@@ -43,6 +43,7 @@ declare -x TMP_FOLDER
 declare -x TMP_PATH
 declare -x APP_PATH
 declare -x BUILD_PATH
+declare -x DERIVED_DATA_PATH
 
 declare -x SUBSCRIPT_DIR
 declare -x LOG_FOLDER
