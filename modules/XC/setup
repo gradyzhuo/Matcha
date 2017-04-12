@@ -57,7 +57,7 @@ function xc_show() {
   elif [[ "$command" == "version" ]]; then
     echo $(agvtool what-marketing-version | grep -m 1 'Found CFBundleShortVersionString of "' | sed 's/^.*Found CFBundleShortVersionString of \"//g' | sed 's/\".*$//g')
   elif [[ "$command" == "build_version" ]]; then
-    echo $(agvtool what-version | sed 's/^.* //g')
+    echo $(defaults read "$(pwd)/$(xc_show info_plist)"  CFBundleVersion)
   fi
 
 }
