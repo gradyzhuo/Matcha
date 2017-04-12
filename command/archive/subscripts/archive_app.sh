@@ -72,9 +72,11 @@ fi
 
 cmd="$cmd -scheme $PROJ_SCHEME"
 
-if [[ -n $DERIVED_DATA_PATH ]]; then
-  cmd="$cmd -derivedDataPath \"$DERIVED_DATA_PATH\""
+if [[ -z $DERIVED_DATA_PATH ]]; then
+  DERIVED_DATA_PATH="$BUILD_PATH"
 fi
+
+cmd="$cmd -derivedDataPath \"$DERIVED_DATA_PATH\""
 cmd="$cmd -archivePath \"$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive\""
 
 if [[ "$BUILD_CONFIGURATION" != "" ]]; then
