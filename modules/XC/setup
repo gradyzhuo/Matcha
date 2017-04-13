@@ -57,7 +57,6 @@ function xc_show() {
   elif [[ "$command" == "version" ]]; then
     echo $(agvtool mvers -terse1)
   elif [[ "$command" == "build_version" ]]; then
-
     agv=$(agvtool vers -terse)
     if [[ -n $agv ]]; then
       echo "$agv"

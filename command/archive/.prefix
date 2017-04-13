@@ -123,6 +123,8 @@ function setup_input_params() {
       elif [[ "$code" == "-delegate"  ]]; then
         DELEGATE="$param"
         code=""
+      elif [[ "$code" == "-config" ]]; then
+        CUSTOM_XCCONFIGS="$CUSTOM_XCCONFIGS $param"
       fi
 		fi
 

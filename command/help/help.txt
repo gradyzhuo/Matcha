@@ -26,7 +26,6 @@
 -tn   				TEAM_NAME													# (required) no default. e.g. Hiiir, Inc. Taiwan Branch.
 -passwd				PASSWD														# the password of this macOS account.
 -pn    				PROJ_NAME       									# the name of project.
--derived_path DERIVED_DATA_PATH 								# the derived data path
 
 -------------------------[ Fastlane ]--------------------------------
 -ndp					NEED_DOWNLOAD_PROVISION_PROFILE
