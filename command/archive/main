@@ -6,17 +6,19 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+source .envs
+
 #=====Common imports=====
 @import Prints --silent
 @import Files --silent
 @import Builder --silent
 
-source .envs
 source .prefix "$@"
 
 if [[ "${array[@]}" =~ "-ndp" ]]; then
   NEED_DOWNLOAD_PROVISION_PROFILE=1
 fi
+
 
 
 
