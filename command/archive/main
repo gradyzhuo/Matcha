@@ -17,9 +17,7 @@ if [[ "${array[@]}" =~ "-ndp" ]]; then
   NEED_DOWNLOAD_PROVISION_PROFILE=1
 fi
 
-
-
-
+setup_input_params "$@"
 setup_delegate "$@"
 
 if [[ -e "$APP_PATH" ]]; then
