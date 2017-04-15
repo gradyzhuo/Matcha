@@ -1,0 +1,83 @@
+#!/bin/bash
+#
+# MailSupport/attachment
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f attachment
+
+function attachment() {
+  declare code
+  declare boundary
+  declare file
+  declare filename
+  declare name
+  declare mime
+  declare header=""
+  declare disposition
+  declare content_id
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-b" ]]; then
+				boundary="$param"
+      elif [[ "$code" == "-file" ]]; then
+        file="$param"
+      elif [[ "$code" == "-filename" ]]; then
+        filename="$param"
+      elif [[ "$code" == "-mime" ]]; then
+        mime="$param"
+      elif [[ "$code" == "-header" ]]; then
+        header=$({
+          echo "$header"
+          echo "$param"
+        })
+      elif [[ "$code" == "-name" ]]; then
+        name="$param"
+      elif [[ "$code" == "-cid" ]]; then
+        content_id="$param"
+      elif [[ "$code" == "-type" ]]; then
+        disposition="$param" #inline, attachment
+      fi
+    fi
+  done
+
+  if [[ -z $file ]]; then
+    print -c red -s bold "[Error] -file can't be empty."
+    return 1
+  fi
+
+  if [[ -z $filename ]]; then
+    filename=$(basename $file)
+  fi
+
+  if [[ -z $name ]]; then
+    name=$filename
+  fi
+
+  if [[ -z $disposition ]]; then
+    disposition="attachment"
+  fi
+
+  data=$(base64 "$file")
+
+  att=$({
+    echo "--$boundary"
+    echo "Content-Transfer-Encoding: base64"
+    echo "Content-Disposition: $disposition;"
+      echo "filename=$filename"
+    echo "Content-Type: $mime;"
+    echo "x-unix-mode=0644;"
+    echo "name=\"$name\""
+    echo "Content-Id: <$content_id>"
+    [ -n $header ] && echo "$header"
+
+    echo "$data"
+  })
+
+  echo "$att"
+}

@@ -7,3 +7,11 @@
 #
 
 source send_mail
+source attachment
+
+
+function @make() {
+  if [[ "$1" == "attachment" ]]; then
+    attachment "$@"
+  fi
+}
