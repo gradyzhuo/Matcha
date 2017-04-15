@@ -57,7 +57,7 @@ mkdirFolder "$INSTALL_LIB_TARGET"
 declare EXEC_PATH=$(readlink "$BASH_SOURCE")
 declare EXEC_DIR=$(dirname "$EXEC_PATH")
 
-SHOULD_COPY="command modules .prefix matcha"
+SHOULD_COPY="command modules .prefix matcha scripts"
 for item in $SHOULD_COPY
 do
     cp -R "$EXEC_DIR/$item" "$INSTALL_LIB_TARGET/"

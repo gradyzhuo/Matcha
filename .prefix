@@ -9,21 +9,18 @@
 declare -x MATCHA_VERSION='1.0'
 declare -x INSTALL_LIB_TARGET="$HOME/.matcha"
 
-declare -x MATCHA_BUILDER_BASE
 declare -x COMMAND_BASE
 declare -x COMMAND
-declare -x MODULES_FOLDER
 
-declare -i -x DEBUG_MODE
-declare -i -x BUILD_CI
-
-declare -f @exec
-declare -f @exists -f
 declare -f command_exists
-declare -f exists
 declare -f welcome
 declare -f tips
+
+declare -f @exec
+declare -f @exists
 declare -f @log
+
+declare -f matcha_session_update
 
 function welcome(){
   print ''
@@ -46,39 +43,41 @@ function tips(){
 }
 
 function @import() {
-  @exec import "$@"
+
+  declare module=$(basename "$1")
+
+  declare -i SILENT_IMPORT=1
+  if [[ "$@" == *"--silent"* ]]; then
+    SILENT_IMPORT=0
+  fi
+
+
+  [[ "$module" == "" && $SILENT_IMPORT == 1 ]] && @error "-- Module name can't be empty! ----------" && return 1;
+
+  declare module_dir=$(dirname "$1")
+  declare module_path="$module_dir/$module"
+  if [[ ! -e "$module_path/@.imports" ]]; then
+    module_path="$MODULES_FOLDER/$module"
+  fi
+
+  if [[ -L "$module_path.mm" ]]; then
+    real=$(readlink "$module_path.mm")
+    module_path=$(dirname "$real")
+  fi
+
+  if [[ -e "$module_path" ]]; then
+    pushd "$module_path" >/dev/null 2>&1
+    source @.imports >/dev/null 2>&1
+    popd >/dev/null 2>&1
+    [[ $SILENT_IMPORT == 1 ]] && @log ">> Module [$module] import succeed." && return 0;
+  else
+    [[ $SILENT_IMPORT == 1 ]] && @error "-- Module [$module] not found! ----------" && return 1;
+  fi
+
 }
 
 function @exec() {
-
-  COMMAND="$1"
-
-  if [[ $(ls "$MATCHA_BUILDER_BASE/command") != *"$COMMAND"*  ]]; then
-    print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
-    return 0
-  fi
-
-  if [[ -z $COMMAND ]]; then
-    print -c "red" -s bold "-- Command name can't be empty! ----------"
-    return 0
-  fi
-
-  COMMAND_DIR="$MATCHA_BUILDER_BASE/command/$COMMAND"
-  pushd "$COMMAND_DIR" >/dev/null 2>&1
-  if [[ -s "$COMMAND_DIR/source" ]]; then
-
-    source  'source' "$@"
-
-  elif [[ -s "$COMMAND_DIR/main" ]]; then
-    PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
-    COMMAND_BASE="$COMMAND_DIR"
-
-    bash -l main "$@"
-
-    COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
-  fi
-  popd >/dev/null 2>&1
-
+  matcha "$@"
 }
 
 function shell_function_exists() {

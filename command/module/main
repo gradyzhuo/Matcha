@@ -46,7 +46,4 @@ elif [[ "$2" == "list" ]]; then
   switch_dir_to "$MODULES_FOLDER"
   echo $(ls *.mm | sed 's/.mm//g')
   restore_dir
-
-elif [[ "$2" == "import" ]]; then
-  @import "$3"
 fi

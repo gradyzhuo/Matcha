@@ -1,0 +1,51 @@
+#!/bin/bash -l
+#
+# matcha
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f shell_session_update
+declare -f execute
+
+#default
+function matcha_session_update() {
+  # do nothing.
+  return $?
+}
+
+function shell_session_update() {
+  matcha_session_update 1>&2
+}
+
+function execute() {
+
+  COMMAND="$1"
+
+  if [[ $(ls "$MATCHA_BUILDER_BASE/command") != *"$COMMAND"*  ]]; then
+    print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
+    return 0
+  fi
+
+  if [[ -z $COMMAND ]]; then
+    print -c "red" -s bold "-- Command name can't be empty! ----------"
+    return 0
+  fi
+
+  COMMAND_DIR="$MATCHA_BUILDER_BASE/command/$COMMAND"
+  pushd "$COMMAND_DIR" >/dev/null 2>&1
+  if [[ -s "$COMMAND_DIR/main" ]]; then
+    PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
+    COMMAND_BASE="$COMMAND_DIR"
+
+    source main "$@"
+
+    COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
+  fi
+  popd >/dev/null 2>&1
+
+}
+
+
+execute "$@"

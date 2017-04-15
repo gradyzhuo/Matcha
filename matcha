@@ -7,6 +7,9 @@
 #
 
 #從執行 shell 路徑判定builder路徑
+declare -x MATCHA_BUILDER_BASE
+declare -x MODULES_FOLDER
+
 declare EXEC_PATH
 
 EXEC_PATH="$BASH_SOURCE" && [[ -L "$BASH_SOURCE" ]] && EXEC_PATH=$(readlink "$BASH_SOURCE");
@@ -23,6 +26,8 @@ MODULES_FOLDER="$MATCHA_BUILDER_BASE/modules"
 @import Prints --silent
 
 function matcha() {
+  declare -i -x DEBUG_MODE=1
+  declare -i -x BUILD_CI=1
 
   if [[ "$@" == *" -ci"* ]]; then
     BUILD_CI=0
@@ -32,10 +37,18 @@ function matcha() {
     DEBUG_MODE=0
   fi
 
-  [[ -n $1 && "$1" != *"-"*  ]] && @exec "$@" && return 0;
-  [[ "$0" == *"bash"* ]] && welcome \
-  && [[ $BUILD_CI == 1 ]] && tips && return 0;
 
+  welcome 1>&2
+  if [[ "$0" == *"bash"* && -z $1 && $BUILD_CI == 1 ]]; then
+    tips 1>&2
+  fi
+
+  if [[ -n $1 && "$1" != *"-"* ]]; then
+    /bin/bash -l "$MATCHA_BUILDER_BASE/scripts/execute" "$@"
+  fi
+
+
+  return $?
 }
 
 #相容舊版

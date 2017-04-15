@@ -14,9 +14,8 @@ source defines
 @import XC
 
 declare -f clean
-declare -f shell_session_update
 
-function shell_session_update() {
+function matcha_session_update() {
   if [[ $? != 0 ]]; then
     did_terminate
     print -c "red" -s bold "Builder is terminated!"
@@ -24,7 +23,6 @@ function shell_session_update() {
 }
 
 function terminate(){
-
   declare error_code="$1"
   declare error_message="$2"
 
