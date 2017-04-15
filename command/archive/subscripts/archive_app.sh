@@ -54,6 +54,7 @@ phase_print "Archiving app"
 
 cmd="xcodebuild"
 
+cmd="$cmd -scheme $PROJ_SCHEME"
 check_type=$(basename *.xcworkspace)
 if [[ "$check_type" != "*.xcworkspace" ]]; then
   print -c "green" "using $check_type"
@@ -67,10 +68,8 @@ else
     print -c "red" "xcodeproj not found."
     exit 1
   fi
-
 fi
 
-cmd="$cmd -scheme $PROJ_SCHEME"
 cmd="$cmd -derivedDataPath \"$BUILD_PATH\""
 cmd="$cmd -archivePath \"$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive\""
 
@@ -85,10 +84,10 @@ cmd="$cmd clean"
 cmd="$cmd archive"
 
 if [[ $BUILD_CI != 0 ]]; then
-  cmd="$cmd >>\"$LOG_FOLDER/app.log\" 2>&1"
+  cmd="$cmd > \"$LOG_FOLDER/app.log\" 2>&1"
 fi
 
-
+@log "$cmd"
 
 prints "-c magenta Building" "-c magenta -s blink ..."
 eval "$cmd || terminate $ARCHIVE_FAIL_CODE 'Archive failed. please checks app.log...'"
