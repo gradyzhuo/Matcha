@@ -98,7 +98,7 @@ function setup_input_params() {
       elif [[ "$code" == "-eo" ]]; then
         EXPORT_OPTION="$param"
       elif [[ "$code" == "-ep" ]]; then
-        EXPORT_FOLDER="$param/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
+        EXPORT_FOLDER="$param"
       elif [[ "$code" == "-lp" ]]; then
         LOG_FOLDER="${param}/$BUILD_DATETIME"
       elif [[ "$code" == "-aid" ]]; then
