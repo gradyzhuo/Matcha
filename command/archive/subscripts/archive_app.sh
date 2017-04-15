@@ -20,14 +20,16 @@ if [[ "$APP_VERSION" == "" ]]; then
 fi
 
 if [[ "$APP_VERSION" != "" ]]; then
-  defaults write "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString "$APP_VERSION"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString string \"$APP_VERSION\"" $INFO_PLIST
+  #defaults write "$APP_PATH/$INFO_PLIST"  CFBundleShortVersionString "$APP_VERSION"
 fi
 
 if [[ "$BUILD_VERSION" == "" ]]; then
   BUILD_VERSION="$CURRENT_PROJECT_BUILD_VERSION"
 fi
 if [[ "$BUILD_VERSION" != "" ]]; then
-  defaults write "$APP_PATH/$INFO_PLIST"  CFBundleVersion "$BUILD_VERSION"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion string \"$BUILD_VERSION\"" $INFO_PLIST
+  #defaults write "$APP_PATH/$INFO_PLIST"  CFBundleVersion "$BUILD_VERSION"
 fi
 
 print -c "green" "Version       => $APP_VERSION"
