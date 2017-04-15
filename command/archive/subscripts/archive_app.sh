@@ -80,12 +80,15 @@ fi
 
 cmd="$cmd -sdk iphoneos"
 cmd="$cmd -xcconfig \"$TMP_PATH/$codesign_xcconfig\""
+
+cmd="$cmd clean"
+cmd="$cmd archive"
+
 if [[ $BUILD_CI != 0 ]]; then
   cmd="$cmd >>\"$LOG_FOLDER/app.log\" 2>&1"
 fi
 
-cmd="$cmd clean"
-cmd="$cmd archive"
+
 
 prints "-c magenta Building" "-c magenta -s blink ..."
 eval "$cmd || terminate $ARCHIVE_FAIL_CODE 'Archive failed. please checks app.log...'"
