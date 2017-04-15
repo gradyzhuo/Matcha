@@ -52,7 +52,7 @@ echo "$CUSTOM_XCCONFIGS" >> "$TMP_PATH/$codesign_xcconfig"
 #####
 phase_print "Archiving app"
 
-cmd="xcodebuild archive"
+cmd="xcodebuild"
 
 check_type=$(basename *.xcworkspace)
 if [[ "$check_type" != "*.xcworkspace" ]]; then
@@ -83,6 +83,9 @@ cmd="$cmd -xcconfig \"$TMP_PATH/$codesign_xcconfig\""
 if [[ $BUILD_CI != 0 ]]; then
   cmd="$cmd >>\"$LOG_FOLDER/app.log\" 2>&1"
 fi
+
+cmd="$cmd clean"
+cmd="$cmd archive"
 
 prints "-c magenta Building" "-c magenta -s blink ..."
 eval "$cmd || terminate $ARCHIVE_FAIL_CODE 'Archive failed. please checks app.log...'"
