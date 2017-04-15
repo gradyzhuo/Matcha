@@ -68,11 +68,8 @@ function attachment() {
   att=$({
     echo "--$boundary"
     echo "Content-Transfer-Encoding: base64"
-    echo "Content-Disposition: $disposition;"
-      echo "filename=$filename"
-    echo "Content-Type: $mime;"
-    echo "x-unix-mode=0644;"
-    echo "name=\"$name\""
+    echo "Content-Disposition: $disposition; filename=$filename"
+    echo "Content-Type: $mime; x-unix-mode=0644; name=\"$name\""
     echo "Content-Id: <$content_id>"
     [ -n $header ] && echo "$header"
 
