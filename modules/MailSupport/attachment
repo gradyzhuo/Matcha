@@ -18,6 +18,7 @@ function attachment() {
   declare header=""
   declare disposition
   declare content_id
+
   for param in "$@"
   do
     if [[ "$param" =~ ^- ]]; then
@@ -52,11 +53,11 @@ function attachment() {
   fi
 
   if [[ -z $filename ]]; then
-    filename=$(basename $file)
+    filename=$(basename "$file")
   fi
 
   if [[ -z $name ]]; then
-    name=$filename
+    name="$filename"
   fi
 
   if [[ -z $disposition ]]; then
