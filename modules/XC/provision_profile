@@ -191,6 +191,25 @@ function profile_showUUID() {
   echo "$uuid"
 }
 
+function profile_showName() {
+  #
+  # unlock the keychain, automatically lock keychain on script exit
+  #
+
+  # security unlock-keychain -p `pwd` $HOME/Library/Keychains/login.keychain
+  # trap "security lock-keychain $HOME/Library/Keychains/login.keychain" EXIT
+
+  #
+  # Extract the profile NAME from the checked in Provisioning Profile.
+  #
+
+  profile_file=$(get_profile_parameter "$@")
+  mobileprovision=$(security cms -D -i "$profile_file")
+  name=$(/usr/libexec/plistbuddy -c Print:Name /dev/stdin <<< ${mobileprovision})
+
+  echo "$name"
+}
+
 function profile_install() {
   profile_file=$(get_profile_parameter "$@")
   uuid=$(profile_showUUID "$@")

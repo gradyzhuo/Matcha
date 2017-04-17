@@ -22,7 +22,7 @@ declare -x -a BUILD_CONFIGURATIONS
 declare -x APP_ID
 declare -x INFO_PLIST
 declare -x ARCHIVE_NAME
-declare -x UUID
+declare -x PROVISIONING_PROFILE_UUID
 
 declare -x GIT_APP
 declare -x GIT_BRANCH_APP="master"

@@ -39,9 +39,12 @@ print -c "green" "Build Version => $BUILD_VERSION"
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
   echo "DEVELOPMENT_TEAM=$TEAM_ID" >> "$TMP_PATH/$codesign_xcconfig"
+  if [[ -n $PROVISIONING_PROFILE_NAME ]]; then
+    echo "PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE_NAME" >> "$TMP_PATH/$codesign_xcconfig"
+  fi
 else
-  if [[ "$UUID" != "" ]]; then
-    echo "PROVISIONING_PROFILE=$UUID" >> "$TMP_PATH/$codesign_xcconfig"
+  if [[ "$PROVISIONING_PROFILE_UUID" != "" ]]; then
+    echo "PROVISIONING_PROFILE=$PROVISIONING_PROFILE_UUID" >> "$TMP_PATH/$codesign_xcconfig"
   fi
 
   if [[ "$SIGNING_IDENTITY" != "" ]]; then

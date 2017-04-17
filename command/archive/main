@@ -84,7 +84,7 @@ do
 	exec_script export_ipa
 
 	APP_ID=""
-	UUID=""
+	PROVISIONING_PROFILE_UUID=""
 
   restore_dir
 done

@@ -42,9 +42,9 @@ function xc_setup_variables {
   fi
 
   SPECIFICS_PROVISION_PROFILE=$(xc_show specifier_provision_profile -settings "$XC_BUILD_SETTINGS")
-  if [[ -z $PROVISIONING_PROFILE_NAME ]]; then
-    PROVISIONING_PROFILE_NAME="$SPECIFICS_PROVISION_PROFILE"
-  fi
+  # if [[ -z $PROVISIONING_PROFILE_NAME ]]; then
+  #   PROVISIONING_PROFILE_NAME="$SPECIFICS_PROVISION_PROFILE"
+  # fi
 }
 
 function exec_script () {
@@ -87,7 +87,7 @@ function setup_input_params() {
       elif [[ "$code" == "-pn" ]]; then
         PROJ_NAME="$param"
       elif [[ "$code" == "-u" ]]; then
-        UUID="$param"
+        PROVISIONING_PROFILE_UUID="$param"
       elif [[ "$code" == "-i" ]]; then
         APP_ID="$param"
       elif [[ "$code" == "-ti" ]]; then
