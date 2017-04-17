@@ -56,7 +56,6 @@ function did_end() {
     builder_did_end $@
     restore_dir
   fi
-  clean built tmp
 }
 
 function did_terminate(){
@@ -66,5 +65,4 @@ function did_terminate(){
     builder_did_terminate $@
     restore_dir
   fi
-  clean built tmp
 }

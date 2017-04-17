@@ -92,3 +92,4 @@ done
 did_exec "builder"
 
 did_end
+clean built tmp
