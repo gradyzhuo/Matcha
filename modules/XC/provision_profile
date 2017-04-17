@@ -131,7 +131,7 @@ function profile_download() {
   restore_dir
 
   if [ "$apple_id_password" != "" ]; then
-        fastlane-credentials remove --username "$apple_id"
+    fastlane fastlane-credentials remove --username "$apple_id"
   fi
 }
 
