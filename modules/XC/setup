@@ -32,7 +32,7 @@ function xc_show() {
 		fi
   done
 
-  if [[ "build_settings app_id info_plist configuration team" == *"$command"* && -z "$settings" ]]; then
+  if [[ "build_settings app_id info_plist configuration team specifier_provision_profile" == *"$command"* && -z "$settings" ]]; then
     declare build_settings_cmd="xcodebuild -showBuildSettings"
     if [[ "$scheme" != "" ]]; then
       build_settings_cmd="$build_settings_cmd -scheme $scheme"
