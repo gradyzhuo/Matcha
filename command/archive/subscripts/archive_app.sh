@@ -37,7 +37,7 @@ print -c "green" "Build Version => $BUILD_VERSION"
 
 #######產生 codesign.xcconfig
 
-if [[ $AUTOMATICALLY_MANAGE_SIGIN == 0 ]]; then
+if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
   echo "DEVELOPMENT_TEAM=$TEAM_ID" >> "$TMP_PATH/$codesign_xcconfig"
 else
   if [[ "$UUID" != "" ]]; then

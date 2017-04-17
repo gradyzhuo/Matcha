@@ -20,7 +20,7 @@ if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
   profile install -profile "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE"
 fi
 
-if [[ $AUTOMATICALLY_MANAGE_SIGIN != 0 && "$UUID" == "" ]]; then
+if [[ $AUTOMATICALLY_MANAGE_SIGNING != 0 && "$UUID" == "" ]]; then
   phase_print "Fetching UUID"
   UUID=$(profile showUUID -profile "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE")
   print -c green "using provision profile: $PROVISIONING_PROFILE($UUID)"

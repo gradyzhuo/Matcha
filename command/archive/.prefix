@@ -36,9 +36,9 @@ function xc_setup_variables {
 
   DEVELOPMENT_TEAM=$(xc_show team -settings "$XC_BUILD_SETTINGS")
   if [[ "$DEVELOPMENT_TEAM" != "" ]]; then
-    AUTOMATICALLY_MANAGE_SIGIN=0
+    AUTOMATICALLY_MANAGE_SIGNING=0
   else
-    AUTOMATICALLY_MANAGE_SIGIN=1
+    AUTOMATICALLY_MANAGE_SIGNING=1
   fi
 }
 
