@@ -35,6 +35,7 @@ declare -x PROVISIONING_PROFILE_NAME
 declare -x PROVISIONING_PROFILE
 declare -x TEAM_ID
 declare -x SPECIFICS_TEAM_ID
+declare -x SPECIFICS_PROVISION_PROFILE
 declare -x TEAM_NAME
 # declare -x SIGNING_IDENTITY="iPhone Distribution: Hiiir, Inc. Taiwan Branch (${TEAM_ID})"
 declare -x SIGNING_IDENTITY

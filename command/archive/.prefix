@@ -40,6 +40,11 @@ function xc_setup_variables {
   else
     AUTOMATICALLY_MANAGE_SIGNING=1
   fi
+
+  SPECIFICS_PROVISION_PROFILE=$(xc_show specifier_provision_profile -settings "$XC_BUILD_SETTINGS")
+  if [[ -z $PROVISIONING_PROFILE_NAME ]]; then
+    PROVISIONING_PROFILE_NAME="$SPECIFICS_PROVISION_PROFILE"
+  fi
 }
 
 function exec_script () {

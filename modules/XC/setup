@@ -45,6 +45,8 @@ function xc_show() {
 
   if [[ "$command" == "build_settings" ]]; then
     echo "$settings"
+  elif [[ "$command" == "specifier_provision_profile" ]]; then
+    echo $(echo "$settings" | grep 'PROVISIONING_PROFILE_SPECIFIER' | sed 's/    PROVISIONING_PROFILE_SPECIFIER = //g')
   elif [[ "$command" == "app_id" ]]; then
     echo $(echo "$settings" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
   elif [[ "$command" == "info_plist" ]]; then
