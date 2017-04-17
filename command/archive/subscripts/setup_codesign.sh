@@ -20,7 +20,7 @@ if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
   profile install -profile "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE"
 
   PROVISIONING_PROFILE_NAME=$(profile showName -profile "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE")
-  print -c green "using provision profile: $PROVISIONING_PROFILE_NAME"
+  print -c green "downloaded provision profile: $PROVISIONING_PROFILE_NAME"
 fi
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING != 0 && "$PROVISIONING_PROFILE_UUID" == "" ]]; then
