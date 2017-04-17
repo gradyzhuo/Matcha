@@ -6,14 +6,19 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-@import Git
+@import Git --silent
 
 declare TAG="1.0"
 declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
 @log 'Cloning Matcha...'
-clone -r "https://github.com/gradyzhuo/Matcha.git" -b "master" -t "$UPDATE_PATH"
+clone -r "https://github.com/gradyzhuo/Matcha.git" -b "master" -t "$UPDATE_PATH" >/dev/null 2>&1
+
+if [[ $? != 0 ]]; then
+  print -c red -s bold "Matcha cloning failed."
+  exit $?
+fi
 
 cd "$UPDATE_PATH" >> /dev/null
 ./install.sh
