@@ -10,7 +10,6 @@ declare -f attachment
 
 function attachment() {
   declare code
-  declare boundary
   declare file
   declare filename
   declare name
@@ -24,9 +23,7 @@ function attachment() {
     if [[ "$param" =~ ^- ]]; then
 			code="$param"
 		else
-      if [[ "$code" == "-b" ]]; then
-				boundary="$param"
-      elif [[ "$code" == "-file" ]]; then
+      if [[ "$code" == "-file" ]]; then
         file="$param"
       elif [[ "$code" == "-filename" ]]; then
         filename="$param"
@@ -67,7 +64,6 @@ function attachment() {
   data=$(base64 "$file")
 
   att=$({
-    echo "--$boundary"
     echo "Content-Transfer-Encoding: base64"
     echo "Content-Disposition: $disposition; filename=$filename"
     echo "Content-Type: $mime; x-unix-mode=0644; name=\"$name\""

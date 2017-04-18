@@ -6,14 +6,21 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+source new
 source send_mail
 source attachment
 source utils
 
+@import Files --silent
+
+declare -x DRAFTS_PATH
+declare -x CURRENT_MAIL_UUID
+
 function @mail() {
   if [[ "$1" == "attachment" ]]; then
     attachment "$@"
-  elif [[ "$1" == "send" ]]; then
-    send_mail "$@"
+  elif [[ "$1" == "new" ]]; then
+    DRAFTS_PATH="$INSTALL_LIB_TARGET/drafts"
+    new_mail "$@"
   fi
 }

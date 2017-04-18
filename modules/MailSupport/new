@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# MailSupport/new
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+function new_mail() {
+  UUID=$(uuidgen)
+  if [[ ! -e "$DRAFTS_PATH" ]]; then
+    mkdirFolder "$DRAFTS_PATH"
+  fi
+  touch "$DRAFTS_PATH/$UUID.drafts"
+  echo $UUID
+  CURRENT_MAIL_UUID="$UUID"
+}
