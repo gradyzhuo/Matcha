@@ -8,10 +8,12 @@
 
 source send_mail
 source attachment
+source utils
 
-
-function @make() {
+function @mail() {
   if [[ "$1" == "attachment" ]]; then
     attachment "$@"
+  elif [[ "$1" == "send" ]]; then
+    send_mail "$@"
   fi
 }

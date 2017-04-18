@@ -53,7 +53,11 @@ function send_mail() {
   fi
 
   if [[ "$ctype" == "text/html" ]]; then
-    content=$(echo "$content" | sed 's/^/<div>/g'  | sed 's/$/<\/div>/g' | sed 's/<div><\/div>/<br \/>/g')
+    if [[ $(@exists -c pandoc) == 0 ]]; then
+      content=$(echo "$content" | pandoc -f markdown_github)
+    else
+      content=$(echo "$content" | sed 's/^/<div>/g'  | sed 's/$/<\/div>/g' | sed 's/<div><\/div>/<br \/>/g')
+    fi
   fi
 
   {

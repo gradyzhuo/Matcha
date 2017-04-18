@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# MailSupport/send_mail
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f plain2html
+
+function plain2html(){
+  content="$1"
+  if [[ $(@exists -c pandoc) == 0 ]]; then
+    content=$(echo "$content" | pandoc -f markdown_github)
+  else
+    content=$(echo "$content" | sed 's/^/<div>/g'  | sed 's/$/<\/div>/g' | sed 's/<div><\/div>/<br \/>/g')
+  fi
+
+  echo "$content"
+}
