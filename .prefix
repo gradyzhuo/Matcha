@@ -67,7 +67,7 @@ function @import() {
 
   if [[ -e "$module_path" ]]; then
     pushd "$module_path" >/dev/null 2>&1
-    source @.imports >/dev/null 2>&1
+    source @.imports >/dev/null
     popd >/dev/null 2>&1
     [[ $SILENT_IMPORT == 1 ]] && @log ">> Module [$module] import succeed." && return 0;
   else

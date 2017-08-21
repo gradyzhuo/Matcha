@@ -6,12 +6,124 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+declare -x CURRENT_BOUNDARY
+
 function new_mail() {
   UUID=$(uuidgen)
-  if [[ ! -e "$DRAFTS_PATH" ]]; then
-    mkdirFolder "$DRAFTS_PATH"
+  DRAFT_FOLDER=$(draft_path "$UUID")
+
+  if [[ ! -e "$DRAFT_FOLDER" ]]; then
+    mkdirFolder "$DRAFT_FOLDER"
   fi
-  touch "$DRAFTS_PATH/$UUID.drafts"
+
+  HEADER=$(draft_header_path "$UUID")
+  BODY=$(draft_body_path "$UUID")
+  FOOTER=$(draft_footer_path "$UUID")
+  PARAMETERS=$(draft_parameters_path "$UUID")
+
+  touch "$HEADER"
+  touch "$BODY"
+  touch "$FOOTER"
+  touch "$PARAMETERS"
   echo $UUID
   CURRENT_MAIL_UUID="$UUID"
+
+  declare code
+  declare charset
+  declare mime_version="1.1"
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-charset" ]]; then
+        charset="$param"
+      fi
+    fi
+  done
+
+  if [[ "$charset" == "" ]]; then
+    charset="UTF-8"
+  fi
+
+  @mail set "$@"
+
+  boundary="--$UUID"
+  CURRENT_BOUNDARY="$boundary"
+
+  {
+    echo "Mime-Version: $mime_version";
+    echo "Content-type: multipart/alternative ; boundary=\"$boundary\" ; charset=\"$charset\"";
+  } >> "$HEADER"
+
+}
+
+
+function mail_add() {
+  BODY=$(draft_body_path "$CURRENT_MAIL_UUID")
+  PARAMETERS=$(draft_parameters_path "$UUID")
+
+  {
+    # echo "$(boundary_start)"
+    if [[ -n $(cat "$BODY") ]]; then
+      echo "$(boundary_start)"
+    fi
+    echo "$2"
+    # echo "$(boundary_end)"
+  }>> "$BODY"
+
+}
+
+function boundary_start() {
+  boundary="$1"
+  if [[ -z $boundary ]]; then
+    boundary="$CURRENT_BOUNDARY"
+  fi
+
+  echo "$boundary"
+
+  unset boundary
+}
+
+function boundary_end() {
+  boundary="$1"
+  if [[ -z $boundary ]]; then
+    boundary="$CURRENT_BOUNDARY"
+  fi
+
+  echo "$boundary"--
+  unset boundary
+}
+
+function mail_set() {
+  declare UUID="$CURRENT_MAIL_UUID"
+
+  DRAFT_FOLDER=$(draft_path "$UUID")
+
+  declare fromuser
+  declare touser
+  declare subject
+  declare ccuser
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+      code="$param"
+    else
+      if [[ "$code" == "-to" ]]; then
+        touser="$param"
+        echo "$touser" > "$DRAFT_FOLDER/to.draft"
+      elif [[ "$code" == "-from" ]]; then
+        fromuser="$param"
+        echo "$fromuser" > "$DRAFT_FOLDER/from.draft"
+      elif [[ "$code" == "-subject" ]]; then
+        subject="$param"
+        echo "$subject" > "$DRAFT_FOLDER/subject.draft"
+      elif [[ "$code" == "-cc" ]]; then
+        ccuser="$param"
+        echo "$ccuser" > "$DRAFT_FOLDER/cc.draft"
+      fi
+    fi
+  done
+
 }

@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# MailSupport/show
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+function show_mail(){
+  if [[ -n "$1" ]]; then
+    UUID="$1"
+  else
+    UUID="$CURRENT_MAIL_UUID"
+  fi
+
+  if [[ $(@mail drafts) != *"$UUID"* ]]; then
+    print -c red "The draft $UUID not found."
+    return 1
+  fi
+
+  HEADER=$(draft_header_path "$UUID")
+  BODY=$(draft_body_path "$UUID")
+  FOOTER=$(draft_footer_path "$UUID")
+  PARAMETERS=$(draft_parameters_path "$UUID")
+
+  DRAFT_FOLDER=$(draft_path "$UUID")
+  FROM="$DRAFT_FOLDER/from.draft"
+  TO="$DRAFT_FOLDER/to.draft"
+  CC="$DRAFT_FOLDER/cc.draft"
+  SUBJECT="$DRAFT_FOLDER/subject.draft"
+
+  full={
+    echo "$(cat "$HEADER")"
+    if [[ -s "$FROM" ]]; then
+      echo FROM: $(cat "$FROM")
+    fi
+    if [[ -s "$TO" ]]; then
+      echo TO: $(cat "$TO")
+    fi
+    if [[ -s "$CC" ]]; then
+      echo CC: $(cat "$CC")
+    fi
+    if [[ -s "$SUBJECT" ]]; then
+      echo Subject: $(cat "$SUBJECT")
+    fi
+
+    echo "$(boundary_start)"
+
+    echo "$(cat "$BODY")"
+
+    echo "$(cat "$FOOTER")"
+
+    echo "$(boundary_end)"
+  }
+  echo "$full"
+
+  return 0
+}

@@ -1,0 +1,77 @@
+#!/bin/bash
+#
+# MailSupport/content
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f html
+declare -f plain
+
+function gen_html(){
+  declare boundary
+
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-b" ]]; then
+				boundary="$param"
+      fi
+    fi
+  done
+}
+
+function gen_plain() {
+  declare content
+  declare mime="text/plain"
+  declare encoding
+  declare charset
+
+  declare code
+  for param in "$@"
+  do
+    if [[ "$param" =~ ^- ]]; then
+			code="$param"
+		else
+      if [[ "$code" == "-content" ]]; then
+        content="$param"
+      elif [[ "$code" == "-encoding" ]]; then
+        encoding="$param"
+      elif [[ "$code" == "-charset" ]]; then
+        charset="$param"
+      fi
+    fi
+  done
+
+  if [[ -z $encoding ]]; then
+    encoding="quoted-printable"
+  fi
+
+  if [[ -z $charset ]]; then
+    charset="UTF-8"
+  fi
+
+  if [[ "$encoding" == "quoted-printable" ]]; then
+    content="\
+=09
+
+$content
+
+=20\
+"
+  fi
+
+  data={
+    echo "Content-Transfer-Encoding: $encoding"
+    echo "Content-Type: text/plain; charset: \"$charset\""
+    echo "$content"
+  }
+
+  echo "$data"
+
+  return 0
+}

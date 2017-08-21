@@ -18,3 +18,35 @@ function plain2html(){
 
   echo "$content"
 }
+
+
+
+function draft_path() {
+  if [[ -n "$1" ]]; then
+    declare UUID="$1"
+  else
+    declare UUID="$CURRENT_MAIL_UUID"
+  fi
+  echo "$DRAFTS_PATH/$UUID"
+}
+
+function draft_parameters_path() {
+  DRAFT_FOLDER=$(draft_path "$1")
+  echo "$DRAFT_FOLDER/parameters.draft"
+}
+
+function draft_header_path() {
+  DRAFT_FOLDER=$(draft_path "$1")
+  echo "$DRAFT_FOLDER/header.draft"
+}
+
+function draft_body_path() {
+  DRAFT_FOLDER=$(draft_path "$1")
+  echo "$DRAFT_FOLDER/body.draft"
+}
+
+
+function draft_footer_path() {
+  DRAFT_FOLDER=$(draft_path "$1")
+  echo "$DRAFT_FOLDER/footer.draft"
+}

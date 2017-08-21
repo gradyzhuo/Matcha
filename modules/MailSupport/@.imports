@@ -7,20 +7,46 @@
 #
 
 source new
+source show
 source send_mail
 source attachment
+source content
 source utils
 
 @import Files --silent
 
-declare -x DRAFTS_PATH
+export DRAFTS_PATH="${TMPDIR-/tmp}matcha_drafts"
 declare -x CURRENT_MAIL_UUID
 
 function @mail() {
+
+  if [[ "plain html" == *"$1"* ]]; then
+    cmd="gen_$1"
+    $cmd "$@"
+    return 0
+  fi
+
   if [[ "$1" == "attachment" ]]; then
     attachment "$@"
   elif [[ "$1" == "new" ]]; then
-    DRAFTS_PATH="$INSTALL_LIB_TARGET/drafts"
     new_mail "$@"
+  elif [[ "$1" == "show" ]]; then
+    uuid="$2"
+    show_mail "$uuid"
+  elif [[ "$1" == "add" ]]; then
+    mail_add "$@"
+  elif [[ "$1" == "current" ]]; then
+    echo "$CURRENT_MAIL_UUID"
+  elif [[ "$1" == "set_current" ]]; then
+    CURRENT_MAIL_UUID="$2"
+  elif [[ "$1" == "drafts" ]]; then
+    ls "$DRAFTS_PATH"
+  elif [[ "$1" == "send" ]]; then
+    uuid="$2"
+    mail_content=$(show_mail "$uuid")
+    echo "$mail_content"
+    echo "$mail_content" | sendmail -t
+  elif [[ "$1" == "set" ]]; then
+    mail_set "$@"
   fi
 }
