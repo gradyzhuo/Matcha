@@ -13,12 +13,15 @@ declare -i need_download=1
 declare apple_id
 declare apple_id_password
 declare apple_id_in_itunesconnect
+declare reserved_result=1
 
 declare code
 for param in "$@"
 do
     if [[ "$param" == "-download" ]]; then
         need_download=0
+    elif [[ "$param" == "-reserved" ]]; then
+        reserved_result=0
     elif [[ "$param" =~ ^- ]]; then
             code="$param"
     else
@@ -91,6 +94,10 @@ EOM
 /Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
 
 if [[ $? == 0 ]]; then 
-    delete "${ITMSP_DIR}"
-    exit $?
+    if [[ $reserved_result == false ]]; then
+        delete "${ITMSP_DIR}"
+    fi
+    return 0
+else 
+    return 1
 fi
