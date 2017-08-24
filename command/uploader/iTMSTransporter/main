@@ -73,7 +73,7 @@ mkdir "${ITMSP_DIR}/$ITMSP_BUNDLE_NAME"
 cp "${LOCAL_IPA_PATh}" "$ITMSP_DIR/$ITMSP_BUNDLE_NAME"
 delete "$LOCAL_IPA_PATh"
 
-cat <<EOM > ${ITMSP_DIR}/$ITMSP_BUNDLE_NAME/metadata.xml
+cat <<EOM > "${ITMSP_DIR}/${ITMSP_BUNDLE_NAME}/metadata.xml"
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="software4.7" xmlns="http://apple.com/itunes/importer">
 <software_assets apple_id="$apple_id_in_itunesconnect">
