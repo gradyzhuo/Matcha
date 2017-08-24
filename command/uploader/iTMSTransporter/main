@@ -7,6 +7,7 @@
 #
 
 declare ipa_path
+declare -i need_download=1
 declare apple_id
 declare apple_id_password
 declare apple_id_in_itunesconnect
@@ -14,19 +15,21 @@ declare apple_id_in_itunesconnect
 declare code
 for param in "$@"
 do
-    if [[ "$param" =~ ^- ]]; then
+    if [[ "$code" == "-download" ]]; then
+        need_download=0
+    elif [[ "$param" =~ ^- ]]; then
             code="$param"
-        else
-            if [[ "$code" == "-ipa" ]]; then
-                ipa_path="$param"
-            elif [[ "$code" == "-apple_id" ]]; then
-                apple_id=($param)
-            elif [[ "$code" == "-password" ]]; then
-                apple_id_password="$param"
-            elif [[ "$code" == "-app_id" ]]; then
-                apple_id_in_itunesconnect="$param"
-            fi
+    else
+        if [[ "$code" == "-ipa" ]]; then
+            ipa_path="$param"
+        elif [[ "$code" == "-apple_id" ]]; then
+            apple_id="$param"
+        elif [[ "$code" == "-password" ]]; then
+            apple_id_password="$param"
+        elif [[ "$code" == "-app_id" ]]; then
+            apple_id_in_itunesconnect="$param"
         fi
+    fi
 done
 
 
@@ -44,20 +47,27 @@ if [[ -z $apple_id_password ]]; then
 fi
 
 declare IPA_FILENAME=$(basename "$ipa_path")
-declare IPA_BELONG_FOLDE=$(dirname "$ipa_path")
-declare MD5=$(md5 -q "$ipa_path")
-declare BYTESIZE=$(stat -f "%z" "$ipa_path")
+declare LOCAL_IPA_PATh="$ipa_path"
+declare IPA_BELONG_FOLDER=$(dirname "$ipa_path")
 
-declare IPA_FILENAME_NO_EXTENSION=$(echo $IPA_FILENAME | cut -f 1 -d '.')
+if [[ -n $ipa_path ] && [ $need_download == 0 ]]; then
+    IPA_BELONG_FOLDER="."
+    LOCAL_IPA_PATh="$IPA_BELONG_FOLDER/$IPA_FILENAME"
+    curl -o "$LOCAL_IPA_PATh" "$ipa_path" #ipa_path:url
+fi
 
-declare ITMSP_DIR="$IPA_BELONG_FOLDE/itmsp_${IPA_FILENAME_NO_EXTENSION}"
+declare MD5=$(md5 -q "$LOCAL_IPA_PATh")
+declare BYTESIZE=$(stat -f "%z" "$LOCAL_IPA_PATh")
+
+declare ITMSP_BUNDLE_NAME="${IPA_FILENAME}.itmsp"
+declare ITMSP_DIR="$IPA_BELONG_FOLDER/itmsp_${IPA_FILENAME}"
 rm -rf "${ITMSP_DIR}"
 mkdir "${ITMSP_DIR}"
-mkdir "${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp"
+mkdir "${ITMSP_DIR}/$ITMSP_BUNDLE_NAME"
 
-cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME_NO_EXTENSION}.itmsp"
+cp "${ipa_path}" "$ITMSP_DIR/$ITMSP_BUNDLE_NAME"
 
-cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp/metadata.xml
+cat <<EOM > ${ITMSP_DIR}/$ITMSP_BUNDLE_NAME/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="software4.7" xmlns="http://apple.com/itunes/importer">
 <software_assets apple_id="$apple_id_in_itunesconnect">
@@ -73,3 +83,5 @@ cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp/metadata.xml
 EOM
 
 /Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
+
+rm -rf "${ITMSP_DIR}"
