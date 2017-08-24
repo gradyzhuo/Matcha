@@ -6,6 +6,8 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+@import Files
+
 declare ipa_path
 declare -i need_download=1
 declare apple_id
@@ -61,11 +63,15 @@ declare BYTESIZE=$(stat -f "%z" "$LOCAL_IPA_PATh")
 
 declare ITMSP_BUNDLE_NAME="${IPA_FILENAME}.itmsp"
 declare ITMSP_DIR="$IPA_BELONG_FOLDER/itmsp_${IPA_FILENAME}"
-rm -rf "${ITMSP_DIR}"
+
+#如果之前的存在，就移除。
+delete "${ITMSP_DIR}"
+
 mkdir "${ITMSP_DIR}"
 mkdir "${ITMSP_DIR}/$ITMSP_BUNDLE_NAME"
 
 cp "${LOCAL_IPA_PATh}" "$ITMSP_DIR/$ITMSP_BUNDLE_NAME"
+delete "$LOCAL_IPA_PATh"
 
 cat <<EOM > ${ITMSP_DIR}/$ITMSP_BUNDLE_NAME/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -84,4 +90,6 @@ EOM
 
 /Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
 
-#rm -rf "${ITMSP_DIR}"
+if [[ $? == 0 ]]; then 
+    delete "${ITMSP_DIR}"
+fi
