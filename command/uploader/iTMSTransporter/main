@@ -84,4 +84,4 @@ EOM
 
 /Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
 
-rm -rf "${ITMSP_DIR}"
+#rm -rf "${ITMSP_DIR}"
