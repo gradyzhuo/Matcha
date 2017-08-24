@@ -92,4 +92,5 @@ EOM
 
 if [[ $? == 0 ]]; then 
     delete "${ITMSP_DIR}"
+    exit $?
 fi
