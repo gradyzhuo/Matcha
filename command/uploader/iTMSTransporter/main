@@ -28,6 +28,12 @@ do
         fi
 done
 
+
+if [[ -z $ipa_path ]]; then 
+    print -c "red" "Ipa path is required. please pass the pass by -ipa."
+    exit 1
+fi
+
 if [[ -z $apple_id ]]; then
     apple_id="$APPLE_ID"
 fi
