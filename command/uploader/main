@@ -6,4 +6,5 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-/Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter "$@"
+print -c red "please use the subcommand as below:"
+ls "$MATCHA_BUILDER_BASE/command/uploader"
