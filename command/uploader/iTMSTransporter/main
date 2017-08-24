@@ -9,6 +9,7 @@
 declare ipa_path
 declare apple_id
 declare apple_id_password
+declare apple_id_in_itunesconnect
 
 declare code
 for param in "$@"
@@ -22,6 +23,8 @@ do
                 apple_id=($param)
             elif [[ "$code" == "-password" ]]; then
                 apple_id_password="$param"
+            elif [[ "$code" == "-app_id" ]]; then
+                apple_id_in_itunesconnect="$param"
             fi
         fi
 done
@@ -57,7 +60,7 @@ cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME_NO_EXTENSION}.itmsp"
 cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="software4.7" xmlns="http://apple.com/itunes/importer">
-<software_assets apple_id="$apple_id">
+<software_assets apple_id="$apple_id_in_itunesconnect">
     <asset type="bundle">
         <data_file>
             <file_name>$IPA_FILENAME</file_name>
