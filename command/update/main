@@ -27,7 +27,7 @@ declare TAG="1.0"
 declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
-@log 'Cloning Matcha...'
+@log 'Cloning Matcha from [$branch]...'
 clone -r "https://github.com/gradyzhuo/Matcha.git" -b $branch -t "$UPDATE_PATH" >/dev/null 2>&1
 
 if [[ $? != 0 ]]; then
