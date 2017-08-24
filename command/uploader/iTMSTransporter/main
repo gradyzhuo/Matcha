@@ -45,14 +45,16 @@ declare IPA_BELONG_FOLDE=$(dirname "$ipa_path")
 declare MD5=$(md5 -q "$ipa_path")
 declare BYTESIZE=$(stat -f "%z" "$ipa_path")
 
-declare ITMSP_DIR="$IPA_BELONG_FOLDE/itmsp_${IPA_FILENAME}"
+declare IPA_FILENAME_NO_EXTENSION=$(echo $IPA_FILENAME | cut -f 1 -d '.')
+
+declare ITMSP_DIR="$IPA_BELONG_FOLDE/itmsp_${IPA_FILENAME_NO_EXTENSION}"
 rm -rf "${ITMSP_DIR}"
 mkdir "${ITMSP_DIR}"
-mkdir "${ITMSP_DIR}/${IPA_FILENAME}.itmsp"
+mkdir "${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp"
 
-cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME}.itmsp"
+cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME_NO_EXTENSION}.itmsp"
 
-cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME}.itmsp/metadata.xml
+cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME_NO_EXTENSION}.itmsp/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="software4.7" xmlns="http://apple.com/itunes/importer">
 <software_assets apple_id="$apple_id">
