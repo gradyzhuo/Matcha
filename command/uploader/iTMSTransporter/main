@@ -15,7 +15,7 @@ declare apple_id_in_itunesconnect
 declare code
 for param in "$@"
 do
-    if [[ "$code" == "-download" ]]; then
+    if [[ "$param" == "-download" ]]; then
         need_download=0
     elif [[ "$param" =~ ^- ]]; then
             code="$param"
