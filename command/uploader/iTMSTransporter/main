@@ -1,12 +1,10 @@
-#!/bin/bash
+#!/bin/bash -l
 #
 # version/main
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
-
-declare iTMSTransporter="/Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter"
 
 declare ipa_path
 declare apple_id
@@ -54,7 +52,7 @@ mkdir "${ITMSP_DIR}/${IPA_FILENAME}.itmsp"
 
 cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME}.itmsp"
 
-cat <<EOM > ${ITMSP_DIR}/${AppTarget}.itmsp/metadata.xml
+cat <<EOM > ${ITMSP_DIR}/${IPA_FILENAME}.itmsp/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="software4.7" xmlns="http://apple.com/itunes/importer">
 <software_assets apple_id="$apple_id">
@@ -69,4 +67,4 @@ cat <<EOM > ${ITMSP_DIR}/${AppTarget}.itmsp/metadata.xml
 </package>
 EOM
 
-iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
+/Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
