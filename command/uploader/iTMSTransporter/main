@@ -65,7 +65,7 @@ rm -rf "${ITMSP_DIR}"
 mkdir "${ITMSP_DIR}"
 mkdir "${ITMSP_DIR}/$ITMSP_BUNDLE_NAME"
 
-cp "${ipa_path}" "$ITMSP_DIR/$ITMSP_BUNDLE_NAME"
+cp "${LOCAL_IPA_PATh}" "$ITMSP_DIR/$ITMSP_BUNDLE_NAME"
 
 cat <<EOM > ${ITMSP_DIR}/$ITMSP_BUNDLE_NAME/metadata.xml
 <?xml version="1.0" encoding="UTF-8"?>
