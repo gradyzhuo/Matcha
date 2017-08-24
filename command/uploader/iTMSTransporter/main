@@ -50,7 +50,7 @@ declare IPA_FILENAME=$(basename "$ipa_path")
 declare LOCAL_IPA_PATh="$ipa_path"
 declare IPA_BELONG_FOLDER=$(dirname "$ipa_path")
 
-if [[ -n $ipa_path ] && [ $need_download == 0 ]]; then
+if [[ -n $ipa_path && $need_download == 0 ]]; then
     IPA_BELONG_FOLDER="."
     LOCAL_IPA_PATh="$IPA_BELONG_FOLDER/$IPA_FILENAME"
     curl -o "$LOCAL_IPA_PATh" "$ipa_path" #ipa_path:url
