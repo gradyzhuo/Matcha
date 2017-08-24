@@ -1,13 +1,10 @@
 #!/bin/bash
 #
-# XC/@.imports
+# version/main
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-@import Files
-
-source exports
-source setup
-source provision_profile
+print -c red "please use the subcommand as below:"
+ls "$MATCHA_BUILDER_BASE/command/uploader"

@@ -8,12 +8,27 @@
 
 @import Git --silent
 
+declare branch="master"
+declare code
+for param in "$@"
+do
+    if [[ "$param" =~ ^- ]]; then
+            code="$param"
+        else
+            if [[ "$code" == "-branch" ]]; then
+                branch="$param"
+            elif [[ "$code" == "-b" ]]; then
+                branch=($param)
+            fi
+        fi
+done
+
 declare TAG="1.0"
 declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
 @log 'Cloning Matcha...'
-clone -r "https://github.com/gradyzhuo/Matcha.git" -b "master" -t "$UPDATE_PATH" >/dev/null 2>&1
+clone -r "https://github.com/gradyzhuo/Matcha.git" -b $branch -t "$UPDATE_PATH" >/dev/null 2>&1
 
 if [[ $? != 0 ]]; then
   print -c red -s bold "Matcha cloning failed."

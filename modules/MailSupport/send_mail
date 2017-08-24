@@ -17,6 +17,8 @@ function send_mail() {
   declare footer
   declare charset
   declare ccuser
+  declare bccuser
+  declare replyto
   declare ctype
   declare mime_version="1.1"
 
@@ -39,6 +41,10 @@ function send_mail() {
         charset="$param"
       elif [[ "$code" == "-cc" ]]; then
         ccuser="$param"
+      elif [[ "$code" == "-bcc" ]]; then
+        bccuser="$param"
+      elif [[ "$code" == "-reply_to" ]]; then
+        replyto="$param"
       elif [[ "$code" == "-ctype" ]]; then
         ctype="$param"
       fi
@@ -64,8 +70,10 @@ function send_mail() {
   echo "Mime-Version: $mime_version";
   echo "Content-type:$ctype ; charset=\"$charset\"";
   echo "From: $fromuser";
+  echo "Reply-To: : $replyto";
   echo "To: $touser";
   echo "CC: $ccuser";
+  echo "Bcc: $bccuser";
   echo "Subject: $subject";
 
   echo "$content"

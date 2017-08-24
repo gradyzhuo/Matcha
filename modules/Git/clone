@@ -47,8 +47,17 @@ declare tag
 	git clone -b ${branch} ${respo} "${target}"
 
 	switch_dir_to "${target}"
+	@log "Git tags:\n \"$(git tag -l)\""
+
 	if [[ "$tag" != "" && `git tag -l $tag` == $tag ]]; then
+		@log "Checkout tag: $tag..."
 		git checkout tags/$tag
+		if [[ $? == 0 ]]; then
+			@log "Checkout tag/$tag succeed."
+		else
+			@log "Checkout tag/$tag failed."
+		fi
+
 	fi
 	restore_dir
 

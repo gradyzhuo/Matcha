@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# version/main
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare iTMSTransporter="/Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter"
+
+declare ipa_path
+declare apple_id
+declare apple_id_password
+
+declare code
+for param in "$@"
+do
+    if [[ "$param" =~ ^- ]]; then
+            code="$param"
+        else
+            if [[ "$code" == "-ipa" ]]; then
+                ipa_path="$param"
+            elif [[ "$code" == "-apple_id" ]]; then
+                apple_id=($param)
+            elif [[ "$code" == "-password" ]]; then
+                apple_id_password="$param"
+            fi
+        fi
+done
+
+
+if [[ -z $ipa_path ]]; then 
+    print -c "red" "Ipa path is required. please pass the pass by -ipa."
+    exit 1
+fi
+
+if [[ -z $apple_id ]]; then
+    apple_id="$APPLE_ID"
+fi
+
+if [[ -z $apple_id_password ]]; then
+    apple_id_password="$APPLE_ID_PASSWORD"
+fi
+
+declare IPA_FILENAME=$(basename "$ipa_path")
+declare IPA_BELONG_FOLDE=$(dirname "$ipa_path")
+declare MD5=$(md5 -q "$ipa_path")
+declare BYTESIZE=$(stat -f "%z" "$ipa_path")
+
+declare ITMSP_DIR="$IPA_BELONG_FOLDE/itmsp_${IPA_FILENAME}"
+rm -rf "${ITMSP_DIR}"
+mkdir "${ITMSP_DIR}"
+mkdir "${ITMSP_DIR}/${IPA_FILENAME}.itmsp"
+
+cp "${ipa_path}" "$ITMSP_DIR/${IPA_FILENAME}.itmsp"
+
+cat <<EOM > ${ITMSP_DIR}/${AppTarget}.itmsp/metadata.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="software4.7" xmlns="http://apple.com/itunes/importer">
+<software_assets apple_id="$apple_id">
+    <asset type="bundle">
+        <data_file>
+            <file_name>$IPA_FILENAME</file_name>
+            <checksum type="md5">$MD5</checksum>
+            <size>$BYTESIZE</size>
+        </data_file>
+    </asset>
+</software_assets>
+</package>
+EOM
+
+iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
