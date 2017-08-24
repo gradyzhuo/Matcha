@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# XC/exports
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+function upload_to_app_store()
+{	
+  IPA_FILE="${JOB_NAME}_${BUILD_NUMBER}.ipa"
+  IPA_FILENAME=$(basename $IPA_FILE)
+  MD5=$(md5 -q $IPA_FILE)
+  BYTESIZE=$(stat -f "%z" $IPA_FILE)
+
+  ITMSP_DIR="itmsp_${AppTarget}"
+  rm -rf "${ITMSP_DIR}"
+  mkdir "${ITMSP_DIR}"
+  mkdir "${ITMSP_DIR}/${AppTarget}.itmsp"
+
+  cat <<EOM > ${ITMSP_DIR}/${AppTarget}.itmsp/metadata.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="software4.7" xmlns="http://apple.com/itunes/importer">
+    <software_assets apple_id="$ItunesConnectAppID">
+        <asset type="bundle">
+            <data_file>
+                <file_name>$IPA_FILENAME</file_name>
+                <checksum type="md5">$MD5</checksum>
+                <size>$BYTESIZE</size>
+            </data_file>
+        </asset>
+    </software_assets>
+</package>
+EOM
+
+    cp "${IPA_FILE}" "$ITMSP_DIR/${AppTarget}.itmsp"
+
+    iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$ItunesConnectID" -p "$ItunesConnectPass" -v detailed
+}

@@ -27,7 +27,7 @@ function exports_option() {
   for param in $PARAMS
   do
     if [[ "$param" =~ ^@ ]]; then
-      code="${param#@}" #把 prefix: - 去掉
+      code="${param#@}" #把 prefix: @ 去掉
 		else
       if [[ "$param" =~ ^- ]]; then
         type="$param"
