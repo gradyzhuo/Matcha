@@ -7,4 +7,4 @@
 #
 
 print -c red "please use the subcommand as below:"
-ls "$MATCHA_BUILDER_BASE/command/uploader"
+ls "$MATCHA_BUILDER_BASE/command/xcproj"
