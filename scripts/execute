@@ -23,7 +23,7 @@ function execute() {
 
   COMMAND="$1"
 
-  if [[ $(ls "$MATCHA_BUILDER_BASE/command") != *"$COMMAND"*  ]]; then
+  if [[ $(ls "$MATCHA_BUILDER_BASE/command/$COMMAND") != *"main"*  ]]; then
     print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
     return 0
   fi
