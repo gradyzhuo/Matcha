@@ -1,0 +1,16 @@
+#!/bin/bash -l
+#
+# call_matcha_delegate
+#
+# Matcha 1.0, Created by gradyzhuo, enoch_lee.
+# Copyright © 2017, Matcha Inc. All rights reserved.
+#
+
+declare -f did_finish_launching_command
+
+function did_finish_launching_command() {
+    ARGVS="$1"
+    if [[ $(@exists -f matcha_did_finish_launching_command) == 0 ]]; then
+        matcha_did_finish_launching_command "$ARGVS"
+    fi
+}

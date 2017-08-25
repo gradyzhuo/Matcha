@@ -6,6 +6,9 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+source matcha_delegate.protocols
+source call_matcha_delegate
+
 declare -f shell_session_update
 declare -f execute
 
@@ -39,7 +42,9 @@ function execute() {
     PREVIOUS_COMMAND_BASE="$COMMAND_BASE"
     COMMAND_BASE="$COMMAND_DIR"
 
+    #之後要拿掉這裡的$@
     source main "$@"
+    did_finish_launching_command "$@"
 
     COMMAND_BASE="$PREVIOUS_COMMAND_BASE"
   fi
