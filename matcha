@@ -44,7 +44,9 @@ function matcha() {
   fi
 
   if [[ -n $1 && "$1" != *"-"* ]]; then
-    /bin/bash -l "$MATCHA_BUILDER_BASE/scripts/execute" "$@"
+    pushd "$MATCHA_BUILDER_BASE/scripts/" >/dev/null 2>&1
+    /bin/bash -l "execute" "$@"
+    popd >/dev/null 2>&1
   fi
 
 

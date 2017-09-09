@@ -81,7 +81,7 @@ $ @import XC
 ```
 
 ### 安裝模組
-透過模組的製作，您也可以將你自已撰寫的模組安裝到Matcha中，模組預設會安裝至 `[HOME]/.Matcha/usr/modules` 並會建立捷徑至 `[HOME]/.Matcha/modules/[MODULE_NAME].mm`
+透過模組的製作，您也可以將你自已撰寫的模組安裝到Matcha中，模組預設會安裝至 `[HOME]/.matcha/usr/modules` 並會建立捷徑至 `[HOME]/.matcha/modules/[MODULE_NAME].mm`
 
 ```bash
 # 請指定到包含 @.imports 的該層資料夾層級即可
@@ -105,4 +105,14 @@ $ matcha [COMMAND_NAME] [PARAMETERS]
 $ source matcha
 @exec [COMMAND_NAME] [PARAMETERS]
 # 注意，@exec 並不支持在終端機(terminal) 直接使用，但您可在撰寫其他腳本做為內文使用。
+```
+
+#### Sub Command
+
+```bash
+#你可以使用 xcproj/archive 封裝 ios 的專案成 ipa 
+$ matcha xcproj/archive [PARAMETERS]
+
+#你可以使用 xcproj/uploader 上傳 ipa 至 iTunes Connect
+$ matcha xcproj/uploader [PARAMETERS]
 ```

@@ -6,11 +6,16 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
+declare -x DELEGATE
+declare -x DELEGATE_FILE_NAME
 source defines
+
+source call_delegate
+source builder_delegate.protocols
+source setup
 
 @import Git
 @import Files
-@import DelegateSupport
 @import XC
 
 declare -f clean

@@ -24,6 +24,8 @@ declare -x INFO_PLIST
 declare -x ARCHIVE_NAME
 declare -x PROVISIONING_PROFILE_UUID
 
+declare -x PROVISIONING_PROFILE_CONFIGURATION_FOLDER
+
 declare -x GIT_APP
 declare -x GIT_BRANCH_APP="master"
 declare -x GIT_TAG_APP
