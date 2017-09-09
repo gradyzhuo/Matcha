@@ -56,13 +56,16 @@ mkdirFolder "$TMP_PATH"
 
 PROVISIONING_PROFILE_CONFIGURATION_FOLDER="$PROVISIONING_FOLDER"
 
-switch_dir_to "$APP_PATH"
+
 declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
 if [[ $configurations_count == 0 ]]; then
   mkdirFolder "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
+  
+  switch_dir_to "$APP_PATH"
   BUILD_CONFIGURATIONS=($(xc_show 'configuration'))
   configurations_count=1
   delete "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
+  restore_dir
 fi
 
 for (( i=0; i<${configurations_count}; i++ ));
@@ -78,6 +81,7 @@ do
   PROVISIONING_PROFILE_CONFIGURATION_FOLDER="$PROVISIONING_FOLDER/$BUILD_CONFIGURATION" 
   mkdirFolder "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
 
+  switch_dir_to "$APP_PATH"
   #===== variables from xcode projects
   xc_setup_variables
   #=============================
@@ -90,10 +94,11 @@ do
 
 	APP_ID=""
 	PROVISIONING_PROFILE_UUID=""
-
+  restore_dir
+  
   delete "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
 done
-restore_dir
+
 
 did_exec "builder"
 
