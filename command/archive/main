@@ -54,17 +54,19 @@ config_env_variables
 mkdirs "log" "export"
 mkdirFolder "$TMP_PATH"
 
+PROVISIONING_PROFILE_CONFIGURATION_FOLDER="$PROVISIONING_FOLDER"
+
+switch_dir_to "$APP_PATH"
 declare -i configurations_count=${#BUILD_CONFIGURATIONS[@]}
 if [[ $configurations_count == 0 ]]; then
-  switch_dir_to "$APP_PATH"
+  mkdirFolder "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
   BUILD_CONFIGURATIONS=($(xc_show 'configuration'))
   configurations_count=1
-  restore_dir
+  delete "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
 fi
 
 for (( i=0; i<${configurations_count}; i++ ));
 do
-  switch_dir_to "$APP_PATH"
 
 	BUILD_CONFIGURATION=${BUILD_CONFIGURATIONS[$i]}
 	print -c green "using configuration: $BUILD_CONFIGURATION"
@@ -72,6 +74,9 @@ do
 	if [[ $BUILD_CI != 0 ]]; then
 		EXPORT_FOLDER="$EXPORT_FOLDER/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
 	fi
+
+  PROVISIONING_PROFILE_CONFIGURATION_FOLDER="$PROVISIONING_FOLDER/$BUILD_CONFIGURATION" 
+  mkdirFolder "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
 
   #===== variables from xcode projects
   xc_setup_variables
@@ -86,8 +91,9 @@ do
 	APP_ID=""
 	PROVISIONING_PROFILE_UUID=""
 
-  restore_dir
+  delete "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER"
 done
+restore_dir
 
 did_exec "builder"
 
