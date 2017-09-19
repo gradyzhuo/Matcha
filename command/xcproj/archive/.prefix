@@ -84,6 +84,8 @@ function setup_input_params() {
 				PROJ_SCHEME="$param"
 			elif [[ "$code" == "-p" ]]; then
 				PROVISIONING_PROFILE_NAME="$param"
+      elif [[ "$code" == "-pf" ]]; then
+        PROVISIONING_PROFILE_FILE="$param"
       elif [[ "$code" == "-pn" ]]; then
         PROJ_NAME="$param"
       elif [[ "$code" == "-u" ]]; then

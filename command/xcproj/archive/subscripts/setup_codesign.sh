@@ -11,26 +11,27 @@ will_exec "setup_codesign"
 configure_signing_identity
 
 PROVISIONING_PROFILE="profile"
-
 #===== Provision Profile =====
 
 if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
+  PROVISIONING_PROFILE_FILE="$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
   phase_print "Downloading provision profile"
-  profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
-  profile install -profile "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
-
-  PROVISIONING_PROFILE_NAME=$(profile showName -profile "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE")
-  print -c green "downloaded provision profile: $PROVISIONING_PROFILE_NAME"
+  profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_PROFILE_FILE"
 fi
+
+profile install -profile "$PROVISIONING_PROFILE_FILE"
+
+PROVISIONING_PROFILE_NAME=$(profile showName -profile "$PROVISIONING_PROFILE_FILE")
+print -c green "downloaded provision profile: $PROVISIONING_PROFILE_NAME"
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING != 0 && "$PROVISIONING_PROFILE_UUID" == "" ]]; then
   phase_print "Fetching UUID"
-  PROVISIONING_PROFILE_UUID=$(profile showUUID -profile "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE")
+  PROVISIONING_PROFILE_UUID=$(profile showUUID -profile "$PROVISIONING_PROFILE_FILE")
   print -c green "using provision profile: $PROVISIONING_PROFILE_NAME($PROVISIONING_PROFILE_UUID)"
 fi
 
 if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
-  profile clean -profile "$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
+  profile clean -profile "$PROVISIONING_PROFILE_FILE"
 fi
 
 did_exec "setup_codesign"
