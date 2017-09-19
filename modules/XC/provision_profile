@@ -130,9 +130,7 @@ function profile_download() {
   eval "$cmd_sigh" #execute
   restore_dir
 
-  if [ "$apple_id_password" != "" ]; then
-    fastlane fastlane-credentials remove --username "$apple_id"
-  fi
+  #profile_clean_password
 }
 
 function get_profile_parameter() {
@@ -237,4 +235,10 @@ function profile_clean(){
   # {
   #   echo "yes"
   # } | sigh manage -e >> /dev/null
+}
+
+function profile_clean_password(){
+  if [ "$apple_id_password" != "" ]; then
+    fastlane fastlane-credentials remove --username "$apple_id"
+  fi
 }
