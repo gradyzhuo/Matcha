@@ -86,6 +86,7 @@ function setup_input_params() {
 				PROVISIONING_PROFILE_NAME="$param"
       elif [[ "$code" == "-pf" ]]; then
         PROVISIONING_PROFILE_FILE="$param"
+        NEED_DOWNLOAD_PROVISION_PROFILE=1
       elif [[ "$code" == "-pn" ]]; then
         PROJ_NAME="$param"
       elif [[ "$code" == "-u" ]]; then
