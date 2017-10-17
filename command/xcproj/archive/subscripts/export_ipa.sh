@@ -17,6 +17,9 @@ output_tmp_folder=".output"
 mkdirFolder "$EXPORT_OPTION_PLIST_FOLDER"
 $EXPORT_OPTION "$EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME" @teamID "$TEAM_ID"
 
+#xcode 9 needed
+defaults write "$EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME" provisioningProfiles -dict "$APP_ID" "$PROVISIONING_PROFILE_UUID"
+
 print -c green "using export option: $EXPORT_OPTION ($EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME)"
 
 rvm use system
