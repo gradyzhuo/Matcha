@@ -93,7 +93,9 @@ cat <<EOM > "${ITMSP_DIR}/${ITMSP_BUNDLE_NAME}/metadata.xml"
 </package>
 EOM
 
-/Applications/Xcode.app/Contents/Applications/Application\ Loader.app/Contents/itms/bin/iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
+export PATH=$PATH:$(xcode-select -p)/../Applications/Application\ Loader.app/Contents/itms/bin/
+iTMSTransporter -m upload -f "${ITMSP_DIR}" -u "$apple_id" -p "$apple_id_password" -v detailed
+
 
 if [[ $? == 0 ]]; then 
     if [[ $reserved_result == false ]]; then
