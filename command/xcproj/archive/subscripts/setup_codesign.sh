@@ -13,16 +13,10 @@ configure_signing_identity
 PROVISIONING_PROFILE="profile"
 #===== Provision Profile =====
 
-declare option="$EXPORT_OPTION"
-
-if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
-    option="all"
-fi
-
 if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
   PROVISIONING_PROFILE_FILE="$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
   phase_print "Downloading provision profile"
-  profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$option" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_PROFILE_FILE"
+  profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_PROFILE_FILE"
 fi
 
 profile install -profile "$PROVISIONING_PROFILE_FILE"

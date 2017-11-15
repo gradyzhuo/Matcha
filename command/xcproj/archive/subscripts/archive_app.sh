@@ -38,7 +38,8 @@ print -c "green" "Build Version => $BUILD_VERSION"
 #######產生 codesign.xcconfig
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
-  echo "DEVELOPMENT_TEAM=$TEAM_NAME" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "skip"
+  # echo "DEVELOPMENT_TEAM=$TEAM_NAME" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_PROFILE_SPECIFIER=Automatic" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_PROFILE=Automatic" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_STYLE=Automatic" >> "$TMP_PATH/$codesign_xcconfig"
