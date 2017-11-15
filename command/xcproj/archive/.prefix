@@ -34,6 +34,13 @@ function xc_setup_variables {
   CURRENT_PROJECT_VERSION=$(xc_show version -settings "$XC_BUILD_SETTINGS")
   CURRENT_PROJECT_BUILD_VERSION=$(xc_show build_version -settings "$XC_BUILD_SETTINGS")
 
+  #Xcode 9
+  PROVISIONING_PROFILE_STYLE=$(xc_show codesign_style -settings "$XC_BUILD_SETTINGS" -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
+  if [[ "$PROVISIONING_PROFILE_STYLE" == "Automatic" ]]; then
+    NEED_DOWNLOAD_PROVISION_PROFILE=1
+    AUTOMATICALLY_MANAGE_SIGNING=0
+  fi
+
   SPECIFICS_PROVISION_PROFILE=$(xc_show specifier_provision_profile -settings "$XC_BUILD_SETTINGS")
   # if [[ -z $PROVISIONING_PROFILE_NAME ]]; then
   #   PROVISIONING_PROFILE_NAME="$SPECIFICS_PROVISION_PROFILE"
@@ -135,13 +142,6 @@ function setup_input_params() {
 
 SOURCE_TYPE="git"
 DELEGATE_FILE_NAME="delegate"
-
-#Xcode 9
-PROVISIONING_PROFILE_STYLE=$(xc_show codesign_style -settings "$XC_BUILD_SETTINGS" -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
-if [[ "$PROVISIONING_PROFILE_STYLE" == "Automatic" ]]; then
-  NEED_DOWNLOAD_PROVISION_PROFILE=1
-  AUTOMATICALLY_MANAGE_SIGNING=0
-fi
 
 if [[ "$APPLE_ID_PASSWORD" != "" ]]; then
   export FASTLANE_PASSWORD="$APPLE_ID_PASSWORD"
