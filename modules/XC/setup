@@ -47,6 +47,8 @@ function xc_show() {
     echo "$settings"
   elif [[ "$command" == "specifier_provision_profile" ]]; then
     echo $(echo "$settings" | grep 'PROVISIONING_PROFILE_SPECIFIER' | sed 's/    PROVISIONING_PROFILE_SPECIFIER = //g')
+  elif [[ "$command" == "codesign_style" ]]; then
+    echo $(echo "$settings" | grep 'CODE_SIGN_STYLE' | sed 's/    CODE_SIGN_STYLE = //g')
   elif [[ "$command" == "app_id" ]]; then
     echo $(echo "$settings" | grep 'PRODUCT_BUNDLE_IDENTIFIER' | sed 's/    PRODUCT_BUNDLE_IDENTIFIER = //g')
   elif [[ "$command" == "info_plist" ]]; then

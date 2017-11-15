@@ -75,12 +75,6 @@ function setup_input_params() {
         ARCHIVE_NAME="$param"
 			elif [[ "$code" == "-s" ]]; then
 				PROJ_SCHEME="$param"
-      elif [[ "$code" == "-provision_style" ]]; then
-				PROVISIONING_PROFILE_STYLE="$param" 
-        if [[ "$param" == "Automatic" ]]; then
-          # NEED_DOWNLOAD_PROVISION_PROFILE=1
-          AUTOMATICALLY_MANAGE_SIGNING=0
-        fi
 			elif [[ "$code" == "-p" ]]; then
 				PROVISIONING_PROFILE_NAME="$param" 
       elif [[ "$code" == "-pf" ]]; then
@@ -141,6 +135,13 @@ function setup_input_params() {
 
 SOURCE_TYPE="git"
 DELEGATE_FILE_NAME="delegate"
+
+#Xcode 9
+PROVISIONING_PROFILE_STYLE=$(xc_show codesign_style -settings "$XC_BUILD_SETTINGS" -s "$PROJ_SCHEME" -conf  "$BUILD_CONFIGURATION")
+if [[ "$PROVISIONING_PROFILE_STYLE" == "Automatic" ]]; then
+  NEED_DOWNLOAD_PROVISION_PROFILE=1
+  AUTOMATICALLY_MANAGE_SIGNING=0
+fi
 
 if [[ "$APPLE_ID_PASSWORD" != "" ]]; then
   export FASTLANE_PASSWORD="$APPLE_ID_PASSWORD"
