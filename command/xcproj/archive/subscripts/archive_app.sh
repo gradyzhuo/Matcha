@@ -84,9 +84,9 @@ cmd="$cmd -archivePath \"$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive\""
 if [[ "$BUILD_CONFIGURATION" != "" ]]; then
   cmd="$cmd -configuration \"$BUILD_CONFIGURATION\""
 fi
-
 cmd="$cmd -sdk iphoneos"
 cmd="$cmd -xcconfig \"$TMP_PATH/$codesign_xcconfig\""
+cmd="$cmd -allowProvisioningUpdates"
 
 cmd="$cmd clean"
 cmd="$cmd archive"
