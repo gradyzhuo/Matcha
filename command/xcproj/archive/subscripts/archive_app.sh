@@ -86,7 +86,10 @@ if [[ "$BUILD_CONFIGURATION" != "" ]]; then
 fi
 cmd="$cmd -sdk iphoneos"
 cmd="$cmd -xcconfig \"$TMP_PATH/$codesign_xcconfig\""
+
+if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
 cmd="$cmd -allowProvisioningUpdates"
+fi
 
 cmd="$cmd clean"
 cmd="$cmd archive"
