@@ -78,7 +78,7 @@ function setup_input_params() {
       elif [[ "$code" == "-provision_style" ]]; then
 				PROVISIONING_PROFILE_STYLE="$param" 
         if [[ "$param" == "Automatic" ]]; then
-          NEED_DOWNLOAD_PROVISION_PROFILE=1
+          # NEED_DOWNLOAD_PROVISION_PROFILE=1
           AUTOMATICALLY_MANAGE_SIGNING=0
         fi
 			elif [[ "$code" == "-p" ]]; then
