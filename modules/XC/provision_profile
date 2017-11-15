@@ -103,15 +103,17 @@ function profile_download() {
     fastlane fastlane-credentials add --username "$apple_id" --password "$apple_id_password"
   fi
 
-  cmd_sigh="fastlane sigh -z"
-  if [[ "$apple_id" != "" ]]; then
-    cmd_sigh="$cmd_sigh -u $apple_id"
-  fi
-
-  if [[ "$export_option" == "ad-hoc" ]]; then
+  cmd_sigh="fastlane sigh"
+  if [[ "$export_option" == "all" ]]; then
+    cmd_sigh="$cmd_sigh download_all"
+  elif [[ "$export_option" == "ad-hoc" ]]; then
     cmd_sigh="$cmd_sigh --adhoc true"
   elif [[ "$export_option" == "development" ]]; then
     cmd_sigh="$cmd_sigh --development true"
+  fi
+
+  if [[ "$apple_id" != "" ]]; then
+    cmd_sigh="$cmd_sigh -z -u $apple_id"
   fi
 
   if [[ "$team_name" != "" ]]; then
