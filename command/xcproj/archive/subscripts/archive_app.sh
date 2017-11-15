@@ -38,10 +38,12 @@ print -c "green" "Build Version => $BUILD_VERSION"
 #######產生 codesign.xcconfig
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
-  echo "DEVELOPMENT_TEAM=$TEAM_ID" >> "$TMP_PATH/$codesign_xcconfig"
-  if [[ -n $PROVISIONING_PROFILE_NAME ]]; then
-    echo "PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE_NAME" >> "$TMP_PATH/$codesign_xcconfig"
-  fi
+  echo "DEVELOPMENT_TEAM=\"$TEAM_ID\"" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "PROVISIONING_PROFILE_SPECIFIER=\"Automatic\"" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "PROVISIONING_PROFILE=\"Automatic\"" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "PROVISIONING_STYLE=\"Automatic\"" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "CODE_SIGN_STYLE=\"Automatic\"" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "CODE_SIGN_IDENTITY=\"iPhone Developer\"" >> "$TMP_PATH/$codesign_xcconfig"
 else
   if [[ "$PROVISIONING_PROFILE_UUID" != "" ]]; then
     echo "PROVISIONING_PROFILE=$PROVISIONING_PROFILE_UUID" >> "$TMP_PATH/$codesign_xcconfig"

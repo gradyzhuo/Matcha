@@ -34,13 +34,6 @@ function xc_setup_variables {
   CURRENT_PROJECT_VERSION=$(xc_show version -settings "$XC_BUILD_SETTINGS")
   CURRENT_PROJECT_BUILD_VERSION=$(xc_show build_version -settings "$XC_BUILD_SETTINGS")
 
-  DEVELOPMENT_TEAM=$(xc_show team -settings "$XC_BUILD_SETTINGS")
-  if [[ "$DEVELOPMENT_TEAM" != "" ]]; then
-    AUTOMATICALLY_MANAGE_SIGNING=0
-  else
-    AUTOMATICALLY_MANAGE_SIGNING=1
-  fi
-
   SPECIFICS_PROVISION_PROFILE=$(xc_show specifier_provision_profile -settings "$XC_BUILD_SETTINGS")
   # if [[ -z $PROVISIONING_PROFILE_NAME ]]; then
   #   PROVISIONING_PROFILE_NAME="$SPECIFICS_PROVISION_PROFILE"
@@ -82,8 +75,12 @@ function setup_input_params() {
         ARCHIVE_NAME="$param"
 			elif [[ "$code" == "-s" ]]; then
 				PROJ_SCHEME="$param"
+      elif [[ "$code" == "-provision_style" ]]; then
+				PROVISIONING_PROFILE_STYLE="$param" 
+        NEED_DOWNLOAD_PROVISION_PROFILE=1
+        AUTOMATICALLY_MANAGE_SIGNING=0
 			elif [[ "$code" == "-p" ]]; then
-				PROVISIONING_PROFILE_NAME="$param"
+				PROVISIONING_PROFILE_NAME="$param" 
       elif [[ "$code" == "-pf" ]]; then
         PROVISIONING_PROFILE_FILE="$param"
         NEED_DOWNLOAD_PROVISION_PROFILE=1
