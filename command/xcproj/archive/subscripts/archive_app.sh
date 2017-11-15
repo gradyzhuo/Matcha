@@ -39,7 +39,7 @@ print -c "green" "Build Version => $BUILD_VERSION"
 
 if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
   echo "skip"
-  # echo "DEVELOPMENT_TEAM=$TEAM_NAME" >> "$TMP_PATH/$codesign_xcconfig"
+  echo "DEVELOPMENT_TEAM=$TEAM_ID" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_PROFILE_SPECIFIER=Automatic" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_PROFILE=Automatic" >> "$TMP_PATH/$codesign_xcconfig"
   # echo "PROVISIONING_STYLE=Automatic" >> "$TMP_PATH/$codesign_xcconfig"

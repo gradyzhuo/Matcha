@@ -31,6 +31,11 @@ cmd="xcodebuild  -exportArchive"
 cmd="$cmd -archivePath \"$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive\""
 cmd="$cmd -exportOptionsPlist \"$EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME\""
 cmd="$cmd -exportPath \"$EXPORT_FOLDER/$output_tmp_folder\""
+
+if [[ $AUTOMATICALLY_MANAGE_SIGNING == 0 ]]; then
+cmd="$cmd -allowProvisioningUpdates"
+fi
+
 if [[ $BUILD_CI != 0 ]]; then
   cmd="$cmd >> \"$LOG_FOLDER/export.log\""
 fi
