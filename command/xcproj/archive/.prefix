@@ -101,6 +101,8 @@ function setup_input_params() {
         TEAM_NAME="$param"
       elif [[ "$code" == "-si" ]]; then
         SPECIFICS_SIGNING_IDENTITY="$param"
+      elif [[ "$code" == "-git" ]]; then
+        GIT_APP="$param"
       elif [[ "$code" == "-b" ]]; then
         GIT_BRANCH_APP="$param"
       elif [[ "$code" == "-eo" ]]; then

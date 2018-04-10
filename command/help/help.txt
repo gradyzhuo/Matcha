@@ -8,38 +8,38 @@
 ##### archive
 ```
 -------------------------[ Required ]--------------------------------
--s						PROJ_SCHEME												# (required) no default.  it's required, if project is built by xcworkspace.
--delegate 		DELEGATE                  				# (required) no default, should implement functions of delegate.
+-s                      PROJ_SCHEME                              # (required) no default.  it's required, if project is built by xcworkspace.
+-delegate               DELEGATE                                 # (required) no default, should implement functions of delegate.
 
 -------------------------[ Optional ]--------------------------------
--v						APP_VERSION												# **by project, e.g. -v 1.0
--bv						BUILD_VERSION											# **by project
--ein					EXPORT_IPA_NAME										# **same as Archive_Name. e.g. -ein "beta.ipa"
--conf					BUILD_CONFIGURATION								# default from scheme in xcode project, e.g. Debug, Release, it's case sensitive.
--eo						EXPORT_OPTION											# **app-store, enterprise, ad-hoc, development
--u						PROVISIONING_UUID         				# **Default from PROVISIONING_PROFILE_NAME
--ep						EXPORT_FOLDER											# **Default Export path "./export/"
--lp						LOG_FOLDER												# **Default Log path "./log"
--p 						PROVISIONING_PROFILE_NAME					# no default. The provision profile name to fetch with.
--i    				APP_ID														# default will set by xcode project build settings.
--path					APP_PATH													# assign to the exist project path, it won't build project by cloning from git.
--tn   				TEAM_NAME													# (required) no default. e.g. Hiiir, Inc. Taiwan Branch.
--passwd				PASSWD														# the password of this macOS account.
--pn    				PROJ_NAME       									# the name of project.
+-v                      APP_VERSION                              # **by project, e.g. -v 1.0
+-bv                     BUILD_VERSION                            # **by project
+-ein                    EXPORT_IPA_NAME                          # **same as Archive_Name. e.g. -ein "beta.ipa"
+-conf                   BUILD_CONFIGURATION                      # default from scheme in xcode project, e.g. Debug, Release, it's case sensitive.
+-eo                     EXPORT_OPTION                            # **app-store, enterprise, ad-hoc, development
+-u                      PROVISIONING_UUID                        # **Default from PROVISIONING_PROFILE_NAME
+-ep                     EXPORT_FOLDER                            # **Default Export path "./export/"
+-lp                     LOG_FOLDER                               # **Default Log path "./log"
+-p                      PROVISIONING_PROFILE_NAME                # no default. The provision profile name to fetch with.
+-i                      APP_ID                                   # default will set by xcode project build settings.
+-path                   APP_PATH                                 # assign to the exist project path, it won't build project by cloning from git.
+-tn                     TEAM_NAME                                # (required) no default. e.g. Hiiir, Inc. Taiwan Branch.
+-passwd                 PASSWD                                   # the password of this macOS account.
+-pn                     PROJ_NAME                                # the name of project.
 
 -------------------------[ Fastlane ]--------------------------------
--ndp					NEED_DOWNLOAD_PROVISION_PROFILE
--aid					APPLE_ID													# without default, it used by fastlane downaloding PROVISIONING_PROFILE, if you wanna automatic execute, you have to set up -apwd.
-
--apwd					APPLE_ID_PASSWORD									# For fastlane `sigh` to download PROVISIONING_PROFILE , and don't worry , it won't be saved!
+-ndp                    NEED_DOWNLOAD_PROVISION_PROFILE
+-aid                    APPLE_ID                                 # without default, it used by fastlane downaloding PROVISIONING_PROFILE, if you wanna automatic execute, you have to set up -apwd.
+-apwd                   APPLE_ID_PASSWORD                        # For fastlane `sigh` to download PROVISIONING_PROFILE , and don't worry , it won't be saved!
 
 -------------------------[ Git ]--------------------------------
--b						GIT_BRANCH_APP										# **master
--app_tag			GIT_TAG_APP												# no default
+-git                    GIT_APP                                  # git url
+-b                      GIT_BRANCH_APP                           # **master
+-app_tag                GIT_TAG_APP                              # no default
 
 -------------------------[ Not important anymore ]--------------------------------
--ti						TEAM_ID														# default from provision profile.
--si						SIGNING_IDENTITY									# **iPhone Distribution: [TEAM_NAME].
+-ti                     TEAM_ID                                  # default from provision profile.
+-si                     SIGNING_IDENTITY                         # **iPhone Distribution: [TEAM_NAME].
 ```
 
 
