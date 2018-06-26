@@ -22,6 +22,10 @@ declare -f @log
 
 declare -f matcha_session_update
 
+declare -f @print
+declare -f @prints
+declare -f @phase
+
 function @print(){
   pc "$@"
 }
