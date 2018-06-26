@@ -8,7 +8,7 @@
 
 will_exec "git"
 
-phase_print "Cloning app"
+@phase "Cloning app"
 
 clone -r "${GIT_APP}" -b "${GIT_BRANCH_APP}" -t "${APP_PATH}" -tag $GIT_TAG_APP || \
 terminate "$GIT_CLOME_FAIL_CODE 'Git clone failed."

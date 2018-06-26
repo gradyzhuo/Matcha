@@ -41,7 +41,7 @@ done
 
 
 if [[ -z $ipa_path ]]; then 
-    print -c "red" "Ipa path is required. please pass the path by -ipa."
+    ＠print -c "red" "Ipa path is required. please pass the path by -ipa."
     exit 1
 fi
 

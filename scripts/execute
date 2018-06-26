@@ -9,6 +9,7 @@
 # source matcha_delegate.protocols
 # source call_matcha_delegate
 
+declare -f matcha_session_update
 declare -f shell_session_update
 declare -f execute
 
@@ -27,12 +28,12 @@ function execute() {
   COMMAND="$1"
 
   if [[ $(ls "$MATCHA_BUILDER_BASE/command/$COMMAND") != *"main"*  ]]; then
-    print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
+    ＠print -c 'red' -s 'bold' "Command \`$1\` not found." 1>&2
     return 0
   fi
 
   if [[ -z $COMMAND ]]; then
-    print -c "red" -s bold "-- Command name can't be empty! ----------"
+    ＠print -c "red" -s bold "-- Command name can't be empty! ----------"
     return 0
   fi
 
@@ -52,5 +53,5 @@ function execute() {
 
 }
 
-
+source "../.prefix" > /dev/null 2>＆1
 execute "$@"

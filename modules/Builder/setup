@@ -40,11 +40,11 @@ function read_delegate(){
   declare delegate_dir_name=$(basename "$delegate_dir")
 
   if [[ "$delegate" == "" ]]; then
-    print -c yellow -s bold ':Warnning: [DELEGATE] is not setting. Please check it by pass -delegate in the command line.'
+    ＠print -c yellow -s bold ':Warnning: [DELEGATE] is not setting. Please check it by pass -delegate in the command line.'
   else
     switch_dir_to "$delegate_dir"
     source "$delegate"
     restore_dir
-    print -c "green" "using delegate: $delegate_dir_name/$delegate"
+    ＠print -c "green" "using delegate: $delegate_dir_name/$delegate"
   fi
 }

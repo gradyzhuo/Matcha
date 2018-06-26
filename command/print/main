@@ -1,10 +1,12 @@
 #!/bin/bash
 #
-# Prints/@.imports
+# print/main
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-source defines
-source print_color
+@import Prints --silent
+
+a=$(echo "$@" | sed 's/print //g')
+pcs "$a"

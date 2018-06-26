@@ -6,5 +6,5 @@
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-print -c red "please use the subcommand as below:"
+＠print -c red "please use the subcommand as below:"
 ls "$MATCHA_BUILDER_BASE/command/xcproj"

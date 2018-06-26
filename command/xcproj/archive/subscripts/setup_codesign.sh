@@ -15,7 +15,7 @@ PROVISIONING_PROFILE="profile"
 
 if [[ $NEED_DOWNLOAD_PROVISION_PROFILE == 0 ]]; then
   PROVISIONING_PROFILE_FILE="$PROVISIONING_PROFILE_CONFIGURATION_FOLDER/$PROVISIONING_PROFILE"
-  phase_print "Downloading provision profile"
+  @phase "Downloading provision profile"
   profile download -fetch "$PROVISIONING_PROFILE_NAME" -option "$EXPORT_OPTION" -id "$APPLE_ID" -passwd "$APPLE_ID_PASSWORD" -app_id "$APP_ID" -team "$TEAM_NAME" -output "$PROVISIONING_PROFILE_FILE"
 fi
 
@@ -23,12 +23,12 @@ if [[ $AUTOMATICALLY_MANAGE_SIGNING != 0 ]]; then
   profile install -profile "$PROVISIONING_PROFILE_FILE"
 
   PROVISIONING_PROFILE_NAME=$(profile showName -profile "$PROVISIONING_PROFILE_FILE")
-  print -c green "downloaded provision profile: $PROVISIONING_PROFILE_NAME"
+  ＠print -c green "downloaded provision profile: $PROVISIONING_PROFILE_NAME"
 
   if [[ "$PROVISIONING_PROFILE_UUID" == "" ]]; then
-    phase_print "Fetching UUID"
+    @phase "Fetching UUID"
     PROVISIONING_PROFILE_UUID=$(profile showUUID -profile "$PROVISIONING_PROFILE_FILE")
-    print -c green "using provision profile: $PROVISIONING_PROFILE_NAME($PROVISIONING_PROFILE_UUID)"
+    ＠print -c green "using provision profile: $PROVISIONING_PROFILE_NAME($PROVISIONING_PROFILE_UUID)"
   fi
 fi
 

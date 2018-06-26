@@ -11,7 +11,7 @@ declare -r codesign_xcconfig="codesign.xcconfig"
 #===== Build =====
 
 will_exec "build_app"
-phase_print "Setting version"
+@phase "Setting version"
 
 #get version/build version in project.
 
@@ -32,8 +32,8 @@ if [[ "$BUILD_VERSION" != "" ]]; then
   #defaults write "$APP_PATH/$INFO_PLIST"  CFBundleVersion "$BUILD_VERSION"
 fi
 
-print -c "green" "Version       => $APP_VERSION"
-print -c "green" "Build Version => $BUILD_VERSION"
+@print -c "green" "Version       => $APP_VERSION"
+@print -c "green" "Build Version => $BUILD_VERSION"
 
 #######產生 codesign.xcconfig
 
@@ -52,22 +52,22 @@ fi
 echo "$CUSTOM_XCCONFIGS" >> "$TMP_PATH/$codesign_xcconfig"
 
 #####
-phase_print "Archiving app"
+@phase "Archiving app"
 
 cmd="xcodebuild"
 
 cmd="$cmd -scheme $PROJ_SCHEME"
 check_type=$(basename *.xcworkspace)
 if [[ "$check_type" != "*.xcworkspace" ]]; then
-  print -c "green" "using $check_type"
+  @print -c "green" "using $check_type"
   cmd="$cmd -workspace \"$check_type\""
 else
   check_type=$(basename *.xcodeproj)
   if [[ "$check_type" != "*.xcodeproj" ]]; then
-    print -c "green" "using $check_type"
+    @print -c "green" "using $check_type"
     cmd="$cmd -project \"$check_type\""
   else
-    print -c "red" "xcodeproj not found."
+    @print -c "red" "xcodeproj not found."
     exit 1
   fi
 fi
@@ -94,12 +94,12 @@ fi
 
 @log "$cmd"
 
-prints "-c magenta Building" "-c magenta -s blink ..."
+@prints "-c magenta Building" "-c magenta -s blink ..."
 eval "$cmd || terminate $ARCHIVE_FAIL_CODE 'Archive failed. please checks app.log...'"
 
 delete "$APP_PATH/$codesign_xcconfig"
 
 #如果成功，會略過 exit
-phase_print "Archive succeeded"
+@phase "Archive succeeded"
 
 did_exec "build_app"

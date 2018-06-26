@@ -14,7 +14,7 @@ function show_mail(){
   fi
 
   if [[ $(@mail drafts) != *"$UUID"* ]]; then
-    print -c red "The draft $UUID not found."
+    ＠print -c red "The draft $UUID not found."
     return 1
   fi
 
