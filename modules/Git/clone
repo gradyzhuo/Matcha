@@ -11,7 +11,7 @@ declare -f clone
 function clone() {
 
 declare code
-declare respo
+declare repo
 declare branch
 declare target
 declare tag
@@ -22,7 +22,7 @@ declare tag
 			code="$ctx"
 		else
 			if [[ "$code" == "-r" ]]; then
-				respo="$ctx"
+				repo="$ctx"
 			elif [[ "$code" == "-b" ]]; then
 				branch="$ctx --single-branch"
 			elif [[ "$code" == "-t" ]]; then
@@ -40,16 +40,18 @@ declare tag
 			target="."
 		fi
   done
-
-	@log -c blue -s bold "$respo cloning..."
+  
+	[[ "$repo" == "" ]] && @log "Repository URL can't be empty."  && exit 1;
+	
+	@log "$repo cloning..."
 
 	mkdirFolder "${target}"
-	git clone -b ${branch} ${respo} "${target}"
+	git clone -b ${branch} ${repo} "${target}"
 
   if [[ $? == 0 ]]; then
-    @log "$respo cloned..."
+    @log "$repo cloned..."
   else
-    @log "$respo failed..."
+    @log "$repo failed..."
   fi
 
 	switch_dir_to "${target}"
