@@ -28,9 +28,7 @@ declare UPDATE_PATH="$HOME/.matcha_update"
 mkdirFolder "$UPDATE_PATH"
 
 @log "Cloning Matcha from [$branch]..."
-clone -r "https://github.com/gradyzhuo/Matcha.git" -b $branch -t "$UPDATE_PATH" >/dev/null 2>&1
-
-if ! $?; then
+if ! `clone -r "https://github.com/gradyzhuo/Matcha.git" -b $branch -t "$UPDATE_PATH" >/dev/null`; then
   @print -c red -s bold "Matcha cloning failed."
   exit $?
 fi
