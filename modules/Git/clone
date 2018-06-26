@@ -46,6 +46,12 @@ declare tag
 	mkdirFolder "${target}"
 	git clone -b ${branch} ${respo} "${target}"
 
+  if [[ $? == 0 ]]; then
+    ＠print -c blue -s bold "$respo cloned..."
+  else
+    ＠print -c red -s bold "$respo failed..."
+  fi
+
 	switch_dir_to "${target}"
 	@log "Git tags:\n \"$(git tag -l)\""
 
@@ -60,12 +66,5 @@ declare tag
 
 	fi
 	restore_dir
-
-  if [[ $? == 0 ]]; then
-    ＠print -c blue -s bold "$respo cloned..."
-  else
-    ＠print -c red -s bold "$respo failed..."
-  fi
-
 
 }
