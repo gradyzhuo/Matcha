@@ -41,8 +41,8 @@ declare tag
 		fi
   done
   
-	[[ "$repo" == "" ]] && @log "Repository URL can't be empty."  && exit 1;
-	
+	[[ "$repo" == "" ]] && @log "Repository URL can't be empty." && return 1;
+
 	@log "$repo cloning..."
 
 	mkdirFolder "${target}"
