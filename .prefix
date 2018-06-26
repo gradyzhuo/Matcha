@@ -22,24 +22,39 @@ declare -f @log
 
 declare -f matcha_session_update
 
+function @print(){
+  pc "$@"
+}
+
+function @prints(){
+  pcs "$@"
+}
+
+function @phase() {
+  title="$1"
+  echo ""
+  @print -c cyan -s bold "++ $title ----------"
+}
+
 function welcome(){
-  print ''
-  print -c green -s bold '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
-  print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  print -c green -s bold  '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
-  print -c green -s bold  '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
-  print -c green -s bold  '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
-  print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
-  print -c green -s bold  '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
-  print ''
+  @print ''
+  @print -c green -s bold '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  @print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  @print -c green -s bold  '＃　　　　　　　～～　Ｗｅｌｃｏｍｅ　～～　　　　　　　　＃'
+  @print -c green -s bold  '＃　　　　　　Ｍａｔｃｈａ　Ｓｃｒｉｐｔｉｎｇ　　　　　　＃'
+  @print -c green -s bold  '＃　　　　　　　Ｖｅｒｓｉｏｎ　　１．０　　　　　　　　　＃'
+  @print -c green -s bold  '＃　　　　　　　　　　　　　　　　　　　　　　　　　　　　＃'
+  @print -c green -s bold  '＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃'
+  @print ''
 }
 
 function tips(){
-  print -c "green" "============================"
-  print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
-  print -c "green" -s "bold" 'Try it!\n```\n    @import Prints\n    print -c "blue" Hello Matcha!\n```'
-  prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
-  print -c green -s bold "Enjoy it!"
+  @print -c "green" "============================"
+  @print -c "green" -s "bold" "Now you can \`@import module\` module to do something."
+  @print -c "green" -s "bold" 'Try it!\n```\n    @print -c "blue" Hello Matcha!\n```'
+  @prints "-c green -s bold 'And you will see the result: '" "-c blue 'Hello Matcha!'"
+  @print -c green -s bold "Enjoy it!"
+  @print -c "green" "============================"
 }
 
 function @import() {
@@ -108,11 +123,11 @@ function @exists() {
 function @log() {
   title="$1"
   DATETIME="$(date +"%y-%m-%d %H:%M:%S")"
-  print -c cyan -s bold "[$DATETIME] $title"
+  @print -c cyan -s bold "[$DATETIME] $title"
 }
 
 function @error() {
   title="$1"
   DATETIME="$(date +"%y-%m-%d %H:%M:%S")"
-  print -c cyan -s bold "[$DATETIME] $title" 1>&2
+  @print -c cyan -s bold "[$DATETIME] $title" 1>&2
 }
