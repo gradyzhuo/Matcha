@@ -19,12 +19,11 @@ declare -f tips
 declare -f @exec
 declare -f @exists
 declare -f @log
-
-declare -f matcha_session_update
-
 declare -f @print
 declare -f @prints
 declare -f @phase
+
+declare -f matcha_session_update
 
 function @print(){
   pc "$@"
