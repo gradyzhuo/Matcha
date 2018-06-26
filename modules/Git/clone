@@ -47,9 +47,9 @@ declare tag
 	git clone -b ${branch} ${respo} "${target}"
 
   if [[ $? == 0 ]]; then
-    @log -c blue -s bold "$respo cloned..."
+    @log "$respo cloned..."
   else
-    @log -c red -s bold "$respo failed..."
+    @log "$respo failed..."
   fi
 
 	switch_dir_to "${target}"
