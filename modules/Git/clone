@@ -44,6 +44,7 @@ declare tag
 	＠print -c blue -s bold "$respo cloning..."
 
 	mkdirFolder "${target}"
+	echo "branch: $branch"
 	git clone -b ${branch} ${respo} "${target}"
 
   if [[ $? == 0 ]]; then
