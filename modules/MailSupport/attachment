@@ -45,7 +45,7 @@ function attachment() {
   done
 
   if [[ -z $file ]]; then
-    print -c red -s bold "[Error] -file can't be empty."
+    ＠print -c red -s bold "[Error] -file can't be empty."
     return 1
   fi
 

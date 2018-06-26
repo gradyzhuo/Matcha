@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 #
 # update/main
 #
@@ -41,7 +41,7 @@ if [[ "$2" == "install" ]]; then
   ln -s "$INSTALL_PATH/$module_name/@.import" "$MODULES_FOLDER/$module_name.mm"
   delete "$cp_path"
 
-  print -c 'green' -s 'bold' "++ Install \`$module_name\` to \`modules/$module_name.mm\` succeed."
+  @print -c 'green' -s 'bold' "++ Install \`$module_name\` to \`modules/$module_name.mm\` succeed."
 elif [[ "$2" == "list" ]]; then
   switch_dir_to "$MODULES_FOLDER"
   echo $(ls *.mm | sed 's/.mm//g')

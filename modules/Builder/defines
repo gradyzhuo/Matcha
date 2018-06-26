@@ -15,17 +15,17 @@ function validate_env_variables(){
   declare -i result=0
 
   if [[ "$SOURCE_TYPE" == "git" && "$GIT_APP" == "" ]]; then
-    print -c red -s bold '[GIT_APP] is not setting.'
+    ＠print -c red -s bold '[GIT_APP] is not setting.'
     result=1
   fi
 
   if [[ "$PROJ_SCHEME" == "" ]]; then
-    print -c red -s bold '[PROJ_SCHEME] is not setting. Please setting it by pass -s in the command line.'
+    ＠print -c red -s bold '[PROJ_SCHEME] is not setting. Please setting it by pass -s in the command line.'
     result=1
   fi
 
   if [[ "$TEAM_NAME" == "" ]]; then
-    print -c red -s bold "[TEAM_NAME] is not setting. Please setting it by pass -tn in the command line."
+    ＠print -c red -s bold "[TEAM_NAME] is not setting. Please setting it by pass -tn in the command line."
     result=1
   fi
 
@@ -65,14 +65,14 @@ function configure_signing_identity() {
   if [[ "$SPECIFICS_SIGNING_IDENTITY" == "" ]]; then
     #https://www.jamf.com/jamf-nation/discussions/18317/ext-attribute-to-list-certificates
     SIGNING_IDENTITY=$(openssl x509 -noout -text <<< "$pem_content" | grep Subject: | sed 's/        Subject: UID=.*, CN=//g' | sed 's/, O=.*//g' | sed 's/, OU=.*//g')
-    print -c green "using 'signing identity': $SIGNING_IDENTITY (by certificate)"
+    ＠print -c green "using 'signing identity': $SIGNING_IDENTITY (by certificate)"
   else
     SIGNING_IDENTITY="$SPECIFICS_SIGNING_IDENTITY"
   fi
 
   if [[ "$SPECIFICS_TEAM_ID" == "" ]]; then
     TEAM_ID=$(openssl x509 -noout -text <<< "$pem_content" | grep Subject: | sed 's/        Subject: UID=//g' | sed 's/,.*//g')
-    print -c green "using 'team id': $TEAM_ID (by certificate)"
+    ＠print -c green "using 'team id': $TEAM_ID (by certificate)"
   else
     TEAM_ID="$SPECIFICS_TEAM_ID"
   fi

@@ -8,7 +8,7 @@
 
 @import Builder --silent
 
-phase_print "Exporting app"
+@phase "Exporting app"
 
 declare EXPORT_OPTION_FILE_NAME="$EXPORT_OPTION.plist"
 output_tmp_folder=".output"
@@ -20,7 +20,7 @@ $EXPORT_OPTION "$EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME" @teamID "$
 #xcode 9 needed
 defaults write "$EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME" provisioningProfiles -dict "$APP_ID" "$PROVISIONING_PROFILE_UUID"
 
-print -c green "using export option: $EXPORT_OPTION ($EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME)"
+＠print -c green "using export option: $EXPORT_OPTION ($EXPORT_OPTION_PLIST_FOLDER/$EXPORT_OPTION_FILE_NAME)"
 
 rvm use system
 
@@ -58,5 +58,5 @@ fi
 delete "$EXPORT_FOLDER/$ARCHIVE_NAME.xcarchive"
 delete "${EXPORT_FOLDER}/$output_tmp_folder"
 
-phase_print "Export suceeded"
-print -c green "exported to ${EXPORT_FOLDER}/${EXPORT_IPA_NAME}.ipa"
+@phase "Export suceeded"
+＠print -c green "exported to ${EXPORT_FOLDER}/${EXPORT_IPA_NAME}.ipa"

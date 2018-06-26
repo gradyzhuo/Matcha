@@ -21,6 +21,19 @@ declare MATCHA_BIN_LINKER="$INSTALL_LIB_TARGET/bin/matcha"
 # Matcha 的安裝路徑
 declare CURRENT_SOURCE=$(readlink "$MATCHA_BIN_LINKER")
 declare CURRENT_SOURCE_DIR=$(dirname "$CURRENT_SOURCE")
+
+declare BASH_PROFILE=".bashrc"
+
+declare os_type=$(uname)
+if [[ $os_type == "Linux" ]]; then
+    BASH_PROFILE=".bashrc"
+elif [[ $os_type == "Darwin" ]]; then
+    BASH_PROFILE=".bash_profile"
+elif [[ $os_type == "FreeBSD" ]]; then
+    BASH_PROFILE=".bashrc"
+fi
+
+
 if [[ "$CURRENT_SOURCE" != "$INSTALL_LIB_TARGET/matcha" ]]; then
   delete "$MATCHA_BIN_LINKER"
 fi
@@ -45,10 +58,10 @@ if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
 fi
 
 BASH_LINK=$(echo 'export "PATH=$HOME/.matcha/bin:$PATH"')
-EXPORT_IN_BASH_PROFILE=$(grep "$BASH_LINK" "$HOME/.bash_profile")
+EXPORT_IN_BASH_PROFILE=$(grep "$BASH_LINK" "$HOME/$BASH_PROFILE")
 if [[ -z $EXPORT_IN_BASH_PROFILE ]]; then
-  echo "$BASH_LINK"  >> "$HOME/.bash_profile"
-  echo '[[ -s "$HOME/.matcha/matcha" ]] && source "$HOME/.matcha/matcha"' >> "$HOME/.bash_profile"
+  echo "$BASH_LINK"  >> "$HOME/$BASH_PROFILE"
+  echo '[[ -s "$HOME/.matcha/matcha" ]] && source "$HOME/.matcha/matcha"' >> "$HOME/$BASH_PROFILE"
 fi
 
 @log "Bubbling Matcha ..."
@@ -101,5 +114,5 @@ fi
 
 cd - >> /dev/null
 
-print -c 'green' -s 'bold' "\nBubbling succeed to \`$INSTALL_LIB_TARGET\`!🍵 🍵 🍵"
-print -c 'green' -s 'bold' "You can start by \`matcha help\`".
+@print -c 'green' -s 'bold' "\nBubbling succeed to \`$INSTALL_LIB_TARGET\`!🍵 🍵 🍵"
+@print -c 'green' -s 'bold' "You can start by \`matcha help\`".

@@ -23,7 +23,7 @@ declare -f clean
 function matcha_session_update() {
   if [[ $? != 0 ]]; then
     did_terminate
-    print -c "red" -s bold "Builder is terminated!"
+    ＠print -c "red" -s bold "Builder is terminated!"
   fi
 }
 
@@ -32,7 +32,7 @@ function terminate(){
   declare error_message="$2"
 
   if [[ "$error_message" != "" ]]; then
-    print -c "red" -s bold "-- $error_message ----------"
+    ＠print -c "red" -s bold "-- $error_message ----------"
   fi
 
   exit 1
@@ -52,19 +52,19 @@ function clean() {
     fi
 
     lower="$(echo $cmd | tr '[:upper:]' '[:lower:]')"
-    phase_print "cleanning $lower files"
+    phase_＠print "cleanning $lower files"
     if [[ "$cmd" == "built" ]]; then
       delete "${BUILD_PATH}"
-      print -c "green" "deleted built path: ${BUILD_PATH}..."
+      ＠print -c "green" "deleted built path: ${BUILD_PATH}..."
     elif [[ "$cmd" == "tmp" ]]; then
       delete "${TMP_PATH}"
-      print -c "green" "deleted tmp path: ${TMP_PATH}..."
+      ＠print -c "green" "deleted tmp path: ${TMP_PATH}..."
     elif [[ "$cmd" == "provision_profile" ]]; then
       delete "$PROVISIONING_FOLDER/$PROVISIONING_PROFILE.mobileprovision"
-      print -c "green" "deleted profile path: $PROVISIONING_FOLDER/$PROVISIONING_PROFILE..."
+      ＠print -c "green" "deleted profile path: $PROVISIONING_FOLDER/$PROVISIONING_PROFILE..."
     elif [[ "$cmd" == "exports" ]]; then
       delete "$EXPORT_FOLDER"
-      print -c "green" "deleted export path: $EXPORT_FOLDER..."
+      ＠print -c "green" "deleted export path: $EXPORT_FOLDER..."
     fi
   done
 }

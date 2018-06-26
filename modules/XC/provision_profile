@@ -37,7 +37,7 @@ function profile() {
   if [[ $(@exists -f $command) == 0 ]]; then
     $command "$@"
   else
-    print -c red -s bold ">> Command 'profile $1' not found"
+    ＠print -c red -s bold ">> Command 'profile $1' not found"
   fi
 
 
@@ -220,9 +220,9 @@ function profile_install() {
 
   declare provision_profile=$(basename "$profile_file")
   if [[ -e $install_lib_target ]]; then
-    print -c green -s bold ">> $provision_profile($uuid) installed to $install_lib_target."
+    ＠print -c green -s bold ">> $provision_profile($uuid) installed to $install_lib_target."
   else
-    print -c red -s bold ">> $provision_profile($uuid) install failed."
+    ＠print -c red -s bold ">> $provision_profile($uuid) install failed."
   fi
 }
 
@@ -230,7 +230,7 @@ function profile_clean(){
   profile_file=$(get_profile_parameter "$@")
   if [[ -e "$profile_file" ]]; then
     delete "$profile_file"
-    print -c "green" "deleted profile path: $profile_file..."
+    ＠print -c "green" "deleted profile path: $profile_file..."
   fi
 
   #remove all expired

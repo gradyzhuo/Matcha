@@ -1,16 +1,15 @@
 #!/bin/bash
 #
-# Prints/print
+# Prints/print_color
 #
 # Matcha 1.0, Created by gradyzhuo, enoch_lee.
 # Copyright © 2017, Matcha Inc. All rights reserved.
 #
 
-declare -f print
-declare -f prints
-declare -f phase_print
+declare -f pc
+declare -f pcs
 
-function print() {
+function pc() {
 
   declare result_str=""
   result_str=$(get_format_string "$@")
@@ -24,7 +23,7 @@ function print() {
 
 }
 
-function prints() {
+function pcs() {
 
   declare result_str=""
 
@@ -43,8 +42,3 @@ function prints() {
   fi
 }
 
-function phase_print() {
-  title="$1"
-  echo ""
-  print -c cyan -s bold "++ $title ----------"
-}

@@ -8,7 +8,7 @@
 
 source .envs
 #=====Common imports=====
-@import Prints --silent
+@import Matcha --silent
 @import Files --silent
 @import Builder --silent
 
@@ -48,7 +48,7 @@ if [[ "$SOURCE_TYPE" == "git" ]]; then
   exec_script clone_app
 fi
 
-phase_print "Configuring path..."
+@phase "Configuring path..."
 
 config_env_variables
 mkdirs "log" "export"
@@ -72,7 +72,7 @@ for (( i=0; i<${configurations_count}; i++ ));
 do
 
 	BUILD_CONFIGURATION=${BUILD_CONFIGURATIONS[$i]}
-	print -c green "using configuration: $BUILD_CONFIGURATION"
+	＠print -c green "using configuration: $BUILD_CONFIGURATION"
 
 	if [[ $BUILD_CI != 0 ]]; then
 		EXPORT_FOLDER="$EXPORT_FOLDER/${BUILD_CONFIGURATION}_${BUILD_DATETIME}"
