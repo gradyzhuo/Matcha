@@ -41,15 +41,15 @@ declare tag
 		fi
   done
 
-	＠print -c blue -s bold "$respo cloning..."
+	@log -c blue -s bold "$respo cloning..."
 
 	mkdirFolder "${target}"
 	git clone -b ${branch} ${respo} "${target}"
 
   if [[ $? == 0 ]]; then
-    ＠print -c blue -s bold "$respo cloned..."
+    @log -c blue -s bold "$respo cloned..."
   else
-    ＠print -c red -s bold "$respo failed..."
+    @log -c red -s bold "$respo failed..."
   fi
 
 	switch_dir_to "${target}"
