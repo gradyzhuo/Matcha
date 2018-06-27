@@ -26,7 +26,7 @@ declare BASH_PROFILE=".bashrc"
 
 declare os_type=$(uname)
 if [[ $os_type == "Linux" ]]; then
-    BASH_PROFILE=".bashrc"
+    BASH_PROFILE=".bash_login"
 elif [[ $os_type == "Darwin" ]]; then
     BASH_PROFILE=".bash_profile"
 elif [[ $os_type == "FreeBSD" ]]; then
@@ -57,9 +57,11 @@ if [[ ! -e "$MATCHA_BIN_LINKER" ]]; then
   ln -s "$INSTALL_LIB_TARGET/matcha" "$MATCHA_BIN_LINKER"
 fi
 
+BASH_COMMENT="#matcha $MATCHA_VERSION"
 BASH_LINK=$(echo 'export "PATH=$HOME/.matcha/bin:$PATH"')
-EXPORT_IN_BASH_PROFILE=$(grep "$BASH_LINK" "$HOME/$BASH_PROFILE")
+EXPORT_IN_BASH_PROFILE=$(grep "$BASH_COMMENT" "$HOME/$BASH_PROFILE")
 if [[ -z $EXPORT_IN_BASH_PROFILE ]]; then
+  echo $BASH_COMMENT >> "$HOME/$BASH_PROFILE"
   echo "$BASH_LINK"  >> "$HOME/$BASH_PROFILE"
   echo '[[ -s "$HOME/.matcha/matcha" ]] && source "$HOME/.matcha/matcha"' >> "$HOME/$BASH_PROFILE"
 fi
