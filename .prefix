@@ -70,7 +70,7 @@ function @import() {
   fi
 
 
-  [[ "$module" == "" && $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m-- Module name can't be empty! ----------" && return 1;
+  [[ "$module" == "" && $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m-- Module name can't be empty! ----------\033[m" && return 1;
 
   declare module_dir=$(dirname "$1")
   declare module_path="$module_dir/$module"
@@ -87,9 +87,9 @@ function @import() {
     pushd "$module_path" >/dev/null 2>&1
     source @.imports >/dev/null
     popd >/dev/null 2>&1
-    [[ $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m>> Module [$module] import succeed." && return 0;
+    [[ $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m>> Module [$module] import succeed.\033[m" && return 0;
   else
-    [[ $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m-- Module [$module] not found! ----------" && return 1;
+    [[ $SILENT_IMPORT == 1 ]] && echo -e "\033[36;1m-- Module [$module] not found! ----------\033[m" && return 1;
   fi
 
 }
